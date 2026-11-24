@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 10 of 10. The twin sync bench: a thermal twin of six constructed floors runs in your browser. Design-spec twin 4.45 C off and 32.9 percent low on energy; calibrated 0.48 C and 1.7 percent; with a Kalman filter 0.218 C and a what-if band that covers 96.8 percent. Trust the sensors fully and coverage falls to 77.4 percent; an unlogged retrofit is flagged on floor 4. Synthetic and declared so.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The twin sync bench - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 10 of 10. Every rung computed live: tracking error against the true room, energy estimate error, band coverage. Plus a lever that makes it worse and a button that breaks it.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p10-the-twin-sync-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The twin sync bench - learn digital twins with phoebe">
+<meta name="twitter:description" content="Calibrate, assimilate, run a what-if with a band. Then trust the sensors fully, and retrofit a floor without telling the twin.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 10 · The twin sync bench - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 10 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 10 of 10</div>
+    <h1>The twin <span class="accent">sync</span> bench</h1>
+    <p class="sub">Everything from the practitioner track on one bench. Kittiwake Hall, a constructed six-storey teaching building, gets a thermal twin of every floor that runs in your browser: first straight from the drawings, then calibrated on a week of readings, then kept in sync by a Kalman filter. You ask it a planning question (what does a night setback save next week?) and read the answer the way sessions 3, 4 and 7 taught: an error against the true room, an energy estimate against what the building really used, and a band that says how far to trust both. Then you tell the filter the sensors are perfect and watch the band lie, and you insulate floor 4 without writing it down and watch the twin point at the change log. Everything here is synthetic, declared on the widget, and computed in the page.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Capstone</span>
+      <span class="chip audience">Practitioners who build and run twins</span>
+      <span class="chip audience">Leads who sign off "the twin says"</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Climb the ladder</span>
+      <span class="a3" style="flex:3">18-28 · Lever and break</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The question Kittiwake has to answer</h2>
+    </div>
+    <p class="lede">Kittiwake Hall (constructed) sets its thermostats to 21 C on weekday days and 19 C the rest of the time; simple proportional thermostats, which settle below their setpoint (occupied hours average 18.6 C across the six floors in the setback week). The facilities lead wants to drop nights and weekends to 15 C and asks the twin one question: how much heat would next week use, and how sure are you? The building then runs the setback for real, so in this constructed world every answer can be checked against what happened, and against a true room temperature no sensor can see.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The whole ladder, computed in front of you on 14 constructed days of six floors. A twin built from the drawings is 4.45 C off the true room and estimates the setback week's heat 32.9 percent low, because the real floors lose heat faster than designed. Calibrated on one week of readings it is 0.48 C off and 1.7 percent high. Kept in sync by a Kalman filter it is 0.218 C off, better than the sensors' own 0.404 C, and its 24-hour what-if band covers 96.8 percent of what the sensors then read. An anti-lever that trusts the sensors fully: the twin copies their noise (0.403 C), the band narrows from 2.20 to 1.28 C and covers only 77.4 percent. A break button that insulates floor 4 without logging it: floor 4's energy estimate goes 63.1 percent wrong and its innovations jump from +0.015 to +0.638 C, which flags floor 4 and nothing else.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What is real and what is constructed<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Real:</strong> the mathematics. A two-node resistance-capacitance model of a room and its building mass (the grey-box family Bacher and Madsen 2011 build up node by node), a grid-search calibration, the Kalman (1960) predict and update, covariance propagated into a 95 percent band, and an innovation test for a shift. The idea that a twin is "dynamically updated with data from its physical twin" is the National Academies (2024) definition, adapted from AIAA and AIA (2020).</p>
+        <p><strong>Constructed, and declared on the widget:</strong> Kittiwake Hall, its six floors, the weather, the sun, the occupants, the as-built gap (real floors lose heat 1.15 to 1.45 times the drawings and hold 0.70 to 0.95 of the designed mass), the thermostats, the 0.4 C sensor noise, every reading. Nothing here describes a real building or product. In a constructed world the true room temperature is known, so you can see what the sensors and the twin get wrong.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the whole ladder, live</span>
+      <h2>Climb the ladder on the same fourteen days</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">The figure is what the engine simulates for each floor. Heat leaks from the room air to outdoors and into the building's mass; the mass leaks too. The twin reads the inputs a real facilities team has (weather, sun, the timetable, the heat meter) and a noisy room sensor. Each rung adds one thing: the drawings, then parameters fitted to readings, then a correction every hour.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn mechanism of one Kittiwake floor as the engine models it. On the left, outdoors, the building mass and the room air, joined by three heat paths: room to outdoors, mass to outdoors, room to mass. In the middle, the inputs the twin reads (weather, sun, timetable, heat meter) feed the room, and a room sensor with 0.4 C noise reads it. On the right, in copper, the Kalman update compares the sensor with the twin's prediction and nudges the twin's state by the gain times the surprise; the correction flows back into the room estimate every hour.">
+        <defs>
+          <filter id="kwkp10aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp10aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp10aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp10aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp10aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp10aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp10aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp10aH" x="30" y="30">ONE FLOOR OF KITTIWAKE HALL, AS THE TWIN SEES IT (CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp10aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="70" width="150" height="56" rx="8" transform="rotate(-0.5 105 98)" fill="#FFFFFF"/>
+          <rect x="30" y="200" width="150" height="56" rx="8" transform="rotate(0.5 105 228)" fill="url(#kwkp10aHc)"/>
+          <rect x="260" y="135" width="160" height="70" rx="10" transform="rotate(-0.4 340 170)" fill="#EDF4FB"/>
+          <path d="M105 128 L105 198"/>
+          <path d="M182 100 L258 150"/>
+          <path d="M182 228 L258 188"/>
+          <rect x="460" y="62" width="180" height="112" rx="10" transform="rotate(0.4 550 118)" fill="#FFFFFF"/>
+          <rect x="460" y="214" width="180" height="56" rx="8" transform="rotate(-0.4 550 242)" fill="#FFFFFF"/>
+          <rect x="690" y="130" width="160" height="84" rx="10" transform="rotate(0.5 770 172)" fill="#C8733A"/>
+          <path d="M458 130 L424 156" marker-end="url(#kwkp10aAr)"/>
+          <path d="M422 192 L456 232" marker-end="url(#kwkp10aAr)"/>
+          <path d="M642 240 L688 204" marker-end="url(#kwkp10aAr)"/>
+          <path d="M770 216 L770 300 L340 300 L340 210" marker-end="url(#kwkp10aAr)"/>
+          <!-- doodle: a thermometer -->
+          <rect x="826" y="40" width="10" height="34" rx="5" fill="#FFFFFF"/>
+          <circle cx="831" cy="80" r="8" fill="#B9D4EE"/>
+        </g>
+
+        <text class="kwkp10aL" x="46" y="94">Outdoors, To</text>
+        <text class="kwkp10aS" x="46" y="112">weather, measured</text>
+        <text class="kwkp10aK" x="46" y="224">Building mass, Tm</text>
+        <text class="kwkp10aK" x="46" y="242">never measured</text>
+        <text class="kwkp10aA" x="114" y="168">Rmo</text>
+        <text class="kwkp10aA" x="194" y="92">Rio</text>
+        <text class="kwkp10aA" x="200" y="246">Rim</text>
+        <text class="kwkp10aL" x="276" y="162">Room air, Ti</text>
+        <text class="kwkp10aS" x="276" y="182">what people feel</text>
+
+        <text class="kwkp10aL" x="476" y="86">What the twin reads</text>
+        <text class="kwkp10aK" x="476" y="108">weather and sun</text>
+        <text class="kwkp10aK" x="476" y="128">the timetable (not who came)</text>
+        <text class="kwkp10aK" x="476" y="148">the heat meter, kW</text>
+        <text class="kwkp10aL" x="476" y="238">Room sensor</text>
+        <text class="kwkp10aS" x="476" y="256">noise sd 0.4 C</text>
+
+        <text class="kwkp10aL" x="706" y="156">Kalman update</text>
+        <text class="kwkp10aK" x="706" y="176">surprise = sensor</text>
+        <text class="kwkp10aK" x="706" y="194">minus prediction</text>
+
+        <text class="kwkp10aS" x="420" y="320">every hour the correction flows back into the twin's state</text>
+        <text class="kwkp10aN" x="30" y="344">Rio and Rmo: heat lost to outdoors; the real floors lose 1.15 to 1.45 times what the drawings say. Rim: room air</text>
+        <text class="kwkp10aN" x="30" y="362">to mass. Room 6 kWh/K, mass 20 kWh/K times kC. All constructed; the engine declares every choice.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the only part a design-spec twin lacks entirely: a way for the building to correct the model every hour.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwkp10-bench">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Synthetic and constructed, declared here: Kittiwake Hall, 6 floors, 14 days hourly, day 0 a Monday. Week 1 normal heating (21 C weekday days, 19 C otherwise); week 2 the real building runs a night setback (15 C nights and weekends). Real floors lose heat 1.15 to 1.45 times the drawings; occupants 2.5 kW times 0.6 to 1.0 a day (the twin assumes 0.8); sensor noise sd 0.4 C; unmodelled disturbance 0.12 C an hour. Real: the RC model, the grid-search calibration, the Kalman filter, the 95 percent band and the shift test. At the canon settings the table prints the canon figures.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp10-seed">Seed for the constructed world</label>
+        <select class="sql-code" id="kwkp10-seed">
+          <option value="1124" selected>1124, the canon</option>
+          <option value="1">1</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <label class="sql-label" for="kwkp10-sd">Sensor noise the filter assumes (the true noise is 0.4 C)</label>
+        <select class="sql-code" id="kwkp10-sd">
+          <option value="0.4" selected>0.4 C, honest</option>
+          <option value="0.2">0.2 C</option>
+          <option value="0.1">0.1 C</option>
+          <option value="0.01">0.01 C, trust the sensors fully</option>
+        </select>
+        <div class="kwkp10-btns">
+          <button class="btn primary" id="kwkp10-anti" type="button">Trust the sensors fully</button>
+          <button class="btn" id="kwkp10-break" type="button">Retrofit floor 4, unlogged</button>
+          <button class="btn" id="kwkp10-reset" type="button">Back to the canon settings</button>
+        </div>
+        <div id="kwkp10-out"></div>
+        <div id="kwkp10-card"></div>
+        <p class="sql-note" id="kwkp10-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp10-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The five runs worth doing first<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Leave everything alone.</strong> Tracking error against the true room in week 2: 4.450 C from the drawings, 0.482 C calibrated, 0.218 C with the filter. The sensors on their own are 0.404 C off: a good filter beats its own sensors because it also knows the physics.</li>
+          <li><strong>Read the energy column.</strong> The building really used 5,067 kWh of heat in the setback week. The drawings say 3,402 (32.9 percent low); calibrated, 5,152 (1.7 percent high). The filter barely changes this number, because a week-ahead plan depends on the parameters, not on this morning's state.</li>
+          <li><strong>Read the saving.</strong> Normal heating would have used 6,343 kWh, so the setback truly saved 20.1 percent. The design-spec twin says 23.9 percent; the calibrated twin 21.5 percent. A twin built from drawings oversells the saving.</li>
+          <li><strong>Read the band.</strong> At the honest setting, each midnight of week 2 the twin forecasts the next 24 hours with a 95 percent band 2.20 C wide on average. It covers 96.8 percent of the readings that then arrive.</li>
+          <li><strong>Try seeds 1, 7 and 42.</strong> The filter's error stays at 0.22 to 0.23 C, coverage at 97.4 to 97.9 percent, and the design twin is 31 to 36 percent low on energy every time. Quote seed-1124 numbers and say "your numbers move with the seed". What holds is the shape.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the filter beats its own sensors<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A reading is the room plus noise. A model prediction is the room plus the model's error. The Kalman filter blends the two in proportion to how much it trusts each: at the honest setting its gain on the room reading settles at about 0.445, so each hour the twin moves 44.5 percent of the way from its prediction toward the reading. The noise in one reading is mostly averaged away, while a real change that persists for hours gets through. That is why the twin's 0.218 C beats the sensors' 0.404 C here. Practitioner session 4 does the same arithmetic by hand.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the scorecard and what each rung fixes</span>
+      <h2>Each rung fixes a different column</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">A single accuracy number hides what a twin is for. The scorecard keeps three apart: does the twin know the state of the building now (tracking error), does it know how the building behaves (energy estimate), and does it know how much it does not know (band coverage). Calibration fixes the second, assimilation the first, and only an honest noise model gives you the third.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn scorecard for the constructed Kittiwake twin, seed 1124. Columns: tracking error against the true room, energy estimate error for the setback week, the twin's setback saving against a true 20.1 percent, and 24-hour band coverage. Design-spec twin: 4.450 C, minus 32.9 percent, 23.9 percent, no band. Calibrated: 0.482 C, plus 1.7 percent, 21.5 percent, no band. Plus Kalman: 0.218 C, plus 1.7 percent, 21.5 percent, 96.8 percent coverage. Trust the sensors fully: 0.403 C, plus 1.7 percent, 21.5 percent, 77.4 percent. The calibrated energy cell is highlighted in copper.">
+        <defs>
+          <filter id="kwkp10bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp10bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp10bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp10bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp10bV { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .kwkp10bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp10bH" x="30" y="30">THE SCORECARD, SEED 1124, WEEK 2 (CONSTRUCTED)</text>
+        <text class="kwkp10bS" x="278" y="58" text-anchor="middle">tracking error</text>
+        <text class="kwkp10bS" x="408" y="58" text-anchor="middle">energy estimate</text>
+        <text class="kwkp10bS" x="538" y="58" text-anchor="middle">saving (true 20.1%)</text>
+        <text class="kwkp10bS" x="668" y="58" text-anchor="middle">band coverage</text>
+
+        <g filter="url(#kwkp10bSk)" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="216" y="68" width="124" height="38" rx="4" fill="#FFFFFF"/>
+          <rect x="346" y="68" width="124" height="38" rx="4" fill="#FFFFFF"/>
+          <rect x="476" y="68" width="124" height="38" rx="4" fill="#FFFFFF"/>
+          <rect x="606" y="68" width="124" height="38" rx="4" fill="url(#kwkp10bHc)"/>
+          <rect x="216" y="112" width="124" height="38" rx="4" fill="#EDF4FB"/>
+          <rect x="346" y="112" width="124" height="38" rx="4" fill="#C8733A"/>
+          <rect x="476" y="112" width="124" height="38" rx="4" fill="#B9D4EE"/>
+          <rect x="606" y="112" width="124" height="38" rx="4" fill="url(#kwkp10bHc)"/>
+          <rect x="216" y="156" width="124" height="38" rx="4" fill="#045C9F"/>
+          <rect x="346" y="156" width="124" height="38" rx="4" fill="#B9D4EE"/>
+          <rect x="476" y="156" width="124" height="38" rx="4" fill="#B9D4EE"/>
+          <rect x="606" y="156" width="124" height="38" rx="4" fill="#045C9F"/>
+          <rect x="216" y="200" width="124" height="38" rx="4" fill="#EDF4FB"/>
+          <rect x="346" y="200" width="124" height="38" rx="4" fill="#B9D4EE"/>
+          <rect x="476" y="200" width="124" height="38" rx="4" fill="#B9D4EE"/>
+          <rect x="606" y="200" width="124" height="38" rx="4" fill="#FFFFFF"/>
+          <path d="M742 219 L770 219" marker-end="url(#kwkp10bAr)"/>
+        </g>
+
+        <text class="kwkp10bL" x="204" y="91" text-anchor="end">Design-spec twin</text>
+        <text class="kwkp10bL" x="204" y="135" text-anchor="end">Calibrated</text>
+        <text class="kwkp10bL" x="204" y="179" text-anchor="end">+ Kalman</text>
+        <text class="kwkp10bL" x="204" y="223" text-anchor="end">Trust sensors fully</text>
+
+        <text class="kwkp10bV" x="278" y="91" text-anchor="middle">4.450 C</text>
+        <text class="kwkp10bV" x="408" y="91" text-anchor="middle">-32.9%</text>
+        <text class="kwkp10bV" x="538" y="91" text-anchor="middle">23.9%</text>
+        <text class="kwkp10bV" x="668" y="91" text-anchor="middle">no band</text>
+        <text class="kwkp10bV" x="278" y="135" text-anchor="middle">0.482 C</text>
+        <text class="kwkp10bV" x="408" y="135" text-anchor="middle">+1.7%</text>
+        <text class="kwkp10bV" x="538" y="135" text-anchor="middle">21.5%</text>
+        <text class="kwkp10bV" x="668" y="135" text-anchor="middle">no band</text>
+        <text class="kwkp10bW" x="278" y="179" text-anchor="middle">0.218 C</text>
+        <text class="kwkp10bV" x="408" y="179" text-anchor="middle">+1.7%</text>
+        <text class="kwkp10bV" x="538" y="179" text-anchor="middle">21.5%</text>
+        <text class="kwkp10bW" x="668" y="179" text-anchor="middle">96.8%</text>
+        <text class="kwkp10bV" x="278" y="223" text-anchor="middle">0.403 C</text>
+        <text class="kwkp10bV" x="408" y="223" text-anchor="middle">+1.7%</text>
+        <text class="kwkp10bV" x="538" y="223" text-anchor="middle">21.5%</text>
+        <text class="kwkp10bV" x="668" y="223" text-anchor="middle">77.4%</text>
+
+        <text class="kwkp10bL" x="778" y="214">the band</text>
+        <text class="kwkp10bL" x="778" y="230">now lies</text>
+
+        <text class="kwkp10bN" x="30" y="270">Sensors alone: 0.404 C. Calibration moves the energy column; the filter moves the tracking column; only an honest</text>
+        <text class="kwkp10bN" x="30" y="288">noise model keeps the coverage column near its nominal 95 percent. Shade: white worst, cobalt best in each column.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper cell is the planning number; it moved when the parameters moved, not when the filter arrived.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the four columns<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The drawings are wrong in one direction.</strong> Every constructed floor loses heat faster than designed, so the design-spec twin thinks rooms are warmer than they are (4.45 C off) and that heating them costs less (32.9 percent low). Per floor it is 21.6 to 42.5 percent low. Leader session 3 is about why the building you drew is not the one you have.</p>
+        <p><strong>Calibration fixes behaviour.</strong> Fitting two multipliers to a week of readings recovers each floor's heat-loss factor within 0.08 and brings the plan to 1.7 percent. It does not pin down the building's mass: one week of readings cannot tell a heavy floor from a light one (practitioner session 3).</p>
+        <p><strong>Assimilation fixes state.</strong> The filter halves the tracking error, from 0.482 to 0.218 C, and leaves the week-ahead plan where calibration put it. If someone says "we added live data, so the forecast is better", ask which forecast.</p>
+        <p><strong>The band is its own column.</strong> A twin can have a good tracking number and a dishonest band. The last row proves it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Calibration criteria you will hear quoted<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Building energy modellers often quote ASHRAE Guideline 14: a model is commonly treated as calibrated when hourly CV(RMSE) is at most 30 percent and NMBE within plus or minus 10 percent, monthly 15 and 5 percent. That is reported here from secondary papers, because the guideline is paywalled, and editions differ. Those criteria judge energy, not the room temperature this bench scores, and researchers have questioned whether they are enough on their own. Treat them as a floor for a conversation, not as proof the twin is fit for your purpose.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the anti-lever and the break button</span>
+      <h2>A lever that makes it worse, and a button that breaks it</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">A bench that can only report good news is not a bench. The anti-lever tells the filter its sensors are almost perfect (0.01 C instead of the true 0.4 C), so its gain goes to 0.999 and the twin copies every reading. The break button insulates floor 4 at the start of week 2 and records it nowhere: the real floor now loses heat at 0.6 times its old rate, and the twin does not know.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two hand drawn panels. Left, trusting the sensors fully: an honest 24-hour band 2.20 C wide holds almost every reading, a collapsed band 1.28 C wide leaves many readings outside; coverage falls from 96.8 to 77.4 percent and tracking error rises to the sensors' own 0.403 C. Right, the unlogged retrofit: floor 4's mean innovation is plus 0.015 C in week 1 and plus 0.638 C in week 2, in copper, while the other five floors stay near zero; the shift test gives z of 11.44 on floor 4, and its energy estimate is 63.1 percent too high.">
+        <defs>
+          <filter id="kwkp10cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp10cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp10cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp10cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp10cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp10cB { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .kwkp10cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp10cH" x="40" y="32">ANTI-LEVER: TRUST THE SENSORS FULLY</text>
+        <text class="kwkp10cH" x="470" y="32">BREAK: FLOOR 4 INSULATED, NOBODY TOLD THE TWIN</text>
+
+        <g filter="url(#kwkp10cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="44" width="390" height="206" rx="12" transform="rotate(-0.3 235 147)" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="70" y="70" width="150" height="110" rx="6" fill="#B9D4EE" stroke="#045C9F" stroke-width="1.4"/>
+          <path d="M70 125 L220 125" stroke="#033F6E" stroke-width="2.4"/>
+          <rect x="250" y="106" width="150" height="38" rx="4" fill="#EDF4FB" stroke="#045C9F" stroke-width="1.4"/>
+          <path d="M250 125 L400 125" stroke="#033F6E" stroke-width="2.4"/>
+          <circle cx="92" cy="108" r="4" fill="#10202F"/>
+          <circle cx="122" cy="148" r="4" fill="#10202F"/>
+          <circle cx="160" cy="98" r="4" fill="#10202F"/>
+          <circle cx="196" cy="140" r="4" fill="#10202F"/>
+          <circle cx="270" cy="92" r="4" fill="#991B1B"/>
+          <circle cx="302" cy="134" r="4" fill="#10202F"/>
+          <circle cx="338" cy="158" r="4" fill="#991B1B"/>
+          <circle cx="378" cy="96" r="4" fill="#991B1B"/>
+          <rect x="460" y="44" width="390" height="206" rx="12" transform="rotate(0.3 655 147)" fill="#FFFFFF"/>
+          <path d="M490 200 L830 200"/>
+          <path d="M660 60 L660 200" stroke-dasharray="5 4" stroke="#4A5A6A"/>
+          <rect x="500" y="194" width="60" height="6" rx="2" fill="#B9D4EE"/>
+          <rect x="580" y="196" width="60" height="4" rx="2" fill="#B9D4EE"/>
+          <rect x="680" y="194" width="60" height="6" rx="2" fill="#B9D4EE"/>
+          <rect x="760" y="80" width="60" height="120" rx="4" fill="#C8733A"/>
+        </g>
+
+        <text class="kwkp10cA" x="80" y="196">honest band, 2.20 C</text>
+        <text class="kwkp10cA" x="252" y="196">collapsed, 1.28 C</text>
+        <text class="kwkp10cS" x="80" y="216">dots: sensor readings that then arrive</text>
+        <text class="kwkp10cS" x="80" y="232">red: outside the band</text>
+
+        <text class="kwkp10cS" x="500" y="222">week 1, floor 4</text>
+        <text class="kwkp10cS" x="500" y="238">+0.015 C</text>
+        <text class="kwkp10cS" x="676" y="222">week 2, floor 4</text>
+        <text class="kwkp10cS" x="676" y="238">+0.638 C, z 11.44</text>
+        <text class="kwkp10cS" x="598" y="74">retrofit</text>
+        <text class="kwkp10cS" x="484" y="74">mean innovation</text>
+        <text class="kwkp10cS" x="484" y="90">sensor minus twin</text>
+
+        <text class="kwkp10cB" x="40" y="278">coverage 96.8% becomes 77.4%; error 0.403 C</text>
+        <text class="kwkp10cB" x="470" y="278">floor 4 energy estimate +63.1%</text>
+        <text class="kwkp10cN" x="40" y="314">Both constructed and computed by the bench. Other floors' shift: |z| below 0.7. The filter still tracks; the surprises carry the warning.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the anti-lever spends the band's honesty; the break shows a physical change that nobody logged is a data change.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the anti-lever teaches<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press "Trust the sensors fully". The twin's tracking error rises from 0.218 to 0.403 C, which is the sensors' own error: with a gain of 0.999 the twin is a copy of the last reading, noise included, and the physics adds nothing. The what-if band narrows from 2.20 to 1.28 C, because the filter believes it knew the starting state exactly and that the thermostat reads a perfect sensor. Coverage falls from 96.8 to 77.4 percent: roughly one reading in four lands outside a band that claims 95.</p>
+        <p>Nothing else in the scorecard moves: the energy estimate is still 1.7 percent high. That is the trap. A narrower band looks like a more confident, better twin, and a dashboard would show it as one. The National Academies (2024) report calls uncertainty quantification an area of particular need for exactly this reason: a band is a claim, and claims need checking against what then happens.</p>
+        <p>Step down through 0.2 and 0.1 C to see it is a slope, not a cliff: coverage 88.5 then 80.7 percent, band 1.56 then 1.35 C.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the break button teaches<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Press "Retrofit floor 4, unlogged". The filter keeps floor 4's room estimate close to the readings (0.399 C off), so a tracking dashboard shows almost nothing. But the twin's predictions on floor 4 are now consistently too cold, and the surprises show it: the mean innovation goes from +0.015 C in week 1 to +0.638 C in week 2, a shift test of z = 11.44. The other five floors stay below 0.7. Floor 4's week-ahead energy estimate is 63.1 percent too high, the building's 8.9 percent.</p>
+        <p>The widget names floor 4 and says what to check: the change log. AIAA and AIA (2020) list "As Maintained" as a phase of the twin's life for this reason: a twin of the building as it was is not a twin of the building as it is. Practitioner sessions 5 and 6 turn this into a routine.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write Kittiwake's twin readiness note from the bench</h2>
+      <span class="tag demo">★ 17 min · everyone builds</span>
+    </div>
+    <p class="lede">You will produce the one paragraph a facilities lead can sign before acting on the twin: how close it tracks, how good its plan is, how honest its band is, and what would break it. The figure shows why the noise assumption goes in the note: coverage falls step by step as the filter trusts its sensors more.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn line of band coverage against the sensor noise the filter assumes, seed 1124. Assumed 0.4 C, the true value: coverage 96.8 percent, band 2.20 C, in copper. Assumed 0.2: 88.5 percent, band 1.56. Assumed 0.1: 80.7 percent, band 1.35. Assumed 0.01: 77.4 percent, band 1.28. A dashed line marks the nominal 95 percent.">
+        <defs>
+          <filter id="kwkp10dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp10dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp10dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp10dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp10dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp10dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp10dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp10dH" x="30" y="30">BAND COVERAGE AGAINST THE SENSOR NOISE THE FILTER ASSUMES (CONSTRUCTED)</text>
+        <text class="kwkp10dA" x="150" y="68" text-anchor="end">nominal 95%</text>
+        <text class="kwkp10dA" x="150" y="202" text-anchor="end">75%</text>
+
+        <g filter="url(#kwkp10dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M160 64 L800 64" stroke-dasharray="6 5" stroke="#4A5A6A"/>
+          <path d="M160 198 L800 198"/>
+          <path d="M240 51 L400 107 L560 159 L720 181" stroke="#045C9F" stroke-width="2.4"/>
+          <circle cx="240" cy="51" r="8" fill="#C8733A"/>
+          <circle cx="400" cy="107" r="6" fill="#B9D4EE"/>
+          <circle cx="560" cy="159" r="6" fill="#B9D4EE"/>
+          <circle cx="720" cy="181" r="6" fill="#B9D4EE"/>
+        </g>
+
+        <text class="kwkp10dL" x="256" y="46">96.8%, band 2.20 C</text>
+        <text class="kwkp10dL" x="414" y="100">88.5%, band 1.56 C</text>
+        <text class="kwkp10dL" x="574" y="152">80.7%, band 1.35 C</text>
+        <text class="kwkp10dL" x="734" y="176">77.4%, band 1.28 C</text>
+        <text class="kwkp10dA" x="240" y="220" text-anchor="middle">0.4 C (true)</text>
+        <text class="kwkp10dA" x="400" y="220" text-anchor="middle">0.2 C</text>
+        <text class="kwkp10dA" x="560" y="220" text-anchor="middle">0.1 C</text>
+        <text class="kwkp10dA" x="720" y="220" text-anchor="middle">0.01 C</text>
+
+        <text class="kwkp10dN" x="30" y="256">The band only means 95 percent if the noise it assumes is the noise you have. Assume less and it narrows and misses</text>
+        <text class="kwkp10dN" x="30" y="274">more; the twin looks surer while being wrong more often. Seed 1124; other seeds give 77 to 83 percent at 0.01 C.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - only the copper point is honest, because only there does the assumed noise equal the real noise.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the canon and copy the Kalman row</h4>
+        <p>Leave the settings alone. Write down the tracking error, the sensors' own error and the gain.</p>
+        <div class="prompt-box good"><span class="label">Your line 1</span>State: twin tracks the true room to 0.218 C over the setback week, better than the sensors alone (0.404 C); filter gain about 0.445, assumed sensor noise 0.4 C.</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Add the plan and the band</h4>
+        <p>Name the energy estimate against what happened, the saving against the true saving, and the coverage of the 24-hour band.</p>
+        <div class="prompt-box good"><span class="label">Your line 2</span>Plan: setback week 5,152 kWh against 5,067 used (+1.7%); saving 21.5% against a true 20.1%. Band: 95% band 2.20 C wide, covered 96.8% of week-2 readings.</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say what moved each number</h4>
+        <p>Compare with the design-spec row and name which step fixed which column.</p>
+        <div class="prompt-box good"><span class="label">Your line 3</span>From the drawings: 4.45 C off and -32.9% on energy. Calibration on week 1 fixed the energy (heat loss 1.2 to 1.5 times design); the Kalman filter fixed the state.</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Say what would break it</h4>
+        <p>Press the anti-lever, then the break button, and write the two dependencies you saw.</p>
+        <div class="prompt-box good"><span class="label">Your line 4</span>Depends on an honest noise model: assuming 0.01 C cuts coverage to 77.4%. Depends on the change log: an unlogged retrofit on floor 4 made its plan 63.1% wrong; watch innovation shifts per floor weekly.</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Change the seed and rewrite line 2</h4>
+        <p>Pick seed 7. Rewrite line 2 with its numbers (your numbers will differ from the canon). Does the conclusion change? It should not, and if it did, that would be the finding.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> A twin readiness note gives three numbers, not one: how well it knows the state, how well it knows the behaviour, how honest its band is. Then it names the noise it assumed and the change log it depends on.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Adding the Kalman filter to Kittiwake's calibrated twin (constructed) cuts tracking error from 0.482 to 0.218 C but leaves the setback-week energy estimate at +1.7 percent. Why?</p>
+      <button class="qopt" type="button">A · The filter is broken</button>
+      <button class="qopt" type="button">B · The filter corrects the twin's current state; a week-ahead plan depends mostly on the parameters, which calibration set</button>
+      <button class="qopt" type="button">C · Energy cannot be estimated by a twin</button>
+      <p class="qwhy">Assimilation fixes where the building is now; calibration fixes how it behaves. A week ahead, the starting state has long been forgotten and the behaviour decides the answer.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Telling the filter the sensors are nearly perfect narrows the 24-hour band from 2.20 to 1.28 C. What happens to coverage, and why?</p>
+      <button class="qopt" type="button">A · It rises, because a narrower band is more precise</button>
+      <button class="qopt" type="button">B · It stays at 96.8 percent, because the readings did not change</button>
+      <button class="qopt" type="button">C · It falls to 77.4 percent, because the band now leaves out noise that is really there</button>
+      <p class="qwhy">A band is only as honest as the noise it assumes. The twin also copies every reading (0.403 C error, the sensors' own), so it gains nothing from the physics.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">After an unlogged retrofit, floor 4's tracking error is still only 0.399 C. What tells you something changed?</p>
+      <button class="qopt" type="button">A · The innovations: floor 4's mean surprise jumps from +0.015 to +0.638 C (z = 11.44) while other floors stay below 0.7</button>
+      <button class="qopt" type="button">B · Nothing; a twin that tracks well is fine</button>
+      <button class="qopt" type="button">C · The weather changed</button>
+      <p class="qwhy">The filter keeps pulling the state back to the readings, so tracking hides the change. The surprises it has to absorb do not. Then check the change log: floor 4's plan is 63.1 percent wrong.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the capstone</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Thirty minutes on the bench, then on your own work.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Find where the band starts to lie</h4>
+        <p>For each seed, step the assumed noise from 0.4 to 0.01 C and record coverage. Write down the setting at which coverage first drops below 90 percent. Your numbers will differ by seed; record the seed.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the readiness note for seed 42</h4>
+        <p>Four lines, in the order of the build-along. Compare it with the canon note and mark what changed.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>List your own unlogged changes</h4>
+        <p>For an asset you know, list three physical changes that could happen without reaching any data system: a swapped part, a moved sensor, a new tenant. Who would notice each, and when?</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the weekly innovation check</h4>
+        <p>One paragraph: which surprises you would average, over what window, what shift would trigger a look at the change log, and who gets the alert.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The twin sync ladder</span><span class="note">Constructed, computed in the page: 4.450, 0.482, 0.218 C; energy -32.9, +1.7, +1.7 percent.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What a twin is</span><span class="note">National Academies (2024), "Foundational Research Gaps and Future Directions for Digital Twins". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">As Designed, As Built, As Maintained</span><span class="note">AIAA and AIA (2020), "Digital Twin: Definition and Value". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Kalman filter</span><span class="note">Kalman (1960), Journal of Basic Engineering 82(1): 35-45. Bibliographic record read; the engine checks the closed form.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Grey-box building models</span><span class="note">Bacher and Madsen (2011), Energy and Buildings 43(7). Record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Calibration criteria</span><span class="note">ASHRAE Guideline 14, hourly CV(RMSE) 30% and NMBE 10%: reported, paywalled, editions differ.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Nonlinear and ensemble filters</span><span class="note">Named only; out of scope.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensor placement and clocks</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a> and <a href="https://phoebefu6.github.io/learn-smart-city-with-phoebe/">learn smart city</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The ladder.</strong> Drawings 4.450 C, calibrated 0.482 C, + Kalman 0.218 C off the true room (constructed).</div>
+      <div class="cheat-item"><strong>The plan.</strong> Setback week heat: drawings -32.9%, calibrated +1.7%.</div>
+      <div class="cheat-item"><strong>The saving.</strong> True 20.1%; calibrated twin 21.5%; drawings 23.9%.</div>
+      <div class="cheat-item"><strong>The band.</strong> 2.20 C wide, covers 96.8% at the honest noise.</div>
+      <div class="cheat-item"><strong>The anti-lever.</strong> Trust sensors fully: 0.403 C, band 1.28 C, coverage 77.4%.</div>
+      <div class="cheat-item"><strong>The break.</strong> Unlogged retrofit: floor 4 surprise +0.638 C, z 11.44, plan +63.1%.</div>
+      <div class="cheat-item"><strong>The note.</strong> State, behaviour, band; then the noise assumed and the change log relied on.</div>
+      <div class="cheat-item"><strong>The honest label.</strong> Synthetic, seeded, declared; your numbers move with the seed.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Back to the leader track.</strong> If you skipped it, leader session 5 draws why the warehouse playbook breaks here, mechanism by mechanism.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 10 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p9-closing-the-loop.html">← Prev: Closing the loop</a>
+        <a href="../index.html">Course home →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var $ = function (id) { return document.getElementById(id); };
+  var seedSel = $("kwkp10-seed"), sdSel = $("kwkp10-sd");
+  var out = $("kwkp10-out"), card = $("kwkp10-card"), verdict = $("kwkp10-verdict"), self = $("kwkp10-self");
+  var showBreak = false;
+  window.KWK_BENCH = { last: null };
+
+  function pct(x, d) { return (x >= 0 ? "" : "-") + (100 * Math.abs(x)).toFixed(d === undefined ? 1 : d) + "%"; }
+  function sgn(x) { return (x >= 0 ? "+" : "-") + (100 * Math.abs(x)).toFixed(1) + "%"; }
+  function kwh(x) { return Math.round(x).toLocaleString("en-US") + " kWh"; }
+  function isCanon() { return seedSel.value === "1124" && sdSel.value === "0.4" && !showBreak; }
+
+  function render() {
+    var o = { seed: Number(seedSel.value) };
+    out.innerHTML = '<p class="sql-note">Calibrating and running the twin of six floors in your browser...</p>';
+    setTimeout(function () {
+      var L = DTW.ladder(o);
+      var you = DTW.custom(Number(sdSel.value), showBreak, o);
+      window.KWK_BENCH.last = { ladder: L, custom: you };
+      var html = '<table class="sql-table"><thead><tr><th>Rung</th><th>Tracking error</th><th>Energy, setback week</th><th>Error</th><th>Twin\'s saving</th><th>Band coverage</th></tr></thead><tbody>';
+      L.rungs.forEach(function (r, i) {
+        html += "<tr><td>" + (i + 1) + " · " + r.label + "</td><td><b>" + r.rmse.toFixed(3) + " C</b></td><td>" + kwh(r.energy) + "</td><td>" + sgn(r.eErr) + "</td><td>" + pct(r.saving) + "</td><td>" + (r.cover === undefined ? "no band" : pct(r.cover) + ", " + r.width.toFixed(2) + " C wide") + "</td></tr>";
+      });
+      html += '<tr class="kwkp10-you"><td>Your setting: assumed noise ' + sdSel.value + " C" + (showBreak ? ", floor 4 retrofitted, unlogged" : "") + "</td><td><b>" + you.rmse.toFixed(3) + " C</b></td><td>" + kwh(you.energy) + "</td><td>" + sgn(you.eErr) + "</td><td>" + pct(you.saving) + "</td><td>" + pct(you.cover) + ", " + you.width.toFixed(2) + " C wide</td></tr>";
+      html += "</tbody></table>";
+      html += '<p class="sql-note">Truth (constructed): the building used ' + kwh(L.trueSaving.setback) + " in the setback week and would have used " + kwh(L.trueSaving.base) + " without it, a saving of " + pct(L.trueSaving.saving) + ". The sensors alone are " + L.sensorRmse.toFixed(3) + " C off the true room. " +
+        (isCanon() ? "The canon settings." : "Not the canon settings: your numbers will differ from the figures in the prose.") + "</p>";
+      out.innerHTML = html;
+
+      var c = '<table class="sql-table"><thead><tr><th>Your setting, per floor</th>';
+      you.floors.forEach(function (f, i) { c += "<th>Floor " + (i + 1) + "</th>"; });
+      c += "</tr></thead><tbody><tr><td>Tracking error</td>";
+      you.floors.forEach(function (f) { c += "<td>" + f.rmse.toFixed(3) + " C</td>"; });
+      c += "</tr><tr><td>Energy error</td>";
+      you.floors.forEach(function (f) { c += "<td>" + sgn(f.eErr) + "</td>"; });
+      c += "</tr><tr><td>Band coverage</td>";
+      you.floors.forEach(function (f) { c += "<td>" + pct(f.cover) + "</td>"; });
+      c += "</tr><tr><td>Innovation shift, week 2 vs 1</td>";
+      you.floors.forEach(function (f, i) { var flag = you.flagged.indexOf(i) >= 0; c += "<td" + (flag ? ' class="kwkp10-flag"' : "") + ">" + (f.shift.delta >= 0 ? "+" : "") + f.shift.delta.toFixed(3) + " C, z " + f.shift.z.toFixed(1) + (flag ? " FLAG" : "") + "</td>"; });
+      c += "</tr></tbody></table>";
+      card.innerHTML = c;
+
+      var msg = "Your setting: tracking error " + you.rmse.toFixed(3) + " C, 24-hour band " + you.width.toFixed(2) + " C wide covering " + pct(you.cover) + " of the readings that then arrived, energy estimate " + sgn(you.eErr) + ".";
+      if (Number(sdSel.value) < 0.4) msg += " The filter assumes less noise than the sensors have (0.4 C): its gain rises to " + you.floors[0].gain.toFixed(3) + ", the twin copies the readings, and the band leaves out noise that is really there.";
+      if (you.flagged.length) msg += " Floor " + you.flagged.map(function (i) { return i + 1; }).join(", ") + ": the surprises shifted (week 1 " + you.floors[you.flagged[0]].shift.w1.toFixed(3) + " C, week 2 " + you.floors[you.flagged[0]].shift.w2.toFixed(3) + " C). The model and the floor no longer agree, and the filter is absorbing it. Cause to check first: the change log. A physical change (here an insulation retrofit, kU times 0.6) reached the building and not the twin.";
+      else msg += " No floor's surprises shifted between the weeks: nothing says the building changed.";
+      verdict.textContent = msg;
+    }, 20);
+  }
+
+  $("kwkp10-anti").addEventListener("click", function () { sdSel.value = "0.01"; showBreak = false; render(); });
+  $("kwkp10-break").addEventListener("click", function () { showBreak = true; render(); });
+  $("kwkp10-reset").addEventListener("click", function () { seedSel.value = "1124"; sdSel.value = "0.4"; showBreak = false; render(); });
+  [seedSel, sdSel].forEach(function (el) { el.addEventListener("change", render); });
+
+  var st = DTW.selfTestResult || DTW.selfTest();
+  var faults = DTW.FAULTS.filter(function (f) { return !DTW.selfTest(f).pass; }).length;
+  self.textContent = st.pass
+    ? "The engine's " + st.checks.length + " self-checks pass in this browser, and " + faults + " of " + DTW.FAULTS.length + " planted faults make a check fail, as they should. Synthetic: Kittiwake Hall and every reading are constructed."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #kwkp10-bench .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp10-bench table.sql-table { margin: .6rem 0 .2rem; font-size: .8rem; }
+  #kwkp10-bench .kwkp10-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0 .3rem; }
+  #kwkp10-bench tr.kwkp10-you td { background: var(--amber-50); }
+  #kwkp10-bench td.kwkp10-flag { background: #FEF2F2; color: #991B1B; font-weight: 700; }
+  #kwkp10-bench #kwkp10-out, #kwkp10-bench #kwkp10-card { overflow-x: auto; }
+</style>
+</body>
+</html>

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 5 of 10. When the model drifts and when the asset does: read the twin's surprises, test week against week, and tell a model that was always wrong from a building that changed. Built on Kittiwake Hall, a constructed teaching building, with an unlogged retrofit detected live in the page.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="When the model drifts and when the asset does - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 5 of 10. The surprises tell you: an unlogged retrofit shifts one floor's innovations while its tracking error still looks fine.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p5-model-drift-or-asset-drift.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="When the model drifts and when the asset does - learn digital twins with phoebe">
+<meta name="twitter:description" content="Model drift, asset drift, and the innovation test that tells them apart.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 5 · When the model drifts and when the asset does - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 5 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 5 of 10</div>
+    <h1>When the <span class="accent">model</span> drifts and when the asset does</h1>
+    <p class="sub">A twin and its building can fall out of step in two ways. The model can be wrong from the start, or the building can change under it. Kittiwake Hall, a constructed six-storey teaching building, gets an insulation retrofit on floor 4 that nobody logs. The filter keeps tracking the room, so the tracking error barely moves. The hourly surprises do move, and tonight you learn to read them: a week-against-week test on the innovations, run live in the page, then the triage that turns a flag into a cause.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Data engineers and analysts running a twin</span>
+      <span class="chip audience">Modellers who own a twin's health</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-11 · Two kinds of drift</span>
+      <span class="a3" style="flex:4">11-23 · The test and the triage</span>
+      <span class="a4" style="flex:7">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The twin looks fine, and it is wrong</h2>
+    </div>
+    <p class="lede">In practitioner session 4 the twin learned to correct itself every hour. That is the good news and the trap: a filter that corrects itself will also quietly correct away the evidence that the building changed. Kittiwake Hall (constructed) runs its calibrated twin through week 2, and at the start of that week floor 4 is insulated and nobody tells the twin. Its tracking error on floor 4 is 0.399 C: worse than the building's 0.218 C, but nobody's alarm goes off at 0.4 C. The surprises, the readings minus the predictions, carry the real story.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A clear line between model drift (the twin was wrong from day one or decays) and asset drift (the building changed at a moment). A week-against-week test on each floor's innovations that flags floor 4 alone in Kittiwake's bench (z 11.44 against a threshold of 4). A three-branch triage for any flag: asset, sensor, model. And a twenty-line Python script with a CUSUM that you run yourself and watch climb after a step.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "the twin still tracks" is not "the twin is right"<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Tracking error asks: is the twin's corrected state close to the room? A filter makes that true by design, because it pulls its state toward every reading. The question a twin owner needs is different: does the model still predict the room before it sees the reading? That lives in the innovation column of the hourly row from practitioner session 1, and only there. If you stored only posteriors, the evidence is gone.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report on digital twins concludes that verification, validation and uncertainty quantification must be a continual process for a twin, one that adapts to changes in the physical counterpart. A twin validated once and then left running is exactly the case this session is about: the building moved on, the validation did not.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for drift<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Innovation.</strong> Reading minus the twin's prediction for that hour: the surprise, before any correction.</li>
+          <li><strong>Model drift.</strong> The model disagrees with the asset because the model is wrong: a wrong parameter, a missing heat path, a bias present from day one or growing slowly.</li>
+          <li><strong>Asset drift.</strong> The model disagrees because the asset changed at a moment: a retrofit, a swapped radiator, a moved sensor.</li>
+          <li><strong>Shift test.</strong> Compare the mean surprise in two windows and ask whether the difference is bigger than noise explains.</li>
+          <li><strong>Welch z.</strong> The difference in means divided by its standard error, allowing each window its own spread.</li>
+          <li><strong>CUSUM.</strong> A running sum of surprises above an allowance that sounds an alarm when it crosses a threshold. Named here; detectors are taught in <a href="https://phoebefu6.github.io/learn-anomaly-detection-with-phoebe/">learn anomaly detection</a>.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers model drift and asset drift</span>
+      <h2>Two kinds of drift, two shapes of surprise</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">The two kinds of drift leave different fingerprints in the surprises. A model that was wrong from the start shows a bias from day one. A building that changed shows a step at a date. The figure draws both shapes; the step is the one with a date you can go and look up.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pair of surprise traces over two weeks, illustrative shapes. Top, model drift: the surprises sit off zero by a constant amount from the first hour of week 1 to the last hour of week 2. Bottom, asset drift: the surprises sit around zero through week 1, then step up at the start of week 2 and stay there; the step is marked in copper. A note gives Kittiwake's constructed numbers: floor 4's mean surprise moved from plus 0.015 to plus 0.638 C.">
+        <defs>
+          <filter id="kwkp5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp5aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp5aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp5aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp5aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp5aH" x="30" y="30">TWO WAYS THE SURPRISES GO WRONG (ILLUSTRATIVE SHAPES)</text>
+
+        <g filter="url(#kwkp5aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="820" height="130" rx="10" transform="rotate(-0.2 440 115)" fill="#FFFFFF"/>
+          <rect x="30" y="200" width="820" height="130" rx="10" transform="rotate(0.2 440 265)" fill="#EDF4FB"/>
+          <path d="M356 146 L834 146" stroke="#C6D2DD" stroke-dasharray="5 4"/>
+          <path d="M595 96 L595 158" stroke-dasharray="6 5"/>
+          <path d="M360 120 L370 121 L380 122 L390 124 L400 121 L410 124 L420 111 L430 118 L440 124 L450 120 L460 124 L470 113 L480 118 L490 114 L500 119 L510 119 L520 111 L530 114 L540 115 L550 124 L560 122 L570 113 L580 122 L590 113 L600 120 L610 113 L620 111 L630 123 L640 114 L650 114 L660 125 L670 123 L680 115 L690 124 L700 119 L710 120 L720 114 L730 124 L740 121 L750 125 L760 124 L770 115 L780 116 L790 113 L800 113 L810 112 L820 115 L830 119" stroke="#045C9F" stroke-width="1.6"/>
+          <path d="M356 290 L834 290" stroke="#C6D2DD" stroke-dasharray="5 4"/>
+          <path d="M595 244 L595 300" stroke-dasharray="6 5"/>
+          <path d="M360 283 L370 292 L380 288 L390 287 L400 294 L410 290 L420 287 L430 290 L440 293 L450 284 L460 297 L470 283 L480 293 L490 295 L500 283 L510 294 L520 288 L530 291 L540 283 L550 284 L560 286 L570 296 L580 286 L590 294 L600 268 L610 268 L620 260 L630 260 L640 262 L650 266 L660 257 L670 265 L680 266 L690 267 L700 256 L710 268 L720 256 L730 260 L740 264 L750 268 L760 260 L770 268 L780 263 L790 259 L800 259 L810 257 L820 256 L830 257" stroke="#045C9F" stroke-width="1.6"/>
+          <circle cx="595" cy="279" r="8" fill="#C8733A"/>
+          <!-- doodle: a thermometer -->
+          <rect x="826" y="16" width="10" height="26" rx="5" fill="#FFFFFF"/>
+          <circle cx="831" cy="44" r="7" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp5aL" x="46" y="74">Model drift: wrong from day one</text>
+        <text class="kwkp5aS" x="46" y="92">a design-spec parameter, a constant bias</text>
+        <text class="kwkp5aK" x="46" y="128">mean off zero in both weeks</text>
+        <text class="kwkp5aS" x="46" y="146">no date to look up</text>
+        <text class="kwkp5aA" x="430" y="172">week 1</text>
+        <text class="kwkp5aA" x="690" y="172">week 2</text>
+        <text class="kwkp5aS" x="300" y="150">zero</text>
+
+        <text class="kwkp5aL" x="46" y="224">Asset drift: the building changed</text>
+        <text class="kwkp5aS" x="46" y="242">a retrofit, a swapped radiator</text>
+        <text class="kwkp5aK" x="46" y="278">mean jumps at one date</text>
+        <text class="kwkp5aS" x="46" y="296">a date you can look up</text>
+        <text class="kwkp5aS" x="300" y="294">zero</text>
+        <text class="kwkp5aA" x="612" y="318">the step: the start of week 2</text>
+
+        <text class="kwkp5aN" x="30" y="356">Shapes are illustrative. In Kittiwake (constructed) the retrofit moved floor 4's mean surprise from +0.015 to +0.638 C.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a constant offset points at the model; a step on a date points at the building, and the copper step is where you start looking.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Model drift: the twin was wrong before anything happened<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Run the design-spec twin of Kittiwake (practitioner session 3) through the filter and its surprises are biased from the first hour: the drawings say the floors lose less heat than they do, so the model keeps predicting a warmer room than the sensor finds. Nothing changed; the model was simply never right. The same signature appears when a parameter slowly decays, such as a heat-loss value that ages with the building: a slow ramp rather than a step. The fix is on the model side: recalibrate, and record a new model version.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Asset drift: the building changed at a moment<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A retrofit, a swapped radiator, new windows, a sensor moved from the wall to a desk: each is a physical change with a date. Before it, the calibrated model was right; after it, the model describes a building that no longer exists. In Kittiwake's bench the retrofit cuts floor 4's heat loss to 0.6 times what it was, at the start of week 2, and the twin is not told. The surprises step up and stay up. The fix is on the asset side first: log the change as a new configuration, then refit the model to it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the line between them is blurry in practice<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A model calibrated on one week can look fine and still be wrong for a season it never saw: that is model drift that only appears when conditions change, and it can look like a step on the day the weather turns. Gradual asset changes (filters clogging, seals ageing) produce ramps that look like model decay. The shapes are a first guess, never a verdict. The AIAA and AIA (2020) position paper names an "As Maintained" phase in a twin's life: the asset keeps changing after it is built, and the twin has to be told.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the innovation shift test</span>
+      <h2>The innovation test: week against week, floor by floor</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">Kittiwake's bench runs one simple test on every floor. Take the mean surprise in week 1 (hours 25 to 167, after a day of warm-up) and in week 2 (hours 168 to 336). Divide the difference by its standard error, with each week allowed its own spread (Welch's z). Flag the floor when the size of z is above 4. The figure shows why the test looks at the surprises and not at the tracking error.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-panel figure for Kittiwake floor 4 with an unlogged retrofit at hour 168, constructed, seed 1124. Top panel: the true room and the twin's corrected estimate stay close through both weeks; tracking error on floor 4 is 0.399 C. Bottom panel: the hourly surprises sit around zero in week 1 with a mean of plus 0.015 C, then sit higher in week 2 with a mean of plus 0.638 C, marked by a copper bar. The shift has z 11.44 and floor 4 is flagged.">
+        <defs>
+          <filter id="kwkp5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp5bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp5bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp5bV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwkp5bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp5bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp5bH" x="30" y="30">FLOOR 4, UNLOGGED RETROFIT AT HOUR 168 (CONSTRUCTED, SEED 1124)</text>
+
+        <g filter="url(#kwkp5bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="820" height="140" rx="10" transform="rotate(0.2 440 120)" fill="#FFFFFF"/>
+          <rect x="30" y="210" width="820" height="140" rx="10" transform="rotate(-0.2 440 280)" fill="#EDF4FB"/>
+          <path d="M595 104 L595 176" stroke-dasharray="6 5"/>
+          <path d="M360 140 L370 137 L380 133 L390 130 L400 128 L410 127 L420 126 L430 126 L440 127 L450 129 L460 132 L470 135 L480 138 L490 142 L500 145 L510 148 L520 151 L530 153 L540 154 L550 154 L560 153 L570 152 L580 150 L590 147 L600 144 L610 140 L620 137 L630 134 L640 131 L650 128 L660 127 L670 126 L680 126 L690 127 L700 129 L710 131 L720 134 L730 138 L740 141 L750 144 L760 148 L770 150 L780 152 L790 154 L800 154 L810 154 L820 152 L830 150"/>
+          <path d="M360 140 L370 136 L380 131 L390 133 L400 125 L410 127 L420 128 L430 124 L440 128 L450 130 L460 129 L470 134 L480 139 L490 141 L500 146 L510 146 L520 149 L530 150 L540 154 L550 157 L560 154 L570 154 L580 149 L590 149 L600 147 L610 144 L620 143 L630 140 L640 135 L650 131 L660 130 L670 129 L680 130 L690 134 L700 132 L710 139 L720 142 L730 140 L740 145 L750 149 L760 150 L770 155 L780 160 L790 156 L800 160 L810 156 L820 158 L830 158" stroke="#045C9F" stroke-width="1.6" stroke-dasharray="5 3"/>
+          <path d="M356 300 L834 300" stroke="#C6D2DD" stroke-dasharray="5 4"/>
+          <path d="M595 254 L595 340" stroke-dasharray="6 5"/>
+          <rect x="600" y="270" width="230" height="8" rx="3" fill="#C8733A" stroke-width="1.4"/>
+          <path d="M360 299 L590 299" stroke-width="2.6"/>
+          <path d="M360 296 L368 309 L376 308 L384 306 L392 305 L400 308 L408 296 L416 306 L424 293 L432 300 L440 308 L448 306 L456 294 L464 313 L472 304 L480 302 L488 285 L496 301 L504 293 L512 305 L520 299 L528 310 L536 304 L544 309 L552 295 L560 304 L568 307 L576 310 L584 296" stroke="#045C9F" stroke-width="1.4"/>
+          <path d="M598 284 L606 285 L614 280 L622 288 L630 288 L638 275 L646 275 L654 264 L662 284 L670 287 L678 273 L686 280 L694 281 L702 281 L710 264 L718 282 L726 276 L734 279 L742 272 L750 278 L758 282 L766 278 L774 281 L782 260 L790 264 L798 272 L806 279 L814 266 L822 280 L830 278" stroke="#045C9F" stroke-width="1.4"/>
+          <!-- doodle: a window -->
+          <rect x="818" y="14" width="26" height="26" rx="2" fill="#FFFFFF"/>
+          <path d="M831 14 L831 40 M818 27 L844 27"/>
+        </g>
+
+        <text class="kwkp5bL" x="46" y="74">State follows</text>
+        <text class="kwkp5bS" x="46" y="92">the corrected estimate chases the readings</text>
+        <text class="kwkp5bK" x="46" y="128">tracking error on floor 4</text>
+        <text class="kwkp5bV" x="46" y="152">0.399 C</text>
+        <text class="kwkp5bS" x="46" y="174">solid: true room; dashed: twin</text>
+        <text class="kwkp5bA" x="430" y="186">week 1</text>
+        <text class="kwkp5bA" x="690" y="186">week 2</text>
+
+        <text class="kwkp5bL" x="46" y="234">Surprises carry it</text>
+        <text class="kwkp5bS" x="46" y="252">reading minus prediction, hour by hour</text>
+        <text class="kwkp5bV" x="46" y="290">+0.015 C</text>
+        <text class="kwkp5bV" x="160" y="290">+0.638 C</text>
+        <text class="kwkp5bS" x="46" y="308">week 1 mean</text>
+        <text class="kwkp5bS" x="160" y="308">week 2 mean</text>
+        <text class="kwkp5bL" x="46" y="334">z 11.44: floor 4 flagged</text>
+
+        <text class="kwkp5bN" x="30" y="378">The filter corrects its state every hour, so tracking error hides the change; the surprises keep a steady sign.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the state absorbs the step and still looks close; the copper bar is the week-2 mean surprise, and that is the evidence.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwkp5-shift">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The shift test on all six floors of Kittiwake's twin, computed in your browser by the bench engine: calibrated on week 1, kept in sync by the Kalman filter, then each floor's mean surprise in week 1 (hours 25 to 167) compared with week 2 (hours 168 to 336), flagged when the size of Welch's z is above 4. Synthetic and constructed: Kittiwake, its weather, readings and the retrofit are generated. The retrofit, when on, cuts floor 4's heat loss to 0.6 times at the start of week 2 and is not logged.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp5-seed">Seed for the constructed world</label>
+        <select class="sql-code" id="kwkp5-seed">
+          <option value="1124" selected>1124, the canon</option>
+          <option value="1">1</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <label class="sql-label" for="kwkp5-floor">Floor whose surprises to draw</label>
+        <select class="sql-code" id="kwkp5-floor">
+          <option value="0">Floor 1</option>
+          <option value="1">Floor 2</option>
+          <option value="2">Floor 3</option>
+          <option value="3" selected>Floor 4</option>
+          <option value="4">Floor 5</option>
+          <option value="5">Floor 6</option>
+        </select>
+        <div class="kwkp5-btns">
+          <button class="btn primary" id="kwkp5-break" type="button">Retrofit on floor 4: on</button>
+          <button class="btn" id="kwkp5-reset" type="button">Back to the canon settings</button>
+        </div>
+        <div id="kwkp5-out"></div>
+        <div id="kwkp5-trace"></div>
+        <p class="sql-note" id="kwkp5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp5-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the table<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Floor 4 stands alone.</strong> At the canon settings its mean surprise is +0.015 C in week 1 and +0.638 C in week 2, z 11.44. Every other floor stays below 0.7 in size. Turn the retrofit off and no floor is flagged: z runs from -0.65 to 0.68 across the six floors.</p>
+        <p><strong>The tracking error barely notices.</strong> Floor 4's tracking error with the retrofit is 0.399 C, against 0.218 C for the whole building without it. Neither number would make anyone look twice. The filter takes about 0.445 of every surprise into its state, practitioner session 4's gain, so it keeps following the room while the model underneath is describing a floor that no longer exists.</p>
+        <p><strong>Change the seed.</strong> Seeds 1, 7 and 42 give a break z of 8.7, 11.6 and 11.9, always on floor 4 and only there. Your numbers will differ by seed; the shape holds.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the wrong state costs<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A good-looking state hides a bad plan. A week-ahead heating plan runs the model forward without readings, so it uses the old parameters. In the bench, floor 4's energy estimate for the setback week is 63.1 percent too high and the whole building's 8.9 percent too high (5,153 against 4,732 kWh). The twin says the setback week will cost far more heat on floor 4 than it does. Energy figures here are constructed and are not investment or financial advice.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a threshold of 4 and two whole weeks<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Six floors are tested at once, so a loose threshold would flag a clean floor now and then by chance alone; 4 is strict enough that the clean runs never get close (the largest clean z across the four seeds is under 1.5 in size). Hourly surprises are also correlated from one hour to the next, which makes a naive z look more certain than it is: one more reason for a strict threshold. Comparing whole weeks is slow: you learn about a Monday change the following Sunday. Faster detectors trade speed against false alarms; that trade is the subject of <a href="https://phoebefu6.github.io/learn-anomaly-detection-with-phoebe/">learn anomaly detection</a>. Kalman (1960) set filtering in a state-space form; the surprises the filter computes each hour are a by-product it already has, so watching them costs nothing extra.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers turning a flag into a cause</span>
+      <h2>From a flag to a cause</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A flag says one thing: the model and the asset disagree on this floor, starting about here. It does not say why. Three things can have changed, and each has its own evidence. The figure is the triage order most twin owners settle on: check the cheapest record first.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn triage tree. The root box says the flag: floor 4's surprises shifted, z 11.44 against a threshold of 4. Three branches. Asset changed, in copper: a retrofit, new windows or a swapped radiator; check the change log first, practitioner session 6. Sensor changed: moved, replaced or recalibrated, a new clock or unit; sensor data lives in learn IoT data. Model changed: a new model version, edited parameters or a code change; diff the model record.">
+        <defs>
+          <filter id="kwkp5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="57" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp5cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp5cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp5cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp5cH" x="30" y="30">A FLAG SAYS THEY DISAGREE, NOT WHY</text>
+
+        <g filter="url(#kwkp5cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="300" y="50" width="280" height="58" rx="8" transform="rotate(-0.4 440 79)" fill="url(#kwkp5cHc)"/>
+          <rect x="30" y="160" width="250" height="100" rx="8" transform="rotate(0.5 155 210)" fill="#C8733A"/>
+          <rect x="315" y="160" width="250" height="100" rx="8" transform="rotate(-0.4 440 210)" fill="#FFFFFF"/>
+          <rect x="600" y="160" width="250" height="100" rx="8" transform="rotate(0.4 725 210)" fill="#FFFFFF"/>
+          <path d="M420 112 L180 156" marker-end="url(#kwkp5cAr)"/>
+          <path d="M440 112 L440 156" marker-end="url(#kwkp5cAr)"/>
+          <path d="M460 112 L700 156" marker-end="url(#kwkp5cAr)"/>
+          <!-- doodle: a clipboard, the change log -->
+          <rect x="818" y="14" width="24" height="30" rx="3" fill="#FFFFFF"/>
+          <path d="M824 14 L824 10 L836 10 L836 14 M823 24 L837 24 M823 31 L837 31"/>
+        </g>
+
+        <text class="kwkp5cL" x="316" y="76">Flag: floor 4 surprises shifted</text>
+        <text class="kwkp5cK" x="316" y="96">z 11.44, threshold 4</text>
+
+        <text class="kwkp5cL" x="46" y="184">Asset changed</text>
+        <text class="kwkp5cK" x="46" y="204">a retrofit, new windows, a</text>
+        <text class="kwkp5cK" x="46" y="222">swapped radiator. Check the</text>
+        <text class="kwkp5cK" x="46" y="240">change log first (session 6)</text>
+
+        <text class="kwkp5cL" x="331" y="184">Sensor changed</text>
+        <text class="kwkp5cS" x="331" y="204">moved, replaced, recalibrated,</text>
+        <text class="kwkp5cS" x="331" y="222">a new clock or unit. Sensor</text>
+        <text class="kwkp5cS" x="331" y="240">data: learn IoT data</text>
+
+        <text class="kwkp5cL" x="616" y="184">Model changed</text>
+        <text class="kwkp5cS" x="616" y="204">a new model version, edited</text>
+        <text class="kwkp5cS" x="616" y="222">parameters, a code change.</text>
+        <text class="kwkp5cS" x="616" y="240">Diff the model record</text>
+
+        <text class="kwkp5cN" x="30" y="296">Check the cheapest evidence first. Thresholds and false alarms belong to detector design, not to the twin.</text>
+        <text class="kwkp5cN" x="30" y="316">Kittiwake (constructed): the cause is an unlogged insulation retrofit, heat loss x 0.6.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three records can explain a flag; the copper branch, the change log, is the one that names a date and a person.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three checks, in order<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The change log.</strong> Was anything done to floor 4 around the start of week 2? If the log says yes, you have a cause and a new configuration version to fit to. If the log says no, that is not proof nothing happened: in Kittiwake's bench the retrofit was real and the log was silent. Practitioner session 6 treats that gap as a data problem.</p>
+        <p><strong>The sensor.</strong> A sensor moved closer to a radiator, swapped for a new one with a different offset, or a clock that slipped an hour all produce a step in the surprises with nothing wrong in the building. Sensor health has its own discipline in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</p>
+        <p><strong>The model version.</strong> Did a new model version go live that week? Every hourly row carries its model version (practitioner session 1), so this is a query, not a meeting. A flag that starts the hour a new version deployed points at the version.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a flag does not tell you<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Not the cause.</strong> All three branches produce the same step.</li>
+          <li><strong>Not the exact hour.</strong> A week-against-week test says "somewhere this week"; finding the hour takes a change-point method or a CUSUM, as in the build-along.</li>
+          <li><strong>Not the size of the physical change.</strong> A mean surprise of +0.638 C is not "heat loss x 0.6"; recovering that takes a recalibration on the new week.</li>
+          <li><strong>Not whether to act.</strong> That belongs to the twin's owner and its governance, practitioner session 8.</li>
+        </ul>
+        <p>Automating root cause, deciding which branch it was without a person, is out of scope here: it needs the change log, the sensor history and the model registry joined, and judgement about which to trust.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Catch a step in the surprises with a week test and a CUSUM</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You will simulate two weeks of hourly surprises for one floor, put a step of +0.6 C in at hour 168, and catch it twice: once with the week-against-week Welch z from Part 2, and once with a one-sided CUSUM that names the hour. Standard library only. The figure is the CUSUM from this exact script around the step.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 322" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn line of the one-sided CUSUM from the build-along script, hours 156 to 185. Before hour 168 the sum keeps resetting to zero and peaks at 0.78. A dashed line marks the step of plus 0.6 at hour 168. After it the sum climbs and crosses the alarm threshold of 1.5 at hour 174, marked in copper, six hours after the change, and reaches 4.03 by hour 185.">
+        <defs>
+          <filter id="kwkp5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp5dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp5dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp5dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp5dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp5dH" x="30" y="30">THE CUSUM FROM drift.py, HOURS 156 TO 185 (CONSTRUCTED NOISE, SEED 11)</text>
+
+        <g filter="url(#kwkp5dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M110 70 L110 260 L832 260"/>
+          <path d="M110 200 L832 200" stroke="#C6D2DD" stroke-dasharray="6 4"/>
+          <path d="M410 80 L410 260" stroke-dasharray="6 5"/>
+          <path d="M120 260 L144 260 L168 255 L192 260 L217 260 L241 260 L265 260 L289 230 L313 229 L337 234 L361 248 L386 260 L410 250 L434 256 L458 237 L482 251 L506 250 L530 223 L554 191 L579 193 L603 200 L627 177 L651 155 L675 155 L699 151 L723 148 L748 150 L772 146 L796 119 L820 99" stroke="#045C9F" stroke-width="2.2"/>
+          <circle cx="554" cy="191" r="7" fill="#C8733A"/>
+          <!-- doodle: a thermometer -->
+          <rect x="828" y="14" width="10" height="26" rx="5" fill="#FFFFFF"/>
+          <circle cx="833" cy="42" r="7" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp5dS" x="100" y="264" text-anchor="end">0</text>
+        <text class="kwkp5dS" x="100" y="204" text-anchor="end">1.5</text>
+        <text class="kwkp5dS" x="100" y="104" text-anchor="end">4.0</text>
+        <text class="kwkp5dA" x="120" y="192">alarm threshold h = 1.5</text>
+        <text class="kwkp5dA" x="418" y="96">step of +0.6 C at hour 168</text>
+        <text class="kwkp5dL" x="680" y="104">CUSUM S</text>
+        <text class="kwkp5dL" x="560" y="228">alarm: hour 174</text>
+        <text class="kwkp5dS" x="560" y="244">6 hours after the change</text>
+        <text class="kwkp5dS" x="120" y="280">hour 156</text>
+        <text class="kwkp5dS" x="410" y="280" text-anchor="middle">168</text>
+        <text class="kwkp5dS" x="820" y="280" text-anchor="end">185</text>
+
+        <text class="kwkp5dN" x="30" y="306">Before the step the sum keeps resetting to 0 (highest 0.78 in week 1). After it, it climbs and does not come back.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper dot is the alarm: a CUSUM names an hour, where the week test only names a week.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Make a scratch folder and the surprises</h4>
+        <p>Make an empty folder, save the script below as drift.py in it, and read the first block. 336 hourly surprises with a standard deviation of 0.3 C stand in for one floor's innovations. From hour 168 every surprise gets +0.6 C: the floor changed and the twin was not told.</p>
+        <div class="prompt-box good"><span class="label">drift.py, part 1</span># Innovations for one floor, two weeks hourly, with a step at the start of week 2.
+import random, statistics, math
+
+rng = random.Random(11)
+innov = [rng.gauss(0.0, 0.3) for _ in range(336)]   # surprises, sd 0.3 C
+for t in range(168, 336):
+    innov[t] += 0.6                                  # the asset changed at hour 168</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Add the week-against-week test</h4>
+        <p>The same Welch z as Kittiwake's bench: the difference of the two weekly means over its standard error, each week with its own variance.</p>
+        <div class="prompt-box good"><span class="label">drift.py, part 2</span>w1, w2 = innov[:168], innov[168:]
+m1, m2 = statistics.mean(w1), statistics.mean(w2)
+z = (m2 - m1) / math.sqrt(statistics.variance(w1) / len(w1) + statistics.variance(w2) / len(w2))
+print(f"week 1 mean {m1:+.3f} C, week 2 mean {m2:+.3f} C, Welch z {z:.2f}")</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Add a one-sided CUSUM</h4>
+        <p>Each hour, add the surprise minus an allowance k (here half the step you care about), never let the sum go below 0, and sound the alarm when it passes h. Record the path so you can look at it.</p>
+        <div class="prompt-box good"><span class="label">drift.py, part 3</span># One-sided CUSUM: add each surprise minus an allowance k, never go below 0, alarm above h.
+k, h, s, alarm, path = 0.3, 1.5, 0.0, None, []
+for t, v in enumerate(innov):
+    s = max(0.0, s + v - k)
+    path.append(s)
+    if s &gt; h and alarm is None:
+        alarm = t
+print(f"highest CUSUM in week 1: {max(path[:168]):.2f} (threshold {h})")
+print(f"CUSUM alarm at hour {alarm}, {alarm - 168} hours after the change")
+print("CUSUM at hours 168 to 180:", " ".join(f"{x:.2f}" for x in path[168:181]))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run it and read the output</h4>
+        <p>From the scratch folder, run <code>python3 -I drift.py</code>. This is the output it printed when we ran it:</p>
+        <div class="prompt-box good"><span class="label">Output</span>week 1 mean +0.059 C, week 2 mean +0.570 C, Welch z 15.21
+highest CUSUM in week 1: 0.78 (threshold 1.5)
+CUSUM alarm at hour 174, 6 hours after the change
+CUSUM at hours 168 to 180: 0.26 0.10 0.57 0.23 0.26 0.93 1.72 1.67 1.51 2.07 2.62 2.63 2.72</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break it on purpose</h4>
+        <p>Set h to 0.5 and run again: the alarm fires in week 1, before anything changed. Then set the step to +0.2 instead of +0.6 and watch how much later the alarm comes, or whether it comes at all. That trade, earlier alarms against false ones, is what detector design is about; take it further in <a href="https://phoebefu6.github.io/learn-anomaly-detection-with-phoebe/">learn anomaly detection</a>.</p>
+        <div class="prompt-box good"><span class="label">two edits to try, one at a time</span>k, h, s, alarm, path = 0.3, 0.5, 0.0, None, []      # a jumpier alarm
+innov[t] += 0.2                                       # a smaller change</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Store every surprise, not just the corrected state, and run a shift test on them per asset, every week. A twin whose surprises are never read will absorb a changed building without a word.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">After the unlogged retrofit, floor 4's tracking error is only 0.399 C (constructed). Why does that number hide the change?</p>
+      <button class="qopt" type="button">A · Because the retrofit made the floor's sensor more accurate</button>
+      <button class="qopt" type="button">B · Because the filter pulls its state toward every reading, so the corrected state follows the room while the model underneath is wrong; the surprises carry the evidence</button>
+      <button class="qopt" type="button">C · Because tracking error is only computed in week 1</button>
+      <p class="qwhy">The update moves the state about 0.445 of the way to each reading. The state stays close; the predictions do not, and the mean surprise jumps from +0.015 to +0.638 C.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The surprises on a floor have been about +0.5 C since the first hour of week 1 and are the same in week 2. Which kind of drift does that shape suggest first?</p>
+      <button class="qopt" type="button">A · Asset drift: something changed at the start of week 2</button>
+      <button class="qopt" type="button">B · No drift: a constant offset is harmless</button>
+      <button class="qopt" type="button">C · Model drift: the model was wrong from the start, for example a design-spec parameter, so recalibrate and version the model</button>
+      <p class="qwhy">A bias present from day one has no date to look up; it points at the model. A step on a date points at the building. Treat both as a first guess and check the records.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Floor 4 is flagged with z 11.44. What does the flag not tell you?</p>
+      <button class="qopt" type="button">A · Why: the asset, the sensor or the model could each have changed, so you check the change log, the sensor and the model version</button>
+      <button class="qopt" type="button">B · That the model and the floor disagree</button>
+      <button class="qopt" type="button">C · Which floor disagrees</button>
+      <p class="qwhy">The flag says the model and the asset disagree on floor 4, this week. The cause takes the triage in Part 3.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>In the widget, turn the retrofit off and on for each of the four seeds, and write down floor 4's z both ways. Your numbers will differ by seed; note which seed has the weakest break signal.</li>
+      <li>Draw floor 2's surprises in the widget with the retrofit on. Write one sentence on why a retrofit on floor 4 does not move floor 2's mean surprise in this bench, and one on whether that would hold in a real building.</li>
+      <li>In drift.py, replace the step with a slow ramp (add 0.6 x (t - 168) / 168 from hour 168). Run it and compare the alarm hour with the step's.</li>
+      <li>For a model you run, write the three triage checks as three queries: the change log, the sensor history, the model version, each for one asset and one week.</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Validation is continual</span><span class="note">National Academies (2024): VVUQ as a continual process that adapts to changes in the physical counterpart. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The asset keeps changing</span><span class="note">AIAA and AIA (2020): the As Maintained phase of a twin's life. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The innovation shift test</span><span class="note">Kittiwake, constructed, computed in the page: floor 4 +0.015 to +0.638 C, z 11.44, flagged alone; tracking error 0.399 C.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">CUSUM</span><span class="note">Named and run in the build-along; detectors and threshold design live in <a href="https://phoebefu6.github.io/learn-anomaly-detection-with-phoebe/">learn anomaly detection</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Root-cause automation</span><span class="note">Out of scope: deciding the cause without a person needs the change log, sensor history and model registry joined.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Two drifts.</strong> Model drift: wrong from the start or decaying. Asset drift: the building changed at a moment.</div>
+      <div class="cheat-item"><strong>Two shapes.</strong> A bias from day one points at the model; a step on a date points at the asset.</div>
+      <div class="cheat-item"><strong>Watch the surprises.</strong> Tracking error hides a change the filter absorbs; innovations do not.</div>
+      <div class="cheat-item"><strong>The shift test.</strong> Week 2 mean surprise minus week 1, over its standard error (Welch z); flag above 4.</div>
+      <div class="cheat-item"><strong>Kittiwake's break.</strong> Floor 4: +0.015 to +0.638 C, z 11.44; others below 0.7. Constructed.</div>
+      <div class="cheat-item"><strong>A flag is not a cause.</strong> Check the change log, then the sensor, then the model version.</div>
+      <div class="cheat-item"><strong>CUSUM.</strong> Sum the surprises above an allowance, reset at 0, alarm above h: it names the hour.</div>
+      <div class="cheat-item"><strong>Constructed.</strong> Kittiwake's numbers are generated; your numbers will differ.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>The change log is a data source.</strong> The flag pointed at floor 4 and the log was silent. Configuration as data, the As Maintained record, and what an unlogged retrofit does to every plan the twin makes.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 5 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p4-the-kalman-filter-by-hand.html">← Prev: Keeping state in sync: the Kalman filter by hand</a>
+        <a href="p6-the-change-log-is-a-data-source.html">Next: The change log is a data source →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var $ = function (id) { return document.getElementById(id); };
+  var seedSel = $("kwkp5-seed"), floorSel = $("kwkp5-floor"), brkBtn = $("kwkp5-break");
+  var out = $("kwkp5-out"), trace = $("kwkp5-trace"), verdict = $("kwkp5-verdict"), self = $("kwkp5-self");
+  if (!seedSel || !out) return;
+  var brk = true, cache = {};
+
+  function f3(x) { return (x >= 0 ? "+" : "") + x.toFixed(3); }
+
+  function innovations(seed, b, f) {
+    var key = seed + "|" + b + "|" + f;
+    if (cache[key]) return cache[key];
+    var W = DTW.world(seed, false), cal = DTW.calibrate(W, f);
+    var p = DTW.params(f, cal.kU, cal.kC);
+    var k = DTW.kalman(b ? DTW.world(seed, true) : W, f, p, DTW.DEFAULTS);
+    cache[key] = k.innov;
+    return k.innov;
+  }
+
+  function drawTrace(innov, row, flagged) {
+    var x0 = 50, x1 = 860, yc = 110, sc = 45, n = innov.length - 1;
+    function X(t) { return (x0 + (x1 - x0) * (t - 1) / (n - 1)).toFixed(1); }
+    function Y(v) { var c = Math.max(-2, Math.min(2, v)); return (yc - sc * c).toFixed(1); }
+    var pts = [];
+    for (var t = 1; t <= n; t++) pts.push(X(t) + "," + Y(innov[t]));
+    var svg = '<svg viewBox="0 0 880 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hourly surprises for the chosen floor over two weeks, with the week means drawn as horizontal lines">';
+    svg += '<line x1="' + x0 + '" y1="' + yc + '" x2="' + x1 + '" y2="' + yc + '" stroke="#C6D2DD" stroke-width="1"/>';
+    svg += '<line x1="' + X(168) + '" y1="30" x2="' + X(168) + '" y2="200" stroke="#10202F" stroke-width="1.2" stroke-dasharray="5 4"/>';
+    svg += '<polyline points="' + pts.join(" ") + '" fill="none" stroke="#045C9F" stroke-width="1" opacity=".75"/>';
+    svg += '<line x1="' + X(25) + '" y1="' + Y(row.w1) + '" x2="' + X(167) + '" y2="' + Y(row.w1) + '" stroke="#10202F" stroke-width="3"/>';
+    svg += '<line x1="' + X(168) + '" y1="' + Y(row.w2) + '" x2="' + X(n) + '" y2="' + Y(row.w2) + '" stroke="' + (flagged ? "#C8733A" : "#10202F") + '" stroke-width="' + (flagged ? 5 : 3) + '"/>';
+    svg += '<text x="54" y="16" style="font: 600 12px Inter, sans-serif; fill: #10202F">week 1 mean ' + f3(row.w1) + ' C</text>';
+    svg += '<text x="' + (Number(X(168)) + 8) + '" y="16" style="font: 600 12px Inter, sans-serif; fill: #10202F">week 2 mean ' + f3(row.w2) + ' C' + (flagged ? ", flagged" : "") + '</text>';
+    svg += '<text x="44" y="' + (yc + 4) + '" text-anchor="end" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A">0</text>';
+    svg += '<text x="44" y="' + (Number(Y(1)) + 4) + '" text-anchor="end" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A">+1</text>';
+    svg += '<text x="44" y="' + (Number(Y(-1)) + 4) + '" text-anchor="end" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A">-1</text>';
+    svg += '<text x="' + x0 + '" y="222" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A">hour 1</text>';
+    svg += '<text x="' + X(168) + '" y="222" text-anchor="middle" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A">hour 168</text>';
+    svg += '<text x="' + x1 + '" y="222" text-anchor="end" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A">hour 336</text>';
+    svg += "</svg>";
+    return svg;
+  }
+
+  function render() {
+    var seed = Number(seedSel.value), f = Number(floorSel.value);
+    brkBtn.textContent = "Retrofit on floor 4: " + (brk ? "on" : "off");
+    out.innerHTML = '<p class="sql-note">Calibrating and filtering six floors in your browser...</p>';
+    setTimeout(function () {
+      var r = DTW.custom(0.4, brk, { seed: seed });
+      var html = '<table class="sql-table"><thead><tr><th>Floor</th><th>Mean surprise, week 1</th><th>Mean surprise, week 2</th><th>Welch z</th><th>Verdict</th></tr></thead><tbody>';
+      r.floors.forEach(function (row, i) {
+        var flag = r.flagged.indexOf(i) >= 0;
+        html += "<tr><td>Floor " + (i + 1) + "</td><td>" + f3(row.shift.w1) + " C</td><td>" + f3(row.shift.w2) + " C</td><td><b>" + row.shift.z.toFixed(2) + "</b></td><td" + (flag ? ' class="kwkp5-flag"' : "") + ">" + (flag ? "FLAG" : "no shift") + "</td></tr>";
+      });
+      html += "</tbody></table>";
+      var canon = seed === 1124 && brk;
+      html += '<p class="sql-note">Tracking error against the true room, week 2: whole building ' + r.rmse.toFixed(3) + " C, floor 4 " + r.floors[3].rmse.toFixed(3) + " C. " + (canon ? "The canon settings." : "Not the canon settings: your numbers will differ from the figures in the prose.") + "</p>";
+      out.innerHTML = html;
+      var innov = innovations(seed, brk, f);
+      trace.innerHTML = drawTrace(innov, r.floors[f].shift, r.flagged.indexOf(f) >= 0);
+      var msg;
+      if (r.flagged.length) {
+        var g = r.flagged[0], s = r.floors[g].shift;
+        msg = "Floor " + r.flagged.map(function (i) { return i + 1; }).join(", ") + " flagged: mean surprise " + f3(s.w1) + " C in week 1, " + f3(s.w2) + " C in week 2, z " + s.z.toFixed(2) + ". Its tracking error is still only " + r.floors[g].rmse.toFixed(3) + " C: the filter follows the room, the surprises carry the warning. The flag says the model and the floor disagree, not why: check the change log, then the sensor, then the model version.";
+      } else {
+        var lo = Infinity, hi = -Infinity;
+        r.floors.forEach(function (row) { lo = Math.min(lo, row.shift.z); hi = Math.max(hi, row.shift.z); });
+        msg = "No floor flagged: z runs from " + lo.toFixed(2) + " to " + hi.toFixed(2) + " across the six floors. Nothing says the building changed between the weeks.";
+      }
+      verdict.textContent = msg;
+    }, 20);
+  }
+
+  brkBtn.addEventListener("click", function () { brk = !brk; render(); });
+  $("kwkp5-reset").addEventListener("click", function () { seedSel.value = "1124"; floorSel.value = "3"; brk = true; render(); });
+  [seedSel, floorSel].forEach(function (el) { el.addEventListener("change", render); });
+
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed: Kittiwake Hall, every reading and the retrofit are generated (default seed 1124). The engine's " + st.checks.length + " self-checks pass in this browser, including that the retrofit is flagged on floor 4 and nowhere else."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #kwkp5-shift .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp5-shift table.sql-table { margin: .6rem 0 .2rem; font-size: .84rem; }
+  #kwkp5-shift .kwkp5-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0 .3rem; }
+  #kwkp5-shift td.kwkp5-flag { background: #FEF2F2; color: #991B1B; font-weight: 700; }
+  #kwkp5-shift #kwkp5-out { overflow-x: auto; }
+  #kwkp5-shift #kwkp5-trace { margin-top: .6rem; border: 1px solid var(--hairline); border-radius: 8px; background: #FFFFFF; padding: .4rem; }
+  #kwkp5-shift #kwkp5-trace svg { width: 100%; height: auto; display: block; }
+</style>
+</body>
+</html>

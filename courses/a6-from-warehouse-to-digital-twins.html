@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 6 of 6. The transfer map for data people moving into digital twins: what carries over (schemas, residuals, train and test, lineage), what must be learned (state versus parameters, grey-box models, data assimilation, checked bands), what must be unlearned, and a 90-day self-study ladder on free and official sources. Kittiwake Hall is a constructed teaching building. Not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="From warehouse to digital twins: the transfer map - learn digital twins with phoebe">
+<meta property="og:description" content="Leader session 6 of 6. Carries over, must learn, must unlearn: twelve concrete skills, a self-assessment that points at the session to take next, and a 90-day ladder on free and official sources.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/a6-from-warehouse-to-digital-twins.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="From warehouse to digital twins: the transfer map - learn digital twins with phoebe">
+<meta name="twitter:description" content="Half of what a data team knows is worth more next to a physical asset. A quarter of it is dangerous there.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 6 · From warehouse to digital twins: the transfer map - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Leader session 6 of 6</div>
+    <h1>From warehouse to digital twins: the <span class="accent">transfer map</span></h1>
+    <p class="sub">A data team arriving at a twin is not starting from zero, and not starting from where it thinks. Some warehouse skills are worth more next to a physical asset, some ideas are new, and a few habits are actively dangerous. Tonight sorts twelve of them into three columns, names the method, the tool class and the reading for each, and ends with a 90-day self-study ladder on free and official sources. Every Kittiwake Hall number is from a constructed teaching building generated in the page, not observed. Nothing here is investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Data leads moving a team into twins</span>
+      <span class="chip audience">Analysts and engineers from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-15 · Carries over</span>
+      <span class="a3" style="flex:3">15-28 · Must learn</span>
+      <span class="a4" style="flex:4">28-45 · Unlearn and build-along</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The analyst who got the twin ticket, six weeks later</h2>
+    </div>
+    <p class="lede">Back at Kittiwake Hall (constructed), the analyst who came from a retail warehouse has a working twin of six floors. Looking back, she sorts what helped into three piles. Her schemas, her habit of slicing residuals and her refusal to score a model on its own training data were worth more than they ever were in the warehouse. State estimation, physics-shaped models and checked uncertainty were new. And three or four reflexes, each sensible in a warehouse, nearly cost her the twin. Leader session 5 showed why the playbook breaks; tonight is the map for the people who have to cross.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A three-column transfer map with four concrete skills in each column, every one tied to a method, a tool class and a reading. A self-assessment you tick in the page that scores your readiness and points each gap at the practitioner session that closes it. The number from Kittiwake's constructed bench that makes each item real: 0.445, 96.8 percent, 77.4 percent, 63.1 percent. And a 90-day ladder of free and official reading, week by week, ending with you rerunning the bench on your own seed.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three columns, and why the third is the one that matters<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Carries over</strong> is what you already have and should lean on harder. <strong>Must learn</strong> is what has no warehouse equivalent. <strong>Must unlearn</strong> is the column people skip, because each habit in it was a good habit somewhere else. A missing skill shows up as slow work. A wrong habit shows up as a confident twin that is wrong, and nobody checks a confident twin.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report on digital twins asks for verification, validation and uncertainty quantification to be a continual process that adapts as the physical counterpart changes. Read that as a data person: there is no "done" state, no final test set, and the thing being modelled moves. Every item in the third column is a version of forgetting that sentence.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How to read each item on the map<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The skill.</strong> What you can do, in one line, in words a hiring manager would recognise.</li>
+          <li><strong>The method.</strong> The named technique behind it: calibration, residual slicing, the Kalman update, coverage checking.</li>
+          <li><strong>The tool class.</strong> The kind of tool, never a product: a versioned table, a notebook, a state-space library, a plotting routine.</li>
+          <li><strong>The reading.</strong> One source, by author or body and year, that you can reach for free or through a library.</li>
+          <li><strong>The number.</strong> One figure from Kittiwake's constructed bench (seed 1124) that shows what the skill is worth. Your own bench run will give different numbers; the shape holds.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the four warehouse skills worth more here</span>
+      <h2>Carries over: what you already have</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">Four warehouse skills arrive intact and become more valuable, because next to a physical asset the cost of getting them wrong is a comfort complaint or a heating budget, not a dashboard tile. The figure maps each one onto the twin record it becomes, using the four records of practitioner session 1.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 412" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn mapping of four warehouse skills onto the four records of a twin. Schemas, keys and versioning become the asset record, keyed on the floor with a configuration version and change log. Train and test discipline becomes the model record, fitted on week 1 and checked on week 2. Residual analysis, in copper, becomes the hourly row's surprise: reading minus prediction, which twin builders call the innovation, sliced by floor and by week. Lineage becomes the decision log: which prediction from which model version a decision relied on.">
+        <defs>
+          <filter id="kwka6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka6aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka6aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka6aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka6aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka6aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka6aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka6aH" x="30" y="30">WHAT YOU ALREADY KNOW, AND THE TWIN RECORD IT BECOMES</text>
+        <text class="kwka6aA" x="30" y="52">in the warehouse</text>
+        <text class="kwka6aA" x="560" y="52">in Kittiwake's twin (constructed)</text>
+
+        <g filter="url(#kwka6aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="64" width="250" height="62" rx="9" transform="rotate(-0.5 155 95)" fill="#FFFFFF"/>
+          <rect x="30" y="144" width="250" height="62" rx="9" transform="rotate(0.4 155 175)" fill="#FFFFFF"/>
+          <rect x="30" y="224" width="250" height="62" rx="9" transform="rotate(-0.4 155 255)" fill="#FFFFFF"/>
+          <rect x="30" y="304" width="250" height="62" rx="9" transform="rotate(0.5 155 335)" fill="#FFFFFF"/>
+          <rect x="560" y="64" width="290" height="62" rx="9" transform="rotate(0.4 705 95)" fill="#EDF4FB"/>
+          <rect x="560" y="144" width="290" height="62" rx="9" transform="rotate(-0.4 705 175)" fill="#EDF4FB"/>
+          <rect x="560" y="224" width="290" height="62" rx="9" transform="rotate(0.3 705 255)" fill="#C8733A"/>
+          <rect x="560" y="304" width="290" height="62" rx="9" transform="rotate(-0.5 705 335)" fill="url(#kwka6aHc)"/>
+          <path d="M284 95 L554 95" marker-end="url(#kwka6aAr)"/>
+          <path d="M284 175 L554 175" marker-end="url(#kwka6aAr)"/>
+          <path d="M284 255 L554 255" marker-end="url(#kwka6aAr)"/>
+          <path d="M284 335 L554 335" marker-end="url(#kwka6aAr)"/>
+          <!-- doodle: a building -->
+          <rect x="818" y="12" width="28" height="32" rx="2" fill="#FFFFFF"/>
+          <path d="M824 20 L830 20 M834 20 L840 20 M824 28 L830 28 M834 28 L840 28 M830 44 L830 36 L834 36 L834 44"/>
+        </g>
+
+        <text class="kwka6aL" x="46" y="90">Schemas, keys, versioning</text>
+        <text class="kwka6aS" x="46" y="110">one row per entity, keyed, dated</text>
+        <text class="kwka6aL" x="46" y="170">Train and test discipline</text>
+        <text class="kwka6aS" x="46" y="190">fit on one set, score on another</text>
+        <text class="kwka6aL" x="46" y="250">Residual analysis</text>
+        <text class="kwka6aS" x="46" y="270">actual minus predicted, sliced</text>
+        <text class="kwka6aL" x="46" y="330">Lineage</text>
+        <text class="kwka6aS" x="46" y="350">which job made this number</text>
+
+        <text class="kwka6aS" x="300" y="85">keyed on the floor, not the sensor</text>
+        <text class="kwka6aS" x="300" y="165">calibration week vs check week</text>
+        <text class="kwka6aS" x="300" y="245">sliced by floor and by week</text>
+        <text class="kwka6aS" x="300" y="325">which model, of which configuration</text>
+
+        <text class="kwka6aL" x="576" y="90">Asset record</text>
+        <text class="kwka6aS" x="576" y="110">floor_id, config_version, change log</text>
+        <text class="kwka6aL" x="576" y="170">Model record</text>
+        <text class="kwka6aS" x="576" y="190">fitted on week 1, checked on week 2</text>
+        <text class="kwka6aL" x="576" y="250">Hourly row: the surprise</text>
+        <text class="kwka6aK" x="576" y="270">reading minus prediction = innovation</text>
+        <text class="kwka6aL" x="576" y="330">Decision log</text>
+        <text class="kwka6aK" x="576" y="350">decision, prediction, model_version</text>
+
+        <text class="kwka6aN" x="30" y="390">Copper: residual analysis carries over almost unchanged. In a twin the residual is called the innovation.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - you already own the copper skill; floor 4's surprise went from +0.015 to +0.638 C after an unlogged change (constructed), and a residual plot sliced by floor shows it.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Schemas, keys and versioning, now for assets, models and predictions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The skill.</strong> Designing keyed, versioned tables. <strong>Here it becomes</strong> an asset record keyed on the physical floor (sensors are replaced, floors are not) with a configuration version that increments on every logged change, a model record with every parameter and where it came from, and a prediction row that names both versions. <strong>Method:</strong> slowly changing records with effective dates. <strong>Tool class:</strong> any versioned table store. <strong>Reading:</strong> AIAA and AIA (2020), whose phases As Designed, As Built, As Used and As Maintained are versions of one asset record.</p>
+        <p>Kittiwake's calibration found floor 4's heat-loss multiplier at 1.42 against a true 1.41 (constructed). That value is a fact about configuration 3 of floor 4, and only that configuration. Practitioner session 1 writes the four schemas.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Residual analysis, sliced by floor and by week<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The skill.</strong> Plotting actual minus predicted and slicing it until a pattern shows. <strong>Here it becomes</strong> innovation monitoring: each hour, the reading minus what the twin predicted. A twin in sync has small, patternless innovations. <strong>Method:</strong> per-segment mean shift against a reference window. <strong>Tool class:</strong> a notebook and a plotting routine. <strong>Reading:</strong> Kalman (1960), where the innovation is the quantity the whole update is built on.</p>
+        <p>In the constructed break, floor 4 was insulated without anyone telling the twin. Its mean innovation went from +0.015 C in week 1 to +0.638 C in week 2, a shift of 11.44 standard errors; no other floor moved more than 0.7. A residual plot sliced by floor finds that in one glance. Practitioner session 5 builds the check; formal detectors live in <a href="https://phoebefu6.github.io/learn-anomaly-detection-with-phoebe/">learn anomaly detection</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Train and test discipline: a calibration week and a check week<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The skill.</strong> Never scoring a model on the data it was fitted to. <strong>Here it becomes</strong> fitting parameters on one period (Kittiwake: week 1, the normal schedule) and judging the twin on a different one (week 2, the night setback it is meant to plan). <strong>Method:</strong> a time-ordered split, never a shuffled one; the asset's behaviour has an order. <strong>Tool class:</strong> a grid search or optimiser in a notebook. <strong>Reading:</strong> ASHRAE Guideline 14, whose calibration criteria are reported via secondary papers: hourly CV(RMSE) at most 30 percent and NMBE within 10 percent; editions and conventions differ.</p>
+        <p>Kittiwake's calibration error against the sensors on week 1 was 0.460 to 0.526 C per floor (constructed). That number says how well the fit matched its own week, nothing more. Practitioner session 3 runs the fit and the check.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Lineage: which model, of which configuration, said this<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The skill.</strong> Tracing any number back to the job and the inputs that produced it. <strong>Here it becomes</strong> a decision log: what was decided, which prediction it relied on, which model version made it, fitted to which configuration. <strong>Method:</strong> carry version keys on every output row. <strong>Tool class:</strong> the same lineage metadata you already keep, plus the asset's configuration version. <strong>Reading:</strong> National Academies (2024) on continual verification and validation.</p>
+        <p>After the unlogged retrofit, Kittiwake's whole-building heat estimate for the setback week was 8.9 percent high (constructed). Without lineage nobody can say whether that plan came from a model fitted before or after the change. Practitioner session 8 is governance: versions, owners, who may act.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the four ideas with no warehouse equivalent</span>
+      <h2>Must learn: state, structure, assimilation, checked bands</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">A warehouse model has inputs and parameters. A twin has a third thing: a state, what the asset is doing right now, which changes every hour and is partly unmeasured. The figure draws the split on one Kittiwake floor; the four cards name what follows from it; the widget lets you score yourself on all twelve items.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-node thermal model of one constructed floor. Inside the floor, two states: room air temperature, which the sensor reads, and building mass temperature, which nobody measures. Heat flows between them through a resistance of 0.5, from room to outdoors through 10 divided by kU, and from mass to outdoors through 4 divided by kU. The mass capacity is 20 times kC. In copper, the state update: every hour the reading minus the prediction, times a gain of about 0.445, moves the states. Separately, the parameters kU and kC are fitted on a calibration week and refitted when the asset changes; one week pins kU within 0.08 but not kC.">
+        <defs>
+          <filter id="kwka6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="63" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka6bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka6bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka6bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka6bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka6bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka6bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka6bH" x="30" y="30">STATE MOVES EVERY HOUR; PARAMETERS MOVE WHEN THE ASSET CHANGES (CONSTRUCTED)</text>
+        <text class="kwka6bA" x="40" y="62">one floor, two nodes</text>
+
+        <g filter="url(#kwka6bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="72" width="440" height="228" rx="10" transform="rotate(-0.3 260 186)" fill="#EDF4FB"/>
+          <circle cx="170" cy="170" r="36" fill="#FFFFFF"/>
+          <circle cx="360" cy="170" r="36" fill="url(#kwka6bHc)"/>
+          <path d="M206 170 L222 170 L228 160 L238 180 L248 160 L258 180 L268 160 L278 180 L284 170 L324 170"/>
+          <path d="M170 206 L170 222 L160 228 L180 238 L160 248 L180 258 L160 268 L170 274 L170 326"/>
+          <path d="M360 206 L360 222 L350 228 L370 238 L350 248 L370 258 L350 268 L360 274 L360 326"/>
+          <rect x="40" y="328" width="440" height="50" rx="9" transform="rotate(0.4 260 353)" fill="#FFFFFF"/>
+          <rect x="540" y="80" width="310" height="112" rx="10" transform="rotate(0.5 695 136)" fill="#C8733A"/>
+          <rect x="540" y="214" width="310" height="128" rx="10" transform="rotate(-0.4 695 278)" fill="#FFFFFF"/>
+          <path d="M536 136 L486 136" marker-end="url(#kwka6bAr)"/>
+          <path d="M536 278 L486 278" marker-end="url(#kwka6bAr)"/>
+          <!-- doodle: a thermometer, the room sensor -->
+          <rect x="72" y="150" width="10" height="44" rx="5" fill="#FFFFFF"/>
+          <circle cx="77" cy="200" r="8" fill="#FFFFFF"/>
+          <path d="M84 172 L130 170"/>
+        </g>
+
+        <text class="kwka6bL" x="120" y="118">room air: a state</text>
+        <text class="kwka6bS" x="153" y="174">Ci 6</text>
+        <text class="kwka6bL" x="306" y="118">mass: a state</text>
+        <text class="kwka6bK" x="333" y="174">20 x kC</text>
+        <text class="kwka6bS" x="226" y="152">Rim 0.5</text>
+        <text class="kwka6bS" x="188" y="252">10 / kU</text>
+        <text class="kwka6bS" x="378" y="252">4 / kU</text>
+        <text class="kwka6bS" x="56" y="226">sensor</text>
+        <text class="kwka6bS" x="56" y="242">reads only</text>
+        <text class="kwka6bS" x="56" y="258">the room</text>
+        <text class="kwka6bS" x="196" y="290">mass is never measured</text>
+        <text class="kwka6bL" x="56" y="358">outdoors: the weather feed, every hour</text>
+
+        <text class="kwka6bL" x="556" y="106">State: updated every hour</text>
+        <text class="kwka6bK" x="556" y="128">reading minus prediction, times</text>
+        <text class="kwka6bK" x="556" y="146">a gain of about 0.445, moves</text>
+        <text class="kwka6bK" x="556" y="164">both the room and the mass</text>
+        <text class="kwka6bK" x="556" y="182">method: Kalman (1960)</text>
+
+        <text class="kwka6bL" x="556" y="240">Parameters kU and kC: how it behaves</text>
+        <text class="kwka6bS" x="556" y="262">fitted on a calibration week,</text>
+        <text class="kwka6bS" x="556" y="280">refitted when the asset changes</text>
+        <text class="kwka6bS" x="556" y="302">one week pins kU within 0.08,</text>
+        <text class="kwka6bS" x="556" y="320">not kC (floor 3: 1.68 vs 0.89)</text>
+
+        <text class="kwka6bN" x="30" y="404">Warehouse models have inputs and parameters. A twin also carries a state, and most of it is unmeasured.</text>
+        <text class="kwka6bN" x="30" y="422">Practitioner session 2 draws this network; session 3 fits kU and kC; session 4 runs the update by hand.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper channel is the new idea: the twin's state is corrected every hour, while its parameters change only when the building does.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>State versus parameters<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The idea.</strong> Parameters say how the asset behaves (how fast a floor loses heat, how much heat its concrete stores). State says what it is doing now (the room temperature, the mass temperature). They are fitted by different methods on different clocks. <strong>Method:</strong> state-space modelling. <strong>Tool class:</strong> a state-space or filtering library. <strong>Reading:</strong> Kalman (1960), which recast filtering and prediction in state-transition form.</p>
+        <p>In Kittiwake's constructed bench, calibrating the parameters took the twin from 4.450 to 0.482 C off the true room; adding hourly state updates took it to 0.218 C, while the week's heat estimate stayed at +1.7 percent. Good parameters fix the plan; good state tracking fixes the now. Practitioner session 1 separates them in the model record and the hourly row.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Physics-structured grey-box models, and identifiability<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The idea.</strong> Instead of a flexible model with thousands of weights, a small network of heat paths whose shape comes from physics and whose few parameters come from data. <strong>Method:</strong> grey-box modelling with stochastic differential equations. <strong>Tool class:</strong> a grey-box or state-space estimation package. <strong>Reading:</strong> Bacher and Madsen (2011), Energy and Buildings, who grow building models one node at a time and keep extra complexity only when a likelihood-ratio test says the data supports it (method reported).</p>
+        <p>The new question is identifiability: which parameters can this data pin down? One constructed week found every floor's kU within 0.08 of the truth, but floor 3's kC came out 1.68 against a true 0.89. Fitting a parameter is not the same as learning it. Practitioner session 3 shows why the mass hides.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Data assimilation: predict, update, and what the gain means<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The idea.</strong> Each hour the twin predicts, the sensor reads, and the state moves part of the way toward the reading. The fraction is the gain, set by how much the model and the sensor are each trusted. <strong>Method:</strong> the Kalman filter, predict then update. <strong>Tool class:</strong> a filtering routine, ten lines by hand. <strong>Reading:</strong> Kalman (1960), plus any free course notes on state estimation.</p>
+        <p>Kittiwake's gain on the room reading averages 0.445 to 0.448 per floor in week 2 (constructed): the twin moves a little less than halfway toward each reading. Practitioner session 4 derives it on paper and checks a closed form. Sensors, clocks and missing readings belong to <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Uncertainty bands checked against outcomes<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The idea.</strong> Every forecast carries a band, and the band is itself a claim that can be checked: a 95 percent band should hold the reading about 95 percent of the time. <strong>Method:</strong> empirical coverage, per segment. <strong>Tool class:</strong> the residual table you already have, plus a count. <strong>Reading:</strong> National Academies (2024) on uncertainty quantification as a continual need.</p>
+        <p>Kittiwake's 24-hour-ahead 95 percent band covered 96.8 percent of week 2's readings, with a mean width of 2.20 C (constructed): honest, slightly cautious. Practitioner session 7 builds it; forecasting methods in general live in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time-series forecasting</a>.</p>
+      </div>
+    </details>
+
+    <div class="wk" id="kwka6-check">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Tick what you can already do without looking anything up. The page scores you and points every unticked item at the practitioner session that closes it. Your ticks are your own input and are not stored anywhere. The number beside each item comes from Kittiwake's constructed bench (seed 1124), computed in your browser.</span>
+      </div>
+      <div class="wk-body">
+        <div class="kwka6-cols" id="kwka6-cols"></div>
+        <div id="kwka6-score" class="kwka6-score"></div>
+        <div id="kwka6-next"></div>
+        <p class="sql-note" id="kwka6-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwka6-self">...</div>
+    </div>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers four habits to unlearn, then the build-along</span>
+      <h2>Must unlearn, then your 90-day ladder</h2>
+      <span class="tag demo">★ 17 min · everyone builds</span>
+    </div>
+    <p class="lede">Four habits that served you well in the warehouse are actively dangerous next to a physical asset, because each one produces a twin that looks fine and is wrong. Each card gives the habit, the replacement and the bench number that shows the damage. Then you build a 13-week self-study ladder on free and official sources, drawn in the figure.</p>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>"The model is done once it is trained"<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Replace it with:</strong> a twin is refitted as the asset changes, and the innovations say when. The National Academies (2024) ask for validation to be continual and to adapt to changes in the physical counterpart. After Kittiwake's unlogged retrofit, floor 4's 95 percent band held the reading only 69.0 percent of the time (constructed). The model had not changed; the floor had. Practitioner session 5 separates model drift from asset drift.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>"Trust the latest reading"<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Replace it with:</strong> weigh each reading against the model by how noisy each is. Told its sensors are perfect, Kittiwake's twin copies every reading: 0.403 C off the true room, the sensors' own 0.404 C, against 0.218 C for the honest twin (constructed). The physics adds information that a fresh reading does not. Practitioner session 4.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>"Narrower is better"<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Replace it with:</strong> a band is only as good as its coverage. The same overconfident twin draws a band 1.28 C wide instead of 2.20 C, and it held the reading 77.4 percent of the time while claiming 95 (constructed). A narrow band that misses one hour in four is worse than a wide one that tells the truth. Practitioner session 7.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>"Config is not data"<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Replace it with:</strong> the change log is a data source, as important as the sensor feed. An insulation retrofit on floor 4 that nobody logged left the twin planning that floor's heat 63.1 percent wrong (constructed), while its room estimate still looked fine. The AIAA and AIA (2020) As Maintained phase is a record, not a memory. Practitioner session 6.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Calibration criteria are themselves argued over. ASHRAE Guideline 14's thresholds are widely reported as the test of a calibrated building model, and Garrett and New (2016, reported) question whether such metrics are sufficient. The warehouse instinct to pass a threshold and move on is the habit to drop: a twin that passed calibration last spring has not been checked since.</p>
+        </div>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 424" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn staircase of four rungs across 13 weeks. Weeks 1 to 3, the definition: National Academies 2024 report, free to read online, official; AIAA and AIA 2020 position paper, free PDF, official. Weeks 4 to 6, assimilation: Kalman 1960 paper, official; free course notes on state estimation. Weeks 7 to 9, grey-box models: Bacher and Madsen 2011, official, may need library access; ASHRAE Guideline 14, paywalled, read about it via free secondary papers. Weeks 10 to 13, in copper, the build: rerun the bench with your own seed, free, practitioner session 10, and write a readiness note.">
+        <defs>
+          <filter id="kwka6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka6cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka6cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka6cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka6cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka6cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka6cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka6cH" x="30" y="30">A 90-DAY LADDER ON FREE AND OFFICIAL SOURCES</text>
+
+        <g filter="url(#kwka6cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="210" width="195" height="120" rx="9" transform="rotate(-0.6 127 270)" fill="#FFFFFF"/>
+          <rect x="240" y="170" width="195" height="160" rx="9" transform="rotate(0.5 337 250)" fill="#EDF4FB"/>
+          <rect x="450" y="130" width="195" height="200" rx="9" transform="rotate(-0.4 547 230)" fill="#FFFFFF"/>
+          <rect x="660" y="90" width="195" height="240" rx="9" transform="rotate(0.5 757 210)" fill="#C8733A"/>
+          <path d="M30 352 L846 352" marker-end="url(#kwka6cAr)"/>
+          <!-- doodle: a building -->
+          <rect x="70" y="112" width="44" height="74" rx="2" fill="#FFFFFF"/>
+          <path d="M78 124 L88 124 M96 124 L106 124 M78 140 L88 140 M96 140 L106 140 M78 156 L88 156 M96 156 L106 156 M88 186 L88 172 L96 172 L96 186"/>
+        </g>
+
+        <text class="kwka6cL" x="46" y="234">Weeks 1-3 · definition</text>
+        <text class="kwka6cS" x="46" y="254">National Academies (2024)</text>
+        <text class="kwka6cS" x="46" y="270">free online · official</text>
+        <text class="kwka6cS" x="46" y="290">AIAA and AIA (2020)</text>
+        <text class="kwka6cS" x="46" y="306">free PDF · official</text>
+
+        <text class="kwka6cL" x="256" y="194">Weeks 4-6 · assimilation</text>
+        <text class="kwka6cS" x="256" y="214">Kalman (1960)</text>
+        <text class="kwka6cS" x="256" y="230">the original · official</text>
+        <text class="kwka6cS" x="256" y="250">course notes on state</text>
+        <text class="kwka6cS" x="256" y="266">estimation · free</text>
+
+        <text class="kwka6cL" x="466" y="154">Weeks 7-9 · grey-box</text>
+        <text class="kwka6cS" x="466" y="174">Bacher and Madsen (2011)</text>
+        <text class="kwka6cS" x="466" y="190">official · library access</text>
+        <text class="kwka6cS" x="466" y="210">ASHRAE Guideline 14</text>
+        <text class="kwka6cS" x="466" y="226">paywalled · read about it</text>
+        <text class="kwka6cS" x="466" y="242">via free secondary papers</text>
+
+        <text class="kwka6cL" x="676" y="114">Weeks 10-13 · build</text>
+        <text class="kwka6cK" x="676" y="134">rerun the bench with</text>
+        <text class="kwka6cK" x="676" y="150">your own seed · free</text>
+        <text class="kwka6cK" x="676" y="166">(practitioner session 10)</text>
+        <text class="kwka6cK" x="676" y="186">write a readiness note</text>
+        <text class="kwka6cK" x="676" y="202">for one real asset</text>
+
+        <text class="kwka6cA" x="30" y="372">week 1</text>
+        <text class="kwka6cA" x="800" y="372">week 13</text>
+
+        <text class="kwka6cN" x="30" y="398">Each rung reads one source and does one thing with it. The copper rung is the point: you rebuild the bench.</text>
+        <text class="kwka6cN" x="30" y="416">Official = the primary source itself. Free = no payment needed. Access to paywalled papers varies.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three rungs of reading and one of building; the ladder ends with something you made, not something you read.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Mark your three columns</h4>
+        <p>Tick the widget in Part 2 honestly. Copy the list of unticked items onto a page; each one names a practitioner session. That list is the spine of your 90 days.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Weeks 1-3: read the definition at source</h4>
+        <p>The National Academies (2024) report, free to read online (official), Summary and chapter 2 first. Then the AIAA and AIA (2020) position paper, a free PDF (official). Write one paragraph: which of the four tests (one asset, updated with data, predicts, informs a decision) does a twin you know fail?</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Weeks 4-6: learn the update</h4>
+        <p>Kalman (1960), the original paper (official), for the state-space framing; then any free course notes on state estimation (free) for the predict and update steps worked through. Do the scalar update by hand once, as in practitioner session 4, until a gain of 0.445 means something to you.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Weeks 7-9: grey-box models and calibration</h4>
+        <p>Bacher and Madsen (2011), Energy and Buildings (official; access may need a library). ASHRAE Guideline 14 is paywalled: read about its calibration criteria in free secondary papers, and note where editions and conventions differ. ISO 23247-1:2021, the manufacturing twin framework, is also paywalled; know it exists and what it scopes. Write down which of your own model's parameters one week of data could pin down.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Weeks 10-13: build, then write the readiness note</h4>
+        <p>Rerun the twin sync bench (practitioner session 10) with your own seed; your numbers will differ and the shape should hold. Then write a one-page readiness note for one real asset: which column each of your team's skills sits in, which sessions they still need, and which of the four habits you have caught in your own work.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a warehouse instinct fires next to a physical asset, ask which column it belongs in before acting on it. Most will carry over. The four that do not will each give you a twin that looks fine and is wrong.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Which warehouse skill carries over almost unchanged and becomes the twin's early warning?</p>
+      <button class="qopt" type="button">A · Dashboard design, because the twin needs a live view</button>
+      <button class="qopt" type="button">B · Shuffled cross-validation, because it uses all the data</button>
+      <button class="qopt" type="button">C · Residual analysis, sliced by floor and by week: in a twin it is innovation monitoring</button>
+      <p class="qwhy">Reading minus prediction is the innovation. Sliced by floor, Kittiwake's showed floor 4 jumping from +0.015 to +0.638 C after an unlogged change (constructed). Shuffling a time series breaks the order the asset lives in.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">One calibration week finds every floor's kU within 0.08, but floor 3's kC comes out 1.68 against a true 0.89. What must-learn idea is this?</p>
+      <button class="qopt" type="button">A · Identifiability: this data pins down heat loss but not thermal mass</button>
+      <button class="qopt" type="button">B · Overfitting, fixed by adding more parameters</button>
+      <button class="qopt" type="button">C · A sensor fault on floor 3</button>
+      <p class="qwhy">A grey-box model's parameters are not all equally learnable from a given week. Fitting a value is not the same as learning it; practitioner session 3 shows why the mass hides.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A team proudly reports that its twin's 95 percent band is now 1.28 C wide instead of 2.20 C. What should a leader ask first?</p>
+      <button class="qopt" type="button">A · Whether the band can be made narrower still</button>
+      <button class="qopt" type="button">B · How often the reading actually fell inside it</button>
+      <button class="qopt" type="button">C · Whether the band is drawn in a nicer colour</button>
+      <p class="qwhy">"Narrower is better" is a habit to unlearn. Kittiwake's 1.28 C band held the reading 77.4 percent of the time; the 2.20 C band held 96.8 percent (constructed).</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">After the last session</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on your own team and on your own calendar.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Map one person, honestly</h4>
+        <p>Pick one data person on your team (yourself counts) and place each of their skills in a column. Name one habit from the third column you have seen them, or yourself, act on in the last month, and what it would have cost next to a physical asset.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Put the ladder in a calendar</h4>
+        <p>Book the four rungs as thirteen weekly slots with the reading named in each. Put the readiness note on the last one, and decide now who will read it.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Continual validation, checked bands</span><span class="note">National Academies (2024), "Foundational Research Gaps and Future Directions for Digital Twins". Read at source; free to read online.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Versions of the asset</span><span class="note">AIAA and AIA (2020), "Digital Twin: Definition and Value": As Designed to As Maintained. Read at source; free PDF.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The twelve bench numbers</span><span class="note">Constructed and computed in the page: gain 0.445, coverage 96.8 vs 77.4 percent, floor 4 +63.1 percent.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">State and assimilation</span><span class="note">Kalman (1960), Journal of Basic Engineering 82(1). Bibliographic record read; derived in practitioner session 4.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Grey-box models</span><span class="note">Bacher and Madsen (2011), Energy and Buildings 43(7). Record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Calibration criteria</span><span class="note">ASHRAE Guideline 14 (2002, 2014). Reported via secondary papers; paywalled.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Manufacturing twin framework</span><span class="note">ISO 23247-1:2021. Reported; contents list read; scope only.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Vendor certifications</span><span class="note">Out of scope by design: the ladder uses only free and official sources. Nothing here is investment advice or a view on any company.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Three columns.</strong> Carries over, must learn, must unlearn. The third is the dangerous one.</div>
+      <div class="cheat-item"><strong>Carries over.</strong> Schemas and versions, residuals by floor and week, calibration week vs check week, lineage.</div>
+      <div class="cheat-item"><strong>Residual = innovation.</strong> Floor 4: +0.015 to +0.638 C after an unlogged change (constructed).</div>
+      <div class="cheat-item"><strong>State vs parameters.</strong> State moves every hour; parameters move when the asset does.</div>
+      <div class="cheat-item"><strong>Identifiability.</strong> One week pins kU within 0.08, not kC (floor 3: 1.68 vs 0.89).</div>
+      <div class="cheat-item"><strong>The gain.</strong> About 0.445: move a little under halfway to each reading (Kalman 1960).</div>
+      <div class="cheat-item"><strong>Unlearn.</strong> Done once trained; trust the latest reading (0.403 C); narrower is better (77.4%); config is not data (+63.1%).</div>
+      <div class="cheat-item"><strong>The ladder.</strong> Definition, assimilation, grey-box, build: 13 weeks on free and official sources.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Back to the course home.</strong> The leader track ends here. If your map has gaps in the second column, the practitioner track starts with <a href="p1-anatomy-of-a-twin.html">Anatomy of a twin</a> and ends with the bench you will rerun in weeks 10 to 13.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 6 of 6 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="a5-why-the-warehouse-playbook-breaks-here.html">← Prev: Why the warehouse playbook breaks here</a>
+        <a href="../index.html">Course home →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  var colsEl = document.getElementById("kwka6-cols");
+  var scoreEl = document.getElementById("kwka6-score");
+  var nextEl = document.getElementById("kwka6-next");
+  var verdict = document.getElementById("kwka6-verdict");
+  var self = document.getElementById("kwka6-self");
+  if (!colsEl || !scoreEl) return;
+  var hasEngine = typeof DTW !== "undefined";
+  var L = hasEngine ? DTW.ladder({}) : null;
+  function pct(x) { return (x >= 0 ? "+" : "-") + (100 * Math.abs(x)).toFixed(1) + "%"; }
+  function cov(x) { return (100 * x).toFixed(1) + "%"; }
+  var S = {
+    1: ["p1-anatomy-of-a-twin.html", "Anatomy of a twin"],
+    3: ["p3-calibrating-a-model-to-measurements.html", "Calibrating a model to measurements"],
+    4: ["p4-the-kalman-filter-by-hand.html", "Keeping state in sync: the Kalman filter by hand"],
+    5: ["p5-model-drift-or-asset-drift.html", "When the model drifts and when the asset does"],
+    6: ["p6-the-change-log-is-a-data-source.html", "The change log is a data source"],
+    7: ["p7-what-if-runs-with-honest-bands.html", "What-if runs with honest bands"],
+    8: ["p8-twin-governance.html", "Twin governance: versions, owners, who may act on it"]
+  };
+  var cols = ["Carries over", "Must learn", "Must unlearn"];
+  var items = [
+    { c: 0, t: "I key records on the physical thing and version assets, models and predictions", s: 1,
+      n: function () { return "floor 4 kU found " + L.cal[3].kU.toFixed(2) + " vs true " + L.truthK.kU[3].toFixed(2) + ": a fact about one configuration"; } },
+    { c: 0, t: "I slice residuals by segment and by time window until a pattern shows", s: 5,
+      n: function () { var s = L.brk.floors[3].shift; return "floor 4 surprise +" + s.w1.toFixed(3) + " to +" + s.w2.toFixed(3) + " C, z = " + s.z.toFixed(2); } },
+    { c: 0, t: "I fit on one period and judge on a different, later one", s: 3,
+      n: function () { var r = L.cal.map(function (x) { return x.rmse; }); return "calibration error on week 1: " + Math.min.apply(null, r).toFixed(3) + " to " + Math.max.apply(null, r).toFixed(3) + " C"; } },
+    { c: 0, t: "I can trace any output back to the model version and inputs that made it", s: 8,
+      n: function () { return "building heat estimate after the unlogged change: " + pct(L.brk.eErr); } },
+    { c: 1, t: "I can explain state versus parameters, and which method updates each", s: 1,
+      n: function () { return "calibrated " + L.rungs[1].rmse.toFixed(3) + " C, plus state updates " + L.rungs[2].rmse.toFixed(3) + " C"; } },
+    { c: 1, t: "I can say which parameters a given dataset can and cannot pin down", s: 3,
+      n: function () { return "floor 3 kC found " + L.cal[2].kC.toFixed(2) + " vs true " + L.truthK.kC[2].toFixed(2); } },
+    { c: 1, t: "I can walk through a Kalman predict and update and say what the gain means", s: 4,
+      n: function () { var g = L.rungs[2].floors.map(function (f) { return f.gain; }); return "gain " + Math.min.apply(null, g).toFixed(3) + " to " + Math.max.apply(null, g).toFixed(3) + " per floor"; } },
+    { c: 1, t: "I check a forecast band's coverage against what then happened", s: 7,
+      n: function () { return "honest 95% band covered " + cov(L.rungs[2].cover) + ", width " + L.rungs[2].width.toFixed(2) + " C"; } },
+    { c: 2, t: "I plan refits for when the asset changes, not just a retrain schedule", s: 5,
+      n: function () { return "floor 4 coverage after the unlogged change: " + cov(L.brk.floors[3].cover); } },
+    { c: 2, t: "I weigh each reading against the model instead of trusting the latest one", s: 4,
+      n: function () { return "full trust: " + L.anti.rmse.toFixed(3) + " C off, sensors alone " + L.sensorRmse.toFixed(3) + " C"; } },
+    { c: 2, t: "I judge a band by its coverage, never by how narrow it is", s: 7,
+      n: function () { return "overconfident band " + L.anti.width.toFixed(2) + " C wide covered " + cov(L.anti.cover); } },
+    { c: 2, t: "I treat the configuration and change log as data, with its own checks", s: 6,
+      n: function () { return "unlogged retrofit: floor 4 heat estimate " + pct(L.brk.floors[3].eErr); } }
+  ];
+  var boxes = [];
+  cols.forEach(function (name, ci) {
+    var col = document.createElement("fieldset");
+    col.className = "kwka6-col";
+    var lg = document.createElement("legend");
+    lg.textContent = name;
+    col.appendChild(lg);
+    items.forEach(function (it, i) {
+      if (it.c !== ci) return;
+      var lab = document.createElement("label");
+      lab.className = "kwka6-item";
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.id = "kwka6-i" + i;
+      cb.addEventListener("change", render);
+      boxes[i] = cb;
+      var span = document.createElement("span");
+      span.textContent = it.t;
+      lab.appendChild(cb);
+      lab.appendChild(span);
+      if (L) {
+        var num = document.createElement("small");
+        num.textContent = "Bench: " + it.n();
+        lab.appendChild(num);
+      }
+      col.appendChild(lab);
+    });
+    colsEl.appendChild(col);
+  });
+  function render() {
+    var total = 0, per = [0, 0, 0], need = {};
+    items.forEach(function (it, i) {
+      if (boxes[i].checked) { total++; per[it.c]++; }
+      else { (need[it.s] = need[it.s] || []).push(it.t); }
+    });
+    scoreEl.innerHTML = "<b>Readiness: " + total + " of 12</b> · carries over " + per[0] + " of 4 · must learn " + per[1] + " of 4 · must unlearn " + per[2] + " of 4";
+    var keys = Object.keys(need).map(Number).sort(function (a, b) { return a - b; });
+    if (!keys.length) {
+      nextEl.innerHTML = "";
+    } else {
+      var rows = keys.map(function (k) {
+        return "<tr><td><a href=\"" + S[k][0] + "\">Practitioner session " + k + " · " + S[k][1] + "</a></td><td>" + need[k].length + "</td></tr>";
+      }).join("");
+      nextEl.innerHTML = '<table class="sql-table"><thead><tr><th>Take next, in this order</th><th>Gaps it closes</th></tr></thead><tbody>' + rows + "</tbody></table>";
+    }
+    var v;
+    if (total === 12) v = "All twelve ticked. Go straight to practitioner session 10 and rerun the bench with your own seed; if your numbers surprise you, untick something.";
+    else if (per[2] < 2) v = "Start with the third column: a missing skill makes you slow, a habit you have not unlearned makes your twin confidently wrong. First stop: practitioner session " + items.filter(function (it, i) { return it.c === 2 && !boxes[i].checked; }).map(function (it) { return it.s; }).sort(function (a, b) { return a - b; })[0] + ".";
+    else if (total <= 4) v = "Most of the map is ahead of you, which is normal. Take the practitioner track in order from session " + keys[0] + ".";
+    else v = "You carry real skills across. Take the " + keys.length + " session" + (keys.length === 1 ? "" : "s") + " listed above, starting with practitioner session " + keys[0] + ".";
+    verdict.textContent = v;
+  }
+  render();
+  if (!hasEngine) {
+    self.textContent = "The engine did not load, so the bench numbers are hidden; the score and the session list still work.";
+    return;
+  }
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Your ticks are self-reported. Bench numbers are synthetic and constructed: Kittiwake Hall, its weather and its readings are generated (seed 1124). The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so the bench numbers beside each item should not be believed.";
+})();
+</script>
+<style>
+  #kwka6-check .kwka6-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+  #kwka6-check fieldset.kwka6-col { border: 1px solid var(--hairline); border-radius: 10px; padding: .4rem .7rem .7rem; min-width: 0; }
+  #kwka6-check fieldset.kwka6-col legend { font-weight: 800; font-size: .82rem; color: var(--ink); padding: 0 .3rem; }
+  #kwka6-check label.kwka6-item { display: grid; grid-template-columns: auto 1fr; gap: .15rem .5rem; font-size: .84rem; line-height: 1.35; margin: .5rem 0; cursor: pointer; color: var(--ink); }
+  #kwka6-check label.kwka6-item input { margin-top: .2rem; accent-color: var(--indigo); }
+  #kwka6-check label.kwka6-item small { grid-column: 2; font-size: .74rem; color: var(--muted); }
+  #kwka6-check .kwka6-score { margin: .9rem 0 .3rem; font-size: .9rem; color: var(--ink); }
+  #kwka6-check table.sql-table { margin: .4rem 0 .2rem; font-size: .85rem; }
+  @media (max-width: 760px) { #kwka6-check .kwka6-cols { grid-template-columns: 1fr; } }
+</style>
+</body>
+</html>

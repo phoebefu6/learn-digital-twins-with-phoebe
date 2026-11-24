@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 1 of 6. A digital twin is not a 3D model; it is a model of one physical asset that is kept up to date with data from it and used to decide something. Kittiwake Hall, a constructed teaching building, shows what that promise is worth: a twin from the drawings is 4.45 C off the true room, a synced one 0.218 C. Not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="A twin is a promise to stay in sync - learn digital twins with phoebe">
+<meta property="og:description" content="Leader session 1 of 6. Asset, model, data link, decision: the four parts of a twin, the promise that ties them, and five questions to put to any twin before you act on it.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/a1-a-twin-is-a-promise-to-stay-in-sync.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A twin is a promise to stay in sync - learn digital twins with phoebe">
+<meta name="twitter:description" content="A model that claims to mirror a building is only worth the evidence that it still does.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 1 · A twin is a promise to stay in sync - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Leader session 1 of 6</div>
+    <h1>A twin is a <span class="accent">promise</span> to stay in sync</h1>
+    <p class="sub">A 3D model of a building is a picture. A digital twin is a promise: this model describes this particular building as it is today, it is kept up to date with data from the building, and someone will use it to decide something. Kittiwake Hall, a constructed six-storey teaching building whose facilities team is building a thermal twin to plan heating, is the case for all sixteen sessions; every Kittiwake number is generated in the page, not observed. Tonight is what a twin is, what the promise costs to keep, and how to tell a twin that keeps it from one that only looks like it does. Nothing here is investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Leaders who fund or sign off a twin</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Four parts, one loop</span>
+      <span class="a3" style="flex:3">18-28 · Checking the promise</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Kittiwake Hall, the week the twin arrives</h2>
+    </div>
+    <p class="lede">Kittiwake Hall is constructed: six floors of seminar rooms, a heat meter per floor, one temperature sensor per floor, a weather feed, and a set of drawings from when the building was designed. The facilities lead wants to turn the heating down at night and asks for a twin that can say what that would save. A data analyst who came from a retail warehouse gets the ticket. What she has to build is not a dashboard and not a 3D model: it is a small physics model of each floor that has to keep agreeing with the building, hour after hour, or stop being trusted. The six leader sessions are about deciding with such a model; the ten practitioner sessions are about building one.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The four parts of any digital twin (an asset, a model, a data link, a decision) and the promise that ties them: the model is kept in step with this particular asset. Why that promise is the whole value: in Kittiwake's constructed bench a twin built from the drawings is 4.45 C off the true room and estimates a week's heating 32.9 percent low, while one calibrated and kept in sync is 0.218 C off. Why "real-time" and a beautiful render prove nothing on their own. And five questions to put to any twin before anyone acts on it. Nothing here is investment advice or a view on any company.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What a twin is, in one definition<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The most careful public definition comes from the National Academies (2024), adapted from an aerospace position paper by AIAA and AIA (2020). Paraphrased: a set of virtual information constructs that mimics the structure, context and behaviour of a physical system, is dynamically updated with data from its physical twin, has a predictive capability, and informs decisions that realize value.</p>
+        <p>Read it as four tests. Is there one particular physical thing? Is the model updated from that thing's data, not just built once? Can it predict something? Does someone decide with it? A model that fails the second test is a simulation, which can be excellent, but it is not making the promise. The report says it plainly: a digital twin is "more than just simulation and modeling."</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) paper names the essential elements as a virtual representation, a physical realization and a transfer of data between the two, and draws the consequence: to have a digital twin requires a physical asset. It follows the asset through phases it calls As Designed, As Built, As Used and As Maintained. Leader session 3 is about the distance between the first two.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Asset.</strong> The one physical thing the twin is of: here, one floor of Kittiwake Hall. Not a type of floor; this floor.</li>
+          <li><strong>State.</strong> What the asset is doing now: the room temperature, and the temperature of the building's mass, which nobody measures.</li>
+          <li><strong>Parameter.</strong> How the asset behaves: how fast a floor loses heat, how much heat its concrete stores. Practitioner session 3 fits them.</li>
+          <li><strong>Calibration.</strong> Choosing parameter values so the model agrees with past measurements.</li>
+          <li><strong>Data assimilation.</strong> Correcting the model's state with each new measurement, weighted by how much each is trusted. The Kalman filter (Kalman 1960) is the classic method; practitioner session 4 does it by hand.</li>
+          <li><strong>Innovation.</strong> The surprise: what the sensor read minus what the twin predicted. A twin that stays in sync has small, patternless innovations.</li>
+          <li><strong>Constructed.</strong> Kittiwake Hall and every number about it are invented so that the truth is knowable. The research and standards are real and cited.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the four parts and the loop that ties them</span>
+      <h2>Asset, model, data link, decision</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">Every twin has the same four parts. What makes it a twin rather than a model is the loop: data flows from the asset into the model, the model predicts, a person (or a controller) decides, and the decision changes the asset, which produces the next data. Break any link and the promise lapses, usually without anyone noticing.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn loop of the four parts of Kittiwake Hall's twin. The asset, one floor of the building, sends hourly readings through the data link (sensor, heat meter, weather) to the model, a two-node thermal model of the floor. The model predicts the next 24 hours and a week ahead. A person decides, for example a night setback, and the decision changes the building's thermostat schedule, which changes the next readings. In copper, the check on the data link: what the sensor read minus what the model predicted, the surprise that tells you whether the promise still holds.">
+        <defs>
+          <filter id="kwka1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka1aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka1aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka1aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka1aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka1aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka1aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka1aH" x="30" y="30">THE FOUR PARTS OF KITTIWAKE'S TWIN, AND THE LOOP (CONSTRUCTED)</text>
+
+        <g filter="url(#kwka1aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="60" width="200" height="96" rx="10" transform="rotate(-0.6 140 108)" fill="url(#kwka1aHc)"/>
+          <rect x="640" y="60" width="200" height="96" rx="10" transform="rotate(0.5 740 108)" fill="#EDF4FB"/>
+          <rect x="640" y="214" width="200" height="80" rx="10" transform="rotate(-0.4 740 254)" fill="#FFFFFF"/>
+          <rect x="40" y="214" width="200" height="80" rx="10" transform="rotate(0.4 140 254)" fill="#FFFFFF"/>
+          <rect x="330" y="60" width="210" height="96" rx="10" transform="rotate(0.3 435 108)" fill="#FFFFFF"/>
+          <rect x="350" y="176" width="170" height="48" rx="8" transform="rotate(-0.5 435 200)" fill="#C8733A"/>
+          <path d="M242 108 L326 108" marker-end="url(#kwka1aAr)"/>
+          <path d="M542 108 L636 108" marker-end="url(#kwka1aAr)"/>
+          <path d="M740 158 L740 210" marker-end="url(#kwka1aAr)"/>
+          <path d="M638 254 L244 254" marker-end="url(#kwka1aAr)"/>
+          <path d="M140 212 L140 160" marker-end="url(#kwka1aAr)"/>
+          <path d="M435 158 L435 172"/>
+          <!-- doodle: a building -->
+          <rect x="820" y="20" width="26" height="30" rx="2" fill="#FFFFFF"/>
+          <path d="M826 28 L832 28 M834 28 L840 28 M826 36 L832 36 M834 36 L840 36"/>
+        </g>
+
+        <text class="kwka1aK" x="56" y="86">1 · The asset</text>
+        <text class="kwka1aK" x="56" y="106">one floor of Kittiwake</text>
+        <text class="kwka1aK" x="56" y="124">Hall, as it is today</text>
+        <text class="kwka1aL" x="346" y="86">2 · The data link</text>
+        <text class="kwka1aS" x="346" y="106">room sensor, heat meter,</text>
+        <text class="kwka1aS" x="346" y="124">weather, every hour</text>
+        <text class="kwka1aL" x="656" y="86">3 · The model</text>
+        <text class="kwka1aS" x="656" y="106">a 2-node thermal model</text>
+        <text class="kwka1aS" x="656" y="124">of this floor</text>
+        <text class="kwka1aL" x="656" y="240">4 · The decision</text>
+        <text class="kwka1aS" x="656" y="260">e.g. 15 C at night</text>
+        <text class="kwka1aS" x="656" y="278">next week</text>
+        <text class="kwka1aL" x="56" y="240">The thermostat</text>
+        <text class="kwka1aS" x="56" y="260">schedule changes, so</text>
+        <text class="kwka1aS" x="56" y="278">the next data changes</text>
+        <text class="kwka1aK" x="366" y="198">the check: reading</text>
+        <text class="kwka1aK" x="366" y="214">minus prediction</text>
+
+        <text class="kwka1aN" x="30" y="322">The loop is what the National Academies (2024) call the bidirectional interaction, and they call it central.</text>
+        <text class="kwka1aN" x="30" y="340">Without the copper check, nobody knows whether part 3 still describes part 1.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the cheapest part to build and the one most often missing: a running comparison of what the model predicted with what the building did.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What each part costs, and who owns it<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The asset</strong> is owned by facilities. It changes on its own schedule: a window replaced, a radiator swapped, a floor insulated. Each change is a change to the thing the twin claims to mirror.</p>
+        <p><strong>The data link</strong> is usually owned by nobody in particular, and that is its risk. Sensors drift, meters are replaced, a feed goes quiet over a holiday. Sensor and clock problems belong to a sibling course, <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>; here the question is whether the model is told.</p>
+        <p><strong>The model</strong> is owned by whoever built it, often a consultant who has left. Its parameters came from somewhere: the drawings, a calibration week, a vendor default.</p>
+        <p><strong>The decision</strong> is owned by a person with a budget. The twin is worth exactly what it changes about that decision, and leader session 2 argues that this, not realism, sets how detailed it needs to be.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the idea came from, and the dispute about it<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The usual origin story credits Michael Grieves, who in Grieves and Vickers (2017) dates the model to 2002, a slide called "Conceptual Ideal for PLM" presented for a product lifecycle management centre, without a name at the time. Accounts differ on who coined the term "digital twin" around 2010, and at least one published critique argues the 2002 claim lacks contemporaneous documentary evidence. The honest version: the idea of a physical product paired with a virtual one has been in engineering since at least the early 2000s; who said it first is disputed, and nothing about using a twin well depends on settling it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Twins that are not about buildings<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The National Academies (2024) definition covers natural, engineered and social systems: an aircraft engine, a patient, a forest, a city's traffic. The four parts and the loop are the same; what changes is how often the asset changes, how much it costs to measure, and who gets hurt if the twin is wrong. City-scale data and residents' consent live in <a href="https://phoebefu6.github.io/learn-smart-city-with-phoebe/">learn smart city</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what the promise is worth, from the bench</span>
+      <h2>A promise has to be checked</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">The figure shows the difference between a model and a twin on one constructed floor. The model built from the drawings starts in the right place and wanders off, because the real floor loses heat faster than designed. The synced twin is nudged back by every reading. The widget below runs the real engine on all six floors so you can see the numbers.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn sketch of one constructed floor over two days. The true room temperature follows a daily rhythm. The design-spec model, which believes the drawings, drifts above the truth because the real floor loses more heat than designed; over the setback week it is 4.45 C off on average across six floors. The synced twin, in copper, receives a small correction every hour from the sensor and stays close, 0.218 C off. Sensor readings scatter around the truth with 0.4 C noise.">
+        <defs>
+          <filter id="kwka1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="13" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka1bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka1bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka1bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka1bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka1bB { font: 700 11px Inter, sans-serif; fill: #8A4316; }
+          .kwka1bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka1bH" x="30" y="30">ONE FLOOR, TWO DAYS: THE MODEL WANDERS, THE TWIN IS NUDGED BACK (SKETCH)</text>
+        <text class="kwka1bA" x="70" y="246">day 1</text>
+        <text class="kwka1bA" x="380" y="246">day 2</text>
+        <text class="kwka1bA" x="40" y="60">warmer</text>
+
+        <g filter="url(#kwka1bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 228 L700 228"/>
+          <path d="M60 228 L60 72"/>
+          <path d="M70 170 C120 120 170 118 220 150 C270 182 320 186 380 168 C430 128 480 124 530 152 C580 182 630 188 690 172" stroke="#045C9F" stroke-width="2.6"/>
+          <path d="M70 170 C120 108 170 96 220 112 C270 132 320 132 380 118 C430 82 480 76 530 96 C580 116 630 120 690 104" stroke="#4A5A6A" stroke-dasharray="7 5"/>
+          <path d="M70 172 C120 126 170 124 220 154 C270 186 320 190 380 172 C430 134 480 130 530 156 C580 186 630 192 690 176" stroke="#C8733A" stroke-width="2.4"/>
+          <circle cx="110" cy="138" r="3.5" fill="#10202F"/>
+          <circle cx="170" cy="112" r="3.5" fill="#10202F"/>
+          <circle cx="240" cy="168" r="3.5" fill="#10202F"/>
+          <circle cx="300" cy="178" r="3.5" fill="#10202F"/>
+          <circle cx="420" cy="140" r="3.5" fill="#10202F"/>
+          <circle cx="470" cy="118" r="3.5" fill="#10202F"/>
+          <circle cx="560" cy="178" r="3.5" fill="#10202F"/>
+          <circle cx="640" cy="186" r="3.5" fill="#10202F"/>
+        </g>
+
+        <text class="kwka1bL" x="716" y="100">model from the</text>
+        <text class="kwka1bL" x="716" y="116">drawings: 4.45 C off</text>
+        <text class="kwka1bB" x="716" y="162">synced twin:</text>
+        <text class="kwka1bB" x="716" y="178">0.218 C off</text>
+        <text class="kwka1bA" x="716" y="200">true room</text>
+        <text class="kwka1bS" x="716" y="220">dots: sensor, 0.4 C</text>
+
+        <text class="kwka1bN" x="30" y="282">A sketch of the mechanism; the numbers are the bench's averages over six floors and the setback week, seed 1124.</text>
+        <text class="kwka1bN" x="30" y="300">The sensors alone are 0.404 C off. The synced twin beats them because it also knows the physics.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the gap between the dashed line and the true room is the as-built gap; the copper line is what an hourly correction buys.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwka1-sync">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Pick a rung. The engine builds a thermal model of each of Kittiwake's six floors in your browser, runs two constructed weeks, and scores it against the true room and the heat the building really used. Everything here is synthetic and labelled so.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwka1-pick">Rung of the ladder</label>
+        <select class="sql-code" id="kwka1-pick"></select>
+        <div id="kwka1-out"></div>
+        <p class="sql-note" id="kwka1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwka1-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the three rungs<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>From the drawings.</strong> 4.450 C off the true room, and 32.9 percent low on the heat the setback week really used. Every real floor loses heat faster than designed, so a twin that believes the drawings believes the building is cheaper to heat than it is.</p>
+        <p><strong>Calibrated.</strong> Fit to one week of readings, it is 0.482 C off and 1.7 percent high. Most of the value arrived here, in the parameters.</p>
+        <p><strong>Kept in sync.</strong> With a correction every hour, 0.218 C off, better than the sensors alone (0.404 C). The plan barely moves, because a week-ahead plan depends on how the building behaves, not on this morning's temperature.</p>
+        <p>Two more options make it worse on purpose. "Trust the sensors fully" keeps the error near the sensors' own (0.403 C) and makes the twin's uncertainty band lie. "Unlogged retrofit" changes floor 4 without telling the twin: floor 4's plan goes 63.1 percent wrong, and only the surprises show it.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "real-time" is not the promise<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A feed that updates every second can still be wrong about what it feeds. The promise is not speed; it is that the model and the asset are checked against each other often enough for the decision. Kittiwake plans heating a week ahead, so hourly is plenty. The National Academies (2024) ask for verification, validation and uncertainty quantification to be a continual process that adapts as the physical counterpart changes. Leader session 4 takes "real-time" claims apart.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Five questions to put to any twin</h2>
+      <span class="tag demo">★ 17 min · everyone builds</span>
+    </div>
+    <p class="lede">You will leave with a one-page check you can run on any twin before acting on what it says, whether a vendor shows it to you or your own team built it. The figure is the order to ask in: each question guards one link of the loop.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn row of five question cards, each tied to one link of the twin loop. One, which asset and which version of it: guards the asset. Two, what decision will it change: guards the decision. Three, how and how often is it updated: guards the data link. Four, how do you know it still matches, in copper: guards the check. Five, how wide is its uncertainty and was the band ever checked: guards the prediction.">
+        <defs>
+          <filter id="kwka1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="17" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka1cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka1cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka1cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka1cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka1cV { font: 800 18px Inter, sans-serif; fill: #033F6E; }
+          .kwka1cX { font: 800 18px Inter, sans-serif; fill: #10202F; }
+          .kwka1cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka1cH" x="30" y="30">FIVE QUESTIONS, ONE PER LINK OF THE LOOP</text>
+
+        <g filter="url(#kwka1cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="152" height="150" rx="10" transform="rotate(-1 106 131)" fill="#FFFFFF"/>
+          <rect x="200" y="56" width="152" height="150" rx="10" transform="rotate(0.8 276 131)" fill="#FFFFFF"/>
+          <rect x="370" y="56" width="152" height="150" rx="10" transform="rotate(-0.6 446 131)" fill="#FFFFFF"/>
+          <rect x="540" y="56" width="152" height="150" rx="10" transform="rotate(0.7 616 131)" fill="#C8733A"/>
+          <rect x="710" y="56" width="152" height="150" rx="10" transform="rotate(-0.8 786 131)" fill="#EDF4FB"/>
+        </g>
+
+        <text class="kwka1cV" x="46" y="86">1</text>
+        <text class="kwka1cL" x="46" y="112">Which asset, and</text>
+        <text class="kwka1cL" x="46" y="128">which version?</text>
+        <text class="kwka1cS" x="46" y="166">guards: the asset</text>
+        <text class="kwka1cV" x="216" y="86">2</text>
+        <text class="kwka1cL" x="216" y="112">Which decision</text>
+        <text class="kwka1cL" x="216" y="128">will it change?</text>
+        <text class="kwka1cS" x="216" y="166">guards: the decision</text>
+        <text class="kwka1cV" x="386" y="86">3</text>
+        <text class="kwka1cL" x="386" y="112">How, and how often,</text>
+        <text class="kwka1cL" x="386" y="128">is it updated?</text>
+        <text class="kwka1cS" x="386" y="166">guards: the data link</text>
+        <text class="kwka1cX" x="556" y="86">4</text>
+        <text class="kwka1cL" x="556" y="112">How do you know</text>
+        <text class="kwka1cL" x="556" y="128">it still matches?</text>
+        <text class="kwka1cK" x="556" y="166">guards: the check</text>
+        <text class="kwka1cV" x="726" y="86">5</text>
+        <text class="kwka1cL" x="726" y="112">How wide is its</text>
+        <text class="kwka1cL" x="726" y="128">band, and checked?</text>
+        <text class="kwka1cS" x="726" y="166">guards: the forecast</text>
+
+        <text class="kwka1cN" x="30" y="246">Ask in this order. A twin that cannot answer 1 and 2 is a demo; one that cannot answer 4 is a model</text>
+        <text class="kwka1cN" x="30" y="264">that used to be a twin. Question 5 is where honest twins and confident ones part ways (practitioner session 7).</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper card is the question most twins cannot answer with a number.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Ask which asset, and which version</h4>
+        <p>Write the asset's name and the date of the last physical change the twin knows about. If the answer is "the design", write that down: Kittiwake's design-spec twin was 4.45 C off.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask which decision it will change</h4>
+        <p>One sentence: "we will use the twin to decide X by date Y". If nobody can say, the twin has no purpose to be fit for, and leader session 2 cannot help you size it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask how, and how often, it is updated</h4>
+        <p>From which feeds, at what interval, and whether the state, the parameters, or both are updated. "Real-time" is not an answer to this question; an interval is.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask how anyone knows it still matches</h4>
+        <p>Ask to see the surprises: the readings minus the predictions over the last month. If nobody looks at them, nobody would notice an unlogged change. In Kittiwake's bench the surprise on floor 4 jumped from +0.015 to +0.638 C while the room estimate still looked fine.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask how wide its band is, and whether it was checked</h4>
+        <p>A twin that gives a single number for next week has hidden its uncertainty. A twin that gives a band should say how often reality fell inside it. Commit to a guess before session 7: Kittiwake's honest 95 percent band covered 96.8 percent; what do you think happens if the twin is told its sensors are perfect?</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When someone shows you a twin, do not ask how realistic it looks. Ask which asset, which decision, how it is updated, how anyone knows it still matches, and how wide its band is. A twin with no answer to the fourth is a model that used to be a twin.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A team shows a detailed 3D model of a building, built from its drawings, with no data feed. Is it a digital twin by the National Academies (2024) definition?</p>
+      <button class="qopt" type="button">A · Yes, because it is detailed enough</button>
+      <button class="qopt" type="button">B · No, because it is not dynamically updated with data from the building; it may still be a useful model</button>
+      <button class="qopt" type="button">C · Yes, if it is rendered in real time</button>
+      <p class="qwhy">The definition asks for a model of a particular system that is updated with data from it, predicts, and informs decisions. Detail and rendering speed are not on the list.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Kittiwake's design-spec twin (constructed) estimates the setback week's heat 32.9 percent low. What most likely went wrong?</p>
+      <button class="qopt" type="button">A · The weather feed was late</button>
+      <button class="qopt" type="button">B · The heating was switched off</button>
+      <button class="qopt" type="button">C · The real floors lose heat faster than the drawings say, and the twin was never fitted to readings</button>
+      <p class="qwhy">The constructed floors lose 1.15 to 1.45 times the designed heat. Calibrated on one week of readings, the estimate is 1.7 percent high. Leader session 3 is about this gap.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">After an unrecorded change to floor 4, Kittiwake's synced twin still tracks the room within 0.4 C. What should a leader ask to see?</p>
+      <button class="qopt" type="button">A · The surprises, readings minus predictions, per floor over time</button>
+      <button class="qopt" type="button">B · A higher-resolution render of floor 4</button>
+      <button class="qopt" type="button">C · Nothing; the tracking error is small</button>
+      <p class="qwhy">The correction hides the change in the room estimate; the surprises it has to make do not. Floor 4's jumped from +0.015 to +0.638 C, flagging it and no other floor.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one twin and on one decision.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the five questions on one real claim</h4>
+        <p>Pick any public description of a digital twin, from any sector, and write one line per question. Do not judge the claim; mark which questions it leaves unanswered.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Name the decision</h4>
+        <p>For an asset you know (a building, a machine, a fleet), write the one decision a twin of it would change, who makes it, and how often. Leader session 2 sizes the twin from that sentence.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">What a twin is</span><span class="note">National Academies (2024), "Foundational Research Gaps and Future Directions for Digital Twins". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Model, asset, data transfer</span><span class="note">AIAA and AIA (2020), "Digital Twin: Definition and Value". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The loop and the check</span><span class="note">Bidirectional interaction, continual VVUQ: National Academies (2024). Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Kittiwake ladder</span><span class="note">Constructed and computed in the page: 4.450, 0.482, 0.218 C; energy -32.9 and +1.7 percent.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The origin story</span><span class="note">Grieves and Vickers (2017), Springer: dated to 2002; naming and origin disputed. Taught as a disagreement.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Calibration and assimilation</span><span class="note">Named tonight. Practitioner sessions 3 and 4.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensors, clocks, sampling</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Real companies, platforms or buildings</span><span class="note">Out of scope by design. Kittiwake is constructed; nothing here is investment advice or a view on any company.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> A twin is a model of one asset, kept in step with it by data, used to decide.</div>
+      <div class="cheat-item"><strong>Four parts.</strong> Asset, data link, model, decision.</div>
+      <div class="cheat-item"><strong>The loop.</strong> Data in, prediction out, decision changes the asset, new data.</div>
+      <div class="cheat-item"><strong>The check.</strong> Reading minus prediction, watched over time.</div>
+      <div class="cheat-item"><strong>Drawings are a prior.</strong> Kittiwake from the drawings: 4.45 C off, energy 32.9% low (constructed).</div>
+      <div class="cheat-item"><strong>Synced is better.</strong> Calibrated and corrected hourly: 0.218 C, better than the sensors' 0.404 C.</div>
+      <div class="cheat-item"><strong>Real-time is not the promise.</strong> An interval checked against the decision is.</div>
+      <div class="cheat-item"><strong>Five questions.</strong> Which asset? Which decision? Updated how? Still matches? How wide a band?</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Fidelity is a choice, not a virtue.</strong> How detailed a twin should be is set by the decision it serves, and every extra detail is something else to keep in sync.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 1 of 6 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="a2-fidelity-is-a-choice.html">Next: Fidelity is a choice, not a virtue →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwka1-pick");
+  var out = document.getElementById("kwka1-out");
+  var verdict = document.getElementById("kwka1-verdict");
+  var self = document.getElementById("kwka1-self");
+  if (!sel || !out) return;
+  var L = DTW.ladder({});
+  var rows = L.rungs.concat([L.anti, L.brk]);
+  var names = ["Rung 1 · From the drawings", "Rung 2 · Calibrated on a week of readings", "Rung 3 · + kept in sync every hour", "Anti-lever · Trust the sensors fully", "Break · Floor 4 retrofitted, unlogged"];
+  rows.forEach(function (r, i) {
+    var o = document.createElement("option");
+    o.value = String(i);
+    o.textContent = names[i];
+    sel.appendChild(o);
+  });
+  sel.value = "2";
+  function pct(x) { return (x >= 0 ? "+" : "-") + (100 * Math.abs(x)).toFixed(1) + "%"; }
+  function render() {
+    var r = rows[Number(sel.value)];
+    out.innerHTML = '<table class="sql-table"><thead><tr><th>Measure</th><th>Value</th></tr></thead><tbody>' +
+      "<tr><td>Off the true room, on average, setback week</td><td><b>" + r.rmse.toFixed(3) + " C</b></td></tr>" +
+      "<tr><td>The sensors alone, for comparison</td><td>" + L.sensorRmse.toFixed(3) + " C</td></tr>" +
+      "<tr><td>Heat estimate for the setback week, against what was used</td><td><b>" + pct(r.eErr) + "</b></td></tr>" +
+      "<tr><td>How often the 24-hour band held the reading</td><td>" + (r.cover === undefined ? "no band: this twin has no uncertainty model" : (100 * r.cover).toFixed(1) + "%") + "</td></tr></tbody></table>";
+    var v;
+    if (r.id === "design") v = "From the drawings: the twin believes the building loses less heat than it does, so it is " + r.rmse.toFixed(2) + " C off and " + pct(r.eErr) + " on heat.";
+    else if (r.id === "calib") v = "Calibrated: fitting how fast each floor loses heat to one week of readings brings the heat estimate to " + pct(r.eErr) + ".";
+    else if (r.id === "kalman") v = "Kept in sync: an hourly correction puts the twin " + r.rmse.toFixed(3) + " C from the true room, closer than the sensors themselves.";
+    else if (r.id === "anti") v = "Trusting the sensors fully: the twin copies every reading (" + r.rmse.toFixed(3) + " C off) and its band holds the reading only " + (100 * r.cover).toFixed(1) + "% of the time while claiming 95%.";
+    else v = "Unlogged retrofit on floor 4: the room estimate still looks fine, but floor " + r.flagged.map(function (i) { return i + 1; }).join(", ") + " is flagged by its surprises and its heat estimate is " + pct(r.floors[3].eErr) + " wrong. Check the change log.";
+    verdict.textContent = v;
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed: Kittiwake Hall, its weather and its readings are generated (seed 1124). The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwka1-sync .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwka1-sync table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

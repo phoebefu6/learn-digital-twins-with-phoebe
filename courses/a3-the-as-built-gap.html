@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 3 of 6. The building you drew is not the building you have. In Kittiwake Hall, a constructed teaching building, every floor loses 1.19 to 1.42 times the heat its drawings say, so a twin built from the drawings is 32.9 percent low on a week's heat and oversells a night setback. Not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The as-built gap - learn digital twins with phoebe">
+<meta property="og:description" content="Leader session 3 of 6. As Designed, As Built, As Used, As Maintained: why a twin from the drawings is wrong in a known direction, how a week of readings closes the gap, and five audit questions before you fund a twin.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/a3-the-as-built-gap.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The as-built gap - learn digital twins with phoebe">
+<meta name="twitter:description" content="The drawings are a first guess about a building. Measurements are the evidence that corrects it.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 3 · The as-built gap - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Leader session 3 of 6</div>
+    <h1>The <span class="accent">as-built</span> gap</h1>
+    <p class="sub">The building you drew versus the one you have. Every building is put up a little differently from its drawings, and a twin that believes the drawings inherits that difference as a steady, one-directional error. Kittiwake Hall, the constructed six-storey teaching building that runs through all sixteen sessions, shows the size of it: every floor loses more heat than drawn, so a twin built from the drawings is 32.9 percent low on a week's heat and promises a bigger saving than the building delivers. Every Kittiwake number is generated in the page, not observed. Nothing here is investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Leaders who fund or sign off a twin</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-15 · Four phases of one building</span>
+      <span class="a3" style="flex:3">15-28 · Kittiwake's gap, floor by floor</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Kittiwake Hall, the day the drawings meet the meters</h2>
+    </div>
+    <p class="lede">Kittiwake Hall is constructed: six floors of seminar rooms, a heat meter and a room sensor per floor, a weather feed, and a set of drawings from when the building was designed. Two sessions ago the facilities lead asked for a twin to plan a night setback; last session sized it at a simple two-node model per floor. Now the analyst has to fill that model with numbers. The obvious source is the drawings: wall build-ups, insulation thicknesses, the designed heat loss of every floor. They are tidy, signed off, and wrong in a direction that matters. Tonight is about how wrong, why, and what a week of the building's own readings does about it.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The four phases an asset passes through (As Designed, As Built, As Used, As Maintained) and why a twin must say which one it describes. The size of the gap in Kittiwake's constructed bench: the real floors lose 1.19 to 1.42 times the heat the drawings say, so the design twin is 21.6 to 42.5 percent low on energy floor by floor, while a twin calibrated on one week of readings is within 3.5 percent. Why the design twin also oversells the night setback (23.9 percent against a true 20.1). A way to think about it that survives any building: the drawings are a prior, measurements are the evidence. And a five-question as-built audit to run before you fund a twin.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The four phases, as the twin community names them<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A twin is a model of one particular asset. But a particular asset is not one thing over its life: it is drawn, then built, then used, then repaired and changed. A model that was faithful at one of those moments can be unfaithful at the next, and nothing in the model itself will say so.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) position paper, read at source, follows a twin through life-cycle phases it calls "As Designed", "As Built", "As Used" and "As Maintained". It also insists that a twin needs a physical asset and a transfer of data between the two. Put the two ideas together and the leader's question writes itself: which phase does this twin describe, and what data moved it there?</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>As-designed.</strong> The asset as the drawings and specifications describe it. Precise, documented, and a plan rather than a record.</li>
+          <li><strong>As-built.</strong> The asset as it was actually put up, including every shortcut, substitution and site decision.</li>
+          <li><strong>Heat-loss multiplier (kU).</strong> How much faster a real Kittiwake floor loses heat than its drawings say. 1.00 means exactly as drawn.</li>
+          <li><strong>Thermal-mass multiplier (kC).</strong> How much heat the floor's concrete really stores, against the drawings.</li>
+          <li><strong>Calibration.</strong> Choosing those multipliers so the model agrees with past readings. Practitioner session 3 does it by grid search.</li>
+          <li><strong>Prior and evidence.</strong> What you believe before you measure (the drawings), and what the measurements say. Good practice lets the evidence move the prior, parameter by parameter.</li>
+          <li><strong>Identifiability.</strong> Whether a given set of readings can pin a parameter down at all. Some cannot, however carefully you fit.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers As Designed, As Built, As Used, As Maintained</span>
+      <h2>Four phases of one building</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The drawings describe the building someone intended. The building on site is the one someone managed to put up, with the materials that arrived, in the weather they had. The difference is rarely a scandal; it is the ordinary friction of construction. For a twin it is decisive, because a model filled from the drawings is a model of the first phase being asked questions about the second.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 428" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn timeline of one floor's four life-cycle phases: As Designed, the drawings; As Built, highlighted in copper; As Used; As Maintained. Below, two wall sections side by side. The drawn wall has an unbroken insulation layer and one thin heat arrow from the room to outdoors, a heat-loss multiplier of 1.00. The built wall has three leaks: a gap in the insulation, a concrete slab edge that bridges straight through it, and a thinner board substituted on site, each with a heat arrow escaping to outdoors. In the constructed Kittiwake Hall the real floors lose 1.15 to 1.45 times the drawn heat.">
+        <defs>
+          <filter id="kwka3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka3aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka3aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka3aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka3aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka3aH" x="30" y="30">ONE FLOOR, FOUR PHASES, AND THE WALL AT THE FIRST TWO (CONSTRUCTED SKETCH)</text>
+
+        <g filter="url(#kwka3aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- phase timeline -->
+          <rect x="40" y="48" width="180" height="54" rx="10" transform="rotate(-0.5 130 75)" fill="#EDF4FB"/>
+          <rect x="250" y="48" width="180" height="54" rx="10" transform="rotate(0.6 340 75)" fill="#C8733A"/>
+          <rect x="460" y="48" width="180" height="54" rx="10" transform="rotate(-0.4 550 75)" fill="#FFFFFF"/>
+          <rect x="670" y="48" width="180" height="54" rx="10" transform="rotate(0.5 760 75)" fill="#FFFFFF"/>
+          <path d="M222 75 L246 75" marker-end="url(#kwka3aAr)"/>
+          <path d="M432 75 L456 75" marker-end="url(#kwka3aAr)"/>
+          <path d="M642 75 L666 75" marker-end="url(#kwka3aAr)"/>
+          <!-- drawn wall panel -->
+          <rect x="40" y="128" width="380" height="222" rx="10" transform="rotate(-0.4 230 239)" fill="#FFFFFF"/>
+          <rect x="150" y="166" width="20" height="156" fill="#EDF4FB"/>
+          <rect x="170" y="166" width="30" height="156" fill="url(#kwka3aHc)"/>
+          <rect x="200" y="166" width="22" height="156" fill="#EDF4FB"/>
+          <path d="M330 240 L64 240" stroke-width="1.4" marker-end="url(#kwka3aAr)"/>
+          <!-- built wall panel -->
+          <rect x="460" y="128" width="380" height="222" rx="10" transform="rotate(0.4 650 239)" fill="#FFFFFF"/>
+          <rect x="570" y="166" width="20" height="156" fill="#EDF4FB"/>
+          <rect x="590" y="166" width="30" height="48" fill="url(#kwka3aHc)"/>
+          <rect x="590" y="234" width="30" height="40" fill="url(#kwka3aHc)"/>
+          <rect x="590" y="288" width="13" height="34" fill="#FFFFFF"/>
+          <rect x="620" y="166" width="22" height="156" fill="#EDF4FB"/>
+          <rect x="590" y="274" width="30" height="14" fill="#EDF4FB"/>
+          <path d="M700 224 L484 224" stroke-width="2.2" marker-end="url(#kwka3aAr)"/>
+          <path d="M700 266 L484 266" stroke-width="2.2" marker-end="url(#kwka3aAr)"/>
+          <path d="M700 306 L484 306" stroke-width="2.2" marker-end="url(#kwka3aAr)"/>
+          <!-- doodle: a thermometer -->
+          <path d="M858 12 L858 34"/>
+          <circle cx="858" cy="40" r="5" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwka3aL" x="56" y="72">As Designed</text>
+        <text class="kwka3aS" x="56" y="90">the drawings</text>
+        <text class="kwka3aL" x="266" y="72">As Built</text>
+        <text class="kwka3aK" x="266" y="90">what was put up</text>
+        <text class="kwka3aL" x="476" y="72">As Used</text>
+        <text class="kwka3aS" x="476" y="90">occupied and run</text>
+        <text class="kwka3aL" x="686" y="72">As Maintained</text>
+        <text class="kwka3aS" x="686" y="90">repaired and changed</text>
+
+        <text class="kwka3aH" x="56" y="152">THE DRAWN WALL</text>
+        <text class="kwka3aS" x="56" y="190">outdoors</text>
+        <text class="kwka3aS" x="250" y="190">room</text>
+        <text class="kwka3aL" x="240" y="286">heat loss as drawn: 1.00</text>
+        <text class="kwka3aS" x="240" y="304">insulation unbroken</text>
+
+        <text class="kwka3aH" x="476" y="152">THE BUILT WALL</text>
+        <text class="kwka3aS" x="476" y="190">outdoors</text>
+        <text class="kwka3aS" x="712" y="190">room</text>
+        <text class="kwka3aS" x="712" y="228">gap in insulation</text>
+        <text class="kwka3aS" x="712" y="262">slab edge bridge</text>
+        <text class="kwka3aS" x="712" y="310">board substituted</text>
+        <text class="kwka3aA" x="476" y="340">same drawing, more heat out</text>
+
+        <text class="kwka3aN" x="30" y="380">Kittiwake's real floors lose 1.15 to 1.45 times the drawn heat (constructed). A drawing is a plan.</text>
+        <text class="kwka3aN" x="30" y="398">A twin filled from the left panel answers questions about the right one, and errs in one direction.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper step is the one a design-spec twin skips: it jumps from the drawings straight to the building in use.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What changes between drawing and building<span class="mini">6 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Workmanship.</strong> Insulation boards that do not quite meet, a cavity with debris in it, a seal that was never finished behind a radiator. Each is small; together they decide how fast heat leaves a floor.</p>
+        <p><strong>Substitutions.</strong> A specified product is unavailable, a cheaper or thinner one arrives, and the change is approved on site. Sometimes it reaches the record; often it does not.</p>
+        <p><strong>Commissioning.</strong> The heating system is set up and tested at handover: valves balanced, controls checked, setpoints entered. What the commissioning engineer actually set is part of the as-built building, and it is easy to lose.</p>
+        <p>None of these needs a culprit. The point for a twin is direction: most of the friction in construction lets heat out rather than keeping it in, so a twin from the drawings is not just uncertain; it is biased, and the bias has a sign you can predict.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) paper treats As Built as its own phase rather than a footnote to As Designed, and it defines a twin as updated with data from its physical twin across the life cycle. Its line on the asset is blunt: "Hence to have a Digital Twin requires a physical asset." A drawing is not that asset; the building is.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>As Used and As Maintained: the gap keeps moving<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Closing the as-built gap once is not the end. Once the building is used, people prop doors open, change a timetable, add a server room. Once it is maintained, a window is replaced, a radiator swapped, a floor insulated. Each is a new version of the asset the twin claims to mirror. Kittiwake's bench plants one such change, an unlogged insulation retrofit on floor 4, and the twin's heat estimate for that floor goes 63.1 percent wrong. Practitioner session 6 treats the change log as a data source; leader session 4 asks how a claim tells you which version it describes.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a warehouse analyst misses this<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In a warehouse, the schema is the record: the table's definition and its contents are the same thing. In a building the definition (the drawings) and the contents (the building) were made by different people at different times, and only one of them is measured. Treating the drawings like a schema, as the truth by construction, is the habit to drop. Leader session 5 takes the warehouse playbook apart in full.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the size of the gap, from the bench</span>
+      <h2>Kittiwake's gap, floor by floor</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Kittiwake's engine knows the truth because it invented it: every real floor was given a heat-loss multiplier between 1.15 and 1.45 times its drawings. The design twin assumes 1.00 everywhere. The calibrated twin was fitted to the first week of readings. The figure sketches what that does to each floor; the widget computes it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 388" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bar sketch of heat loss per floor, drawings against the constructed building, seed 1124. The drawings say 1.00 on every floor. The built floors lose 1.42, 1.19, 1.21, 1.41, 1.41 and 1.21 times that; the extra above 1.00 is copper. Under each floor, the design twin's energy error for the setback week: minus 37.7, 21.6, 26.5, 42.5, 41.2 and 24.2 percent; and the calibrated twin's: plus 2.5, plus 3.5, minus 0.8, minus 1.2, plus 2.3 and plus 3.5 percent. Whole building: design minus 32.9, calibrated plus 1.7 percent. Setback saving: design twin 23.9, calibrated 21.5, truth 20.1 percent.">
+        <defs>
+          <filter id="kwka3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka3bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka3bV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwka3bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka3bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka3bH" x="30" y="30">HEAT LOSS PER FLOOR: WHAT THE DRAWINGS SAY, WHAT WAS BUILT (CONSTRUCTED, SEED 1124)</text>
+        <text class="kwka3bS" x="420" y="56">tint = drawings · hachure + copper = built, copper is the gap</text>
+
+        <g filter="url(#kwka3bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M120 260 L820 260"/>
+          <path d="M120 140 L820 140" stroke="#4A5A6A" stroke-width="1.2" stroke-dasharray="6 5"/>
+          <!-- floor 1 -->
+          <rect x="130" y="140" width="32" height="120" fill="#EDF4FB"/>
+          <rect x="168" y="140" width="32" height="120" fill="url(#kwka3bHc)"/>
+          <rect x="168" y="90" width="32" height="50" fill="#C8733A"/>
+          <!-- floor 2 -->
+          <rect x="245" y="140" width="32" height="120" fill="#EDF4FB"/>
+          <rect x="283" y="140" width="32" height="120" fill="url(#kwka3bHc)"/>
+          <rect x="283" y="117" width="32" height="23" fill="#C8733A"/>
+          <!-- floor 3 -->
+          <rect x="360" y="140" width="32" height="120" fill="#EDF4FB"/>
+          <rect x="398" y="140" width="32" height="120" fill="url(#kwka3bHc)"/>
+          <rect x="398" y="115" width="32" height="25" fill="#C8733A"/>
+          <!-- floor 4 -->
+          <rect x="475" y="140" width="32" height="120" fill="#EDF4FB"/>
+          <rect x="513" y="140" width="32" height="120" fill="url(#kwka3bHc)"/>
+          <rect x="513" y="91" width="32" height="49" fill="#C8733A"/>
+          <!-- floor 5 -->
+          <rect x="590" y="140" width="32" height="120" fill="#EDF4FB"/>
+          <rect x="628" y="140" width="32" height="120" fill="url(#kwka3bHc)"/>
+          <rect x="628" y="91" width="32" height="49" fill="#C8733A"/>
+          <!-- floor 6 -->
+          <rect x="705" y="140" width="32" height="120" fill="#EDF4FB"/>
+          <rect x="743" y="140" width="32" height="120" fill="url(#kwka3bHc)"/>
+          <rect x="743" y="115" width="32" height="25" fill="#C8733A"/>
+          <!-- doodle: a radiator -->
+          <rect x="836" y="40" width="30" height="20" rx="3" fill="#FFFFFF"/>
+          <path d="M844 42 L844 58 M851 42 L851 58 M858 42 L858 58"/>
+        </g>
+
+        <text class="kwka3bS" x="24" y="144">drawings 1.00</text>
+        <text class="kwka3bV" x="164" y="82">1.42</text>
+        <text class="kwka3bV" x="279" y="109">1.19</text>
+        <text class="kwka3bV" x="394" y="107">1.21</text>
+        <text class="kwka3bV" x="509" y="83">1.41</text>
+        <text class="kwka3bV" x="624" y="83">1.41</text>
+        <text class="kwka3bV" x="739" y="107">1.21</text>
+
+        <text class="kwka3bA" x="140" y="280">floor 1</text>
+        <text class="kwka3bA" x="255" y="280">floor 2</text>
+        <text class="kwka3bA" x="370" y="280">floor 3</text>
+        <text class="kwka3bA" x="485" y="280">floor 4</text>
+        <text class="kwka3bA" x="600" y="280">floor 5</text>
+        <text class="kwka3bA" x="715" y="280">floor 6</text>
+
+        <text class="kwka3bS" x="24" y="302">design twin</text>
+        <text class="kwka3bL" x="140" y="302">-37.7%</text>
+        <text class="kwka3bL" x="255" y="302">-21.6%</text>
+        <text class="kwka3bL" x="370" y="302">-26.5%</text>
+        <text class="kwka3bL" x="485" y="302">-42.5%</text>
+        <text class="kwka3bL" x="600" y="302">-41.2%</text>
+        <text class="kwka3bL" x="715" y="302">-24.2%</text>
+
+        <text class="kwka3bS" x="24" y="322">calibrated</text>
+        <text class="kwka3bS" x="140" y="322">+2.5%</text>
+        <text class="kwka3bS" x="255" y="322">+3.5%</text>
+        <text class="kwka3bS" x="370" y="322">-0.8%</text>
+        <text class="kwka3bS" x="485" y="322">-1.2%</text>
+        <text class="kwka3bS" x="600" y="322">+2.3%</text>
+        <text class="kwka3bS" x="715" y="322">+3.5%</text>
+
+        <text class="kwka3bN" x="30" y="350">Error on the setback week's heat. Building: design twin -32.9 percent, calibrated twin +1.7 percent.</text>
+        <text class="kwka3bN" x="30" y="368">Setback saving: design twin 23.9 percent, calibrated twin 21.5, constructed truth 20.1.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper caps are heat the drawings never mention; the design twin misses most on the floors where they are tallest.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwka3-gap">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The engine builds Kittiwake Hall in your browser: 6 floors, 14 days hourly, real floors losing 1.15 to 1.45 times the drawn heat, a night setback in week 2. It fits each floor's multipliers to week 1 and scores the design twin and the calibrated twin against the heat the constructed building really used in week 2. Pick another seed to build a different constructed building; your numbers will differ, the shape holds.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwka3-seed">Seed for the constructed building</label>
+        <select class="sql-code" id="kwka3-seed">
+          <option value="1124" selected>1124 · the canon</option>
+          <option value="1">1</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <div id="kwka3-out"></div>
+        <p class="sql-note" id="kwka3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwka3-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the table<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The true multiplier.</strong> At the canon seed the real floors lose 1.42, 1.19, 1.21, 1.41, 1.41 and 1.21 times the drawn heat. The drawings say 1.00 for all six.</p>
+        <p><strong>The design twin's miss.</strong> 21.6 to 42.5 percent low per floor, 32.9 percent low for the building: it estimates 3,402 kWh for a week the building actually used 5,067. Every sign is negative. That is what a bias looks like, as opposed to noise.</p>
+        <p><strong>The calibrated twin.</strong> Fitted to one week of readings, it recovers every multiplier within 0.08 and lands between -1.2 and +3.5 percent per floor, +1.7 percent for the building (5,152 kWh).</p>
+        <p><strong>The end floors.</strong> Floors 1 and 6 have a roof or ground slab and lose 1.3 times more even in the drawings. The multiplier is on top of that, so a large multiplier on an end floor, like floor 1's 1.42, is the most heat the drawings leave out.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the design twin oversells the saving<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The decision Kittiwake's twin serves is a night setback: heat to 15 C at night and at weekends instead of 19. In the constructed truth that saves 20.1 percent (6,343 to 5,067 kWh). The calibrated twin says 21.5 percent. The design twin says 23.9 percent.</p>
+        <p>Why too high? A building that loses heat slowly, as the drawings believe, cools less overnight and needs less to recover in the morning, so a model of that building credits the setback with more. The error has a direction, and so does its effect on the business case: a twin from the drawings makes the saving look bigger than it is. In every seed the bench has run, the design twin overstates the saving and calibration brings it within about 1.5 points.</p>
+        <p>These are constructed numbers for one constructed building. They show the mechanism, not the size of savings anywhere real.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the method comes from<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Kittiwake's twin keeps the physics structure from the drawings (rooms and mass joined by heat paths) and takes the numbers from data. That is a grey-box model, and leader session 2 argued it is the right fidelity for a heating plan.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Bacher and Madsen (2011), in Energy and Buildings, identify models for the heat dynamics of a building as grey-box models: physical equations whose parameters are estimated from measured data. As reported in secondary summaries, they grow the model step by step and test each added part against the data before accepting it, applied to a test building. The lesson for a leader is the order of authority: the structure may come from the drawings, the numbers should come from the building.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>Drawings as a prior, measurements as evidence</h2>
+      <span class="tag demo">★ 17 min · everyone builds</span>
+    </div>
+    <p class="lede">The right way to hold the drawings is neither to trust them nor to throw them away. They are a prior: a reasonable first guess for every parameter. A week of readings is evidence, and evidence moves some parameters a lot and others hardly at all. You will leave with a one-page audit that asks, for a twin you are about to fund, which parameters the evidence has actually moved.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn sketch of a prior narrowed by evidence on Kittiwake's floor 3, constructed, seed 1124. Left panel, heat-loss multiplier kU: the prior from the drawings is a wide hump at 1.00; after one week of readings the belief is a tall narrow copper peak at the fitted 1.26, close to the true 1.21. Right panel, thermal-mass multiplier kC: the same wide prior at 1.00, but after a week the belief is still a low flat ridge across most of the range; the fit lands at 1.68 while the truth is 0.89. One week pins heat loss, not thermal mass.">
+        <defs>
+          <filter id="kwka3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka3cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka3cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka3cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka3cH" x="30" y="30">FLOOR 3: WHAT A WEEK OF READINGS DOES TO EACH BELIEF (CONSTRUCTED, SEED 1124)</text>
+
+        <g filter="url(#kwka3cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="52" width="390" height="252" rx="10" transform="rotate(-0.4 235 178)" fill="#FFFFFF"/>
+          <rect x="450" y="52" width="390" height="252" rx="10" transform="rotate(0.4 645 178)" fill="#FFFFFF"/>
+          <!-- left: kU -->
+          <path d="M70 250 L400 250"/>
+          <path d="M82 250 C130 250 150 192 180 192 C210 192 230 250 280 250" stroke="#4A5A6A" stroke-dasharray="6 5"/>
+          <path d="M228 250 C240 250 244 112 251 112 C258 112 262 250 274 250" fill="#C8733A"/>
+          <path d="M238 250 L238 258"/>
+          <!-- right: kC -->
+          <path d="M480 250 L810 250"/>
+          <path d="M492 250 C540 250 560 192 590 192 C620 192 640 250 690 250" stroke="#4A5A6A" stroke-dasharray="6 5"/>
+          <path d="M500 250 C530 250 548 214 590 210 C650 206 730 206 780 212 C796 216 802 250 810 250" fill="url(#kwka3cHc)"/>
+          <circle cx="777" cy="211" r="4" fill="#10202F"/>
+          <path d="M559 250 L559 258"/>
+          <!-- doodle: a thermometer -->
+          <path d="M858 12 L858 34"/>
+          <circle cx="858" cy="40" r="5" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwka3cH" x="56" y="78">HEAT LOSS kU: PINNED</text>
+        <text class="kwka3cS" x="80" y="180">prior: drawings, 1.00</text>
+        <text class="kwka3cL" x="282" y="124">after a week: 1.26</text>
+        <text class="kwka3cS" x="282" y="142">a narrow peak</text>
+        <text class="kwka3cS" x="62" y="272">0.6</text>
+        <text class="kwka3cS" x="214" y="274">true 1.21</text>
+        <text class="kwka3cS" x="386" y="272">1.8</text>
+        <text class="kwka3cA" x="150" y="292">multiplier on the drawings</text>
+
+        <text class="kwka3cH" x="466" y="78">THERMAL MASS kC: NOT PINNED</text>
+        <text class="kwka3cS" x="474" y="180">prior: drawings, 1.00</text>
+        <text class="kwka3cL" x="700" y="190">fitted 1.68</text>
+        <text class="kwka3cS" x="660" y="120">after a week: still flat</text>
+        <text class="kwka3cS" x="472" y="272">0.6</text>
+        <text class="kwka3cS" x="534" y="274">true 0.89</text>
+        <text class="kwka3cS" x="796" y="272">1.8</text>
+        <text class="kwka3cA" x="560" y="292">multiplier on the drawings</text>
+
+        <text class="kwka3cN" x="30" y="330">One week of readings pins how fast a floor loses heat (all six within 0.08), not how much heat it stores.</text>
+        <text class="kwka3cN" x="30" y="348">The curve shapes are a sketch; the fitted and true values are Kittiwake's own.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper peak is evidence doing its job; the flat ridge on the right is a parameter the week could not see, so its fitted value means little.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Commissioning data is the cheapest evidence you will ever get<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The weeks around handover are the one time a building is measured with intent: systems are switched on deliberately, setpoints are known, nobody has yet moved in and propped a door open. Readings from that window are the evidence a twin's parameters most need, and they are routinely archived as a pass or fail certificate rather than kept as data.</p>
+        <p>Kittiwake's calibration week is the constructed version of that window: one ordinary week of hourly readings per floor fits every heat-loss multiplier within 0.08, with the fitted model 0.460 to 0.526 C from the sensors. Ask for the raw readings, not the certificate. How sensors, clocks and missing readings should be handled is the territory of <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When to distrust the drawings, and when to distrust the fit<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Distrust the drawings</strong> for anything that depends on workmanship: heat loss, air leakage, how well a joint was sealed. These are where construction friction lives, and in Kittiwake every one of them points the same way.</p>
+        <p><strong>Distrust the fit</strong> for anything the evidence could not see. Floor 3's thermal mass came out at 1.68 times the drawings when the truth is 0.89, and on floor 1 the fit said 1.62 against 0.85. A week of ordinary heating does not swing the building's mass hard enough to reveal it. The honest move is to keep the drawing value as the prior for that parameter and say so, rather than report a fitted number the data cannot support. Practitioner session 3 calls this identifiability.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>ASHRAE Guideline 14 (editions 2002 and 2014, reported via secondary papers; the standard is paywalled) is commonly cited for calibration criteria: a model is often treated as calibrated when hourly CV(RMSE) is at most 30 percent and NMBE within plus or minus 10 percent, or monthly 15 and 5 percent. Garrett and New (2016) question whether those metrics are enough (reported). Notice what they measure: agreement with the meter, not whether each parameter was pinned. Kittiwake's floor 3 can match its meter well and still carry a mass value the week never tested.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Who owns the as-built record<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The drawings have an owner, usually the design team, and a revision number. The as-built record often has neither: the contractor's marked-up set, the commissioning engineer's settings, the substitution approvals, each in a different place. A twin built on that record needs one person who can say which version it reflects and who must be told when it changes. Leader session 4 reads a twin claim for exactly this; practitioner session 8 assigns the owners. This is a working practice, not legal or compliance advice.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 352" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn audit card on a clipboard with five rows, each a question and Kittiwake's constructed answer. One, which drawing revision: the design set. Two, what was measured after handover: a week of hourly readings per floor. Three, which parameters were fitted, and on what: kU and kC, week 1, grid search. Four, in copper, which were left at design values: room air capacity and occupant load. Five, what changed since: ask the change log.">
+        <defs>
+          <filter id="kwka3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka3dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka3dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka3dK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka3dV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwka3dX { font: 800 16px Inter, sans-serif; fill: #10202F; }
+          .kwka3dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka3dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka3dH" x="30" y="30">THE AS-BUILT AUDIT: FIVE ROWS BEFORE YOU FUND A TWIN</text>
+
+        <g filter="url(#kwka3dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="120" y="52" width="640" height="252" rx="12" transform="rotate(-0.5 440 178)" fill="#FFFFFF"/>
+          <!-- doodle: the clipboard clip -->
+          <rect x="400" y="36" width="80" height="13" rx="5" fill="#EDF4FB"/>
+          <path d="M140 118 L740 118 M140 162 L740 162 M140 206 L740 206"/>
+          <rect x="138" y="210" width="604" height="40" rx="6" transform="rotate(0.3 440 230)" fill="#C8733A"/>
+          <path d="M140 254 L740 254"/>
+        </g>
+
+        <text class="kwka3dA" x="176" y="86">question</text>
+        <text class="kwka3dA" x="490" y="86">Kittiwake's answer (constructed)</text>
+
+        <text class="kwka3dV" x="150" y="112">1</text>
+        <text class="kwka3dL" x="176" y="110">Which drawing revision?</text>
+        <text class="kwka3dS" x="490" y="110">the design set, never revised</text>
+
+        <text class="kwka3dV" x="150" y="156">2</text>
+        <text class="kwka3dL" x="176" y="154">What was measured after handover?</text>
+        <text class="kwka3dS" x="490" y="154">a week of hourly readings per floor</text>
+
+        <text class="kwka3dV" x="150" y="200">3</text>
+        <text class="kwka3dL" x="176" y="198">Which were fitted, on what data?</text>
+        <text class="kwka3dS" x="490" y="198">kU and kC, week 1, grid search</text>
+
+        <text class="kwka3dX" x="150" y="238">4</text>
+        <text class="kwka3dL" x="176" y="236">Which were left at design values?</text>
+        <text class="kwka3dK" x="490" y="236">room air capacity, occupant load</text>
+
+        <text class="kwka3dV" x="150" y="286">5</text>
+        <text class="kwka3dL" x="176" y="284">What changed since?</text>
+        <text class="kwka3dS" x="490" y="284">ask the change log</text>
+
+        <text class="kwka3dN" x="30" y="330">A twin that cannot answer row 4 has hidden its assumptions inside its parameters.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper row is the one vendors and teams most often leave blank, and the one that tells you where the drawings still speak.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Ask which drawing revision the twin was built from</h4>
+        <p>Write the revision and its date. If the answer is "the design set" and nothing later, write that down too: Kittiwake's design twin was 32.9 percent low on the setback week's heat for exactly that reason.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask what was measured after handover</h4>
+        <p>Which readings, how many weeks, at what interval, and whether the raw data still exists or only a certificate does. One week of hourly readings was enough to pin Kittiwake's heat loss; none would have left the twin on the drawings.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask which parameters were fitted, and on what data</h4>
+        <p>List them. For each, ask whether the data could actually see it: a fitted value the evidence could not pin, like floor 3's thermal mass at 1.68 against a true 0.89, is a guess with a decimal point.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask which were left at design values</h4>
+        <p>This is the row most often blank. Every twin keeps some drawing values; the honest ones say which, and why that is acceptable for the decision. Kittiwake's twin keeps the room air capacity and assumes an average occupant load.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask what has changed since</h4>
+        <p>Retrofits, replaced equipment, changed timetables. Each is a new version of the asset. If nobody can answer, the twin's as-built gap is quietly reopening; Kittiwake's unlogged retrofit on floor 4 put that floor's heat estimate 63.1 percent wrong.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a twin's numbers are presented, ask where each parameter came from: the drawings, a measurement, or a fit the data could not support. A twin from the drawings is not neutral; it is wrong in a direction you can predict, and usually in the direction that flatters the business case.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Kittiwake's design twin (constructed) is low on the setback week's heat on every floor, by 21.6 to 42.5 percent. Why is every error the same sign?</p>
+      <button class="qopt" type="button">A · The weather that week was unusually cold</button>
+      <button class="qopt" type="button">B · The heat meters read high</button>
+      <button class="qopt" type="button">C · Every real floor loses more heat than its drawings say (1.19 to 1.42 times), and the design twin assumes exactly the drawings</button>
+      <p class="qwhy">A bias, not noise: construction friction lets heat out, so a twin that assumes 1.00 everywhere underestimates every floor. Calibrated on one week, the errors fall to -1.2 to +3.5 percent.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Calibration on one week of readings recovered every floor's heat-loss multiplier within 0.08, but put floor 3's thermal mass at 1.68 against a true 0.89. Why?</p>
+      <button class="qopt" type="button">A · An ordinary week of heating does not exercise the building's mass enough for the readings to reveal it, so the data cannot pin that parameter</button>
+      <button class="qopt" type="button">B · The grid search had a bug on floor 3</button>
+      <button class="qopt" type="button">C · Thermal mass changes every week</button>
+      <p class="qwhy">Some parameters are identifiable from a given set of readings and some are not. The honest twin keeps the drawing value as the prior for kC and says so, rather than trusting a fitted number the data never tested.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The design twin says a night setback saves 23.9 percent; the constructed truth is 20.1 percent. Why does a twin from the drawings oversell it?</p>
+      <button class="qopt" type="button">A · It rounds up by convention</button>
+      <button class="qopt" type="button">B · It believes the building loses heat slowly, so it credits the setback with more than a leakier real building gives</button>
+      <button class="qopt" type="button">C · It ignores the weekends</button>
+      <p class="qwhy">The as-built gap carries into the decision. Calibrated, the twin says 21.5 percent. In every seed the bench has run, the design twin overstates the saving.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one asset you know.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the audit on one model you already rely on</h4>
+        <p>Pick a model of a physical asset your organisation uses, a twin or simply an engineering estimate, and fill the five rows. Mark each answer as known, guessed or unknown. Row 4 is the one to push on.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Predict the sign of the gap</h4>
+        <p>For that asset, write which way you expect the as-built gap to point, and what decision it would flatter. Leader session 4 asks you to read a twin claim with this in mind.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The four life-cycle phases</span><span class="note">AIAA and AIA (2020), "Digital Twin: Definition and Value": As Designed, As Built, As Used, As Maintained. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Structure from physics, numbers from data</span><span class="note">Bacher and Madsen (2011), Energy and Buildings 43(7). Bibliographic record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Kittiwake's as-built gap</span><span class="note">Constructed and computed in the page: kU 1.19 to 1.42, calibrated within 0.08; energy -32.9 vs +1.7 percent; saving 23.9 / 21.5 / 20.1 percent.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Calibration criteria</span><span class="note">ASHRAE Guideline 14 (2002, 2014), reported via secondary papers; paywalled. Sufficiency questioned by Garrett and New (2016), reported.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Commissioning procedures</span><span class="note">Out of scope: how commissioning is run is building services engineering, not twin practice.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Four phases.</strong> As Designed, As Built, As Used, As Maintained. Ask which one the twin describes.</div>
+      <div class="cheat-item"><strong>The drawing is a plan.</strong> Workmanship, substitutions and commissioning make the building differ from it.</div>
+      <div class="cheat-item"><strong>The gap has a sign.</strong> Kittiwake's floors lose 1.19 to 1.42 times the drawn heat (constructed).</div>
+      <div class="cheat-item"><strong>Design twin.</strong> 21.6 to 42.5 percent low per floor, 32.9 percent for the building.</div>
+      <div class="cheat-item"><strong>One week fixes most of it.</strong> Calibrated: -1.2 to +3.5 percent per floor, +1.7 for the building.</div>
+      <div class="cheat-item"><strong>It flatters the case.</strong> Setback saving: design twin 23.9%, calibrated 21.5%, truth 20.1%.</div>
+      <div class="cheat-item"><strong>Prior and evidence.</strong> Heat loss was pinned; thermal mass was not (floor 3: 1.68 fitted, 0.89 true).</div>
+      <div class="cheat-item"><strong>Five audit rows.</strong> Revision? Measured? Fitted on what? Left at design? Changed since?</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Reading a digital twin claim.</strong> A render, the word "real-time" and a savings figure with no baseline or band: how to read what a twin claim actually says, and what it leaves out.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 3 of 6 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="a2-fidelity-is-a-choice.html">← Prev: Fidelity is a choice, not a virtue</a>
+        <a href="a4-reading-a-digital-twin-claim.html">Next: Reading a digital twin claim →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwka3-seed");
+  var out = document.getElementById("kwka3-out");
+  var verdict = document.getElementById("kwka3-verdict");
+  var self = document.getElementById("kwka3-self");
+  if (!sel || !out) return;
+  function pct(x) { return (x >= 0 ? "+" : "-") + (100 * Math.abs(x)).toFixed(1) + "%"; }
+  function render() {
+    var seed = Number(sel.value);
+    var L = DTW.ladder({ seed: seed });
+    var d = L.rungs[0], c = L.rungs[1];
+    var html = '<table class="sql-table"><thead><tr><th>Floor</th><th>True heat-loss multiplier</th><th>Drawings</th><th>Calibrated</th><th>Design twin, energy error</th><th>Calibrated twin, energy error</th></tr></thead><tbody>';
+    for (var f = 0; f < 6; f++) {
+      html += "<tr><td>" + (f + 1) + (f === 0 || f === 5 ? " (end)" : "") + "</td><td><b>" + L.truthK.kU[f].toFixed(2) + "</b></td><td>1.00</td><td>" + L.cal[f].kU.toFixed(2) +
+        "</td><td><b>" + pct(d.floors[f].eErr) + "</b></td><td>" + pct(c.floors[f].eErr) + "</td></tr>";
+    }
+    html += "<tr><td><b>Building</b></td><td></td><td></td><td></td><td><b>" + pct(d.eErr) + "</b></td><td><b>" + pct(c.eErr) + "</b></td></tr></tbody></table>";
+    out.innerHTML = html;
+    verdict.textContent = "Seed " + seed + ": the design twin is " + pct(d.eErr) + " on the setback week's heat and says the night setback saves " +
+      (100 * d.saving).toFixed(1) + "%; the calibrated twin says " + (100 * c.saving).toFixed(1) + "%; the constructed truth is " +
+      (100 * L.trueSaving.saving).toFixed(1) + "%. A twin from the drawings oversells." + (seed === 1124 ? "" : " Your numbers differ from the canon; the shape holds.");
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed: Kittiwake Hall, its weather and its readings are generated (seed " + sel.value + " at load). End floors 1 and 6 lose 1.3 times more in the drawings too. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwka3-gap .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwka3-gap table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

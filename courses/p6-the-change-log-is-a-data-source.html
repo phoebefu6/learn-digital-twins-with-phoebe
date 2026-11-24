@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 6 of 10. The change log is a data source: configuration as data, the As Maintained record, what one unlogged retrofit does to a twin's plan, and a logging pipeline from work order to model version. Built on Kittiwake Hall, a constructed teaching building, with the retrofit computed live in the page.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The change log is a data source - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 6 of 10. A retrofit is a data event: what one unlogged change costs a twin's plan, and the pipeline that turns a work order into a new model version.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p6-the-change-log-is-a-data-source.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The change log is a data source - learn digital twins with phoebe">
+<meta name="twitter:description" content="One unlogged retrofit, its cost in the plan, and the log that would have caught it.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 6 · The change log is a data source - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 6 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 6 of 10</div>
+    <h1>The <span class="accent">change log</span> is a data source</h1>
+    <p class="sub">Last session the surprises pointed at floor 4 and the log was silent. Tonight you treat that silence as the bug. A twin is fitted to one configuration of its asset; every physical change is a data event that moves a parameter, and a change nobody logs keeps feeding the plan with the old building. Kittiwake Hall, a constructed six-storey teaching building, gets an insulation retrofit on floor 4 that never reaches the twin. You will price that in the page, then build the pipeline and the join that would have caught it.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Data engineers and analysts running a twin</span>
+      <span class="chip audience">Facilities and asset data owners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Configuration and its cost</span>
+      <span class="a3" style="flex:2">18-23 · Logging pipeline</span>
+      <span class="a4" style="flex:7">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The building changed; the twin was not told</h2>
+    </div>
+    <p class="lede">Kittiwake Hall (constructed) has a twin calibrated on week 1 and kept in sync by a Kalman filter. At the start of week 2 a contractor insulates floor 4, and floor 4 now loses 0.6 times the heat it used to. The work order closes; nothing reaches the twin. The filter keeps following the room sensor, so the live temperatures still look right. The plan for next week does not: it is computed from the old floor.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A change-log schema in which every row names the parameter it moves. The price of one unlogged retrofit on Kittiwake's twin, computed in the page: floor 4's energy plan off by +63.1 percent and the whole building's by +8.9 percent (constructed). A pipeline from work order to model version, with what a configuration-version bump must trigger. And a fifteen-line Python join that reads a surprise series against a change log and says, week by week, "explained by change X" or "UNEXPLAINED: check the floor".</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a retrofit is a data event<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Practitioner session 1 keyed the asset record on the floor and gave it a configuration version. That version is not paperwork. The model record says "fitted to config 3", and every parameter in it (heat loss, thermal mass, what a metered kilowatt delivers, where the sensor sits) describes config 3. The day the floor becomes config 4, those parameters are claims about a building that no longer exists. A change log row is the only way the twin can know which of its numbers just went stale.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) position paper describes a twin following its asset through As Designed, As Built, As Used and As Maintained, and says the twin is updated with data from its physical twin throughout its life cycle. As Maintained is the phase a change log writes: every repair, swap and retrofit is a step in it, and a twin that skips one is mirroring an earlier asset.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Configuration.</strong> The asset as it physically is: walls, plant, sensors and where they sit.</li>
+          <li><strong>Configuration version.</strong> An id that increments with every logged physical change.</li>
+          <li><strong>Change log row.</strong> One physical change: what, when, who, evidence, and which model parameters it touches.</li>
+          <li><strong>Touched parameter.</strong> A model parameter whose value the change makes stale; it must be recalibrated on data from after the change.</li>
+          <li><strong>Effective time and logged time.</strong> When the work happened, and when the row was written. They differ when the log is late.</li>
+          <li><strong>Innovation, or surprise.</strong> Reading minus the twin's prediction; practitioner session 5 flags a shift in its mean.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers configuration as data and the change log row</span>
+      <h2>Configuration is data, and every change moves a parameter</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">A change log is usually written for auditors. A twin needs it for a different reason: each row says which model number has just become wrong. The figure follows floor 4 through four changes. Three were logged, and each points at the parameter it moves. One was not, and it points at a parameter the twin still believes.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn timeline of Kittiwake floor 4, constructed. Four changes in order: version 2, windows replaced, logged, touches kU the heat loss; version 3, radiator swapped, logged, touches the heat delivered per metered kilowatt hour; version 4, sensor moved, logged, touches the measurement itself; then, in copper and dashed, an insulation retrofit that was never logged, which makes kU stale while the twin keeps its calibrated 1.42.">
+        <defs>
+          <filter id="kwkp6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp6aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp6aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp6aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp6aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp6aH" x="30" y="30">FLOOR 4 OVER ITS LIFE: FOUR CHANGES, FOUR PARAMETERS (CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp6aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="52" width="170" height="62" rx="8" transform="rotate(-0.5 125 83)" fill="#FFFFFF"/>
+          <rect x="240" y="52" width="170" height="62" rx="8" transform="rotate(0.5 325 83)" fill="#FFFFFF"/>
+          <rect x="440" y="52" width="170" height="62" rx="8" transform="rotate(-0.4 525 83)" fill="#FFFFFF"/>
+          <rect x="660" y="52" width="180" height="62" rx="8" transform="rotate(0.6 750 83)" fill="#C8733A" stroke-dasharray="7 5"/>
+          <path d="M30 140 L852 140" marker-end="url(#kwkp6aAr)"/>
+          <path d="M125 116 L125 192" marker-end="url(#kwkp6aAr)"/>
+          <path d="M325 116 L325 192" marker-end="url(#kwkp6aAr)"/>
+          <path d="M525 116 L525 192" marker-end="url(#kwkp6aAr)"/>
+          <path d="M750 116 L750 192" stroke-dasharray="6 5" marker-end="url(#kwkp6aAr)"/>
+          <rect x="40" y="196" width="170" height="58" rx="8" transform="rotate(0.4 125 225)" fill="#EDF4FB"/>
+          <rect x="240" y="196" width="170" height="58" rx="8" transform="rotate(-0.4 325 225)" fill="#EDF4FB"/>
+          <rect x="440" y="196" width="170" height="58" rx="8" transform="rotate(0.5 525 225)" fill="url(#kwkp6aHc)"/>
+          <rect x="660" y="196" width="180" height="58" rx="8" transform="rotate(-0.5 750 225)" fill="#FBEFE5"/>
+          <!-- doodle: a window -->
+          <rect x="834" y="14" width="24" height="22" rx="2" fill="#FFFFFF"/>
+          <path d="M846 14 L846 36 M834 25 L858 25"/>
+        </g>
+
+        <text class="kwkp6aL" x="54" y="76">v2 · logged</text>
+        <text class="kwkp6aK" x="54" y="94">windows replaced</text>
+        <text class="kwkp6aL" x="254" y="76">v3 · logged</text>
+        <text class="kwkp6aK" x="254" y="94">radiator swapped</text>
+        <text class="kwkp6aL" x="454" y="76">v4 · logged</text>
+        <text class="kwkp6aK" x="454" y="94">sensor moved</text>
+        <text class="kwkp6aL" x="674" y="76">NOT logged</text>
+        <text class="kwkp6aK" x="674" y="94">insulation retrofit</text>
+
+        <text class="kwkp6aA" x="134" y="160">config 2</text>
+        <text class="kwkp6aA" x="334" y="160">config 3</text>
+        <text class="kwkp6aA" x="534" y="160">config 4</text>
+        <text class="kwkp6aA" x="759" y="160">still config 4</text>
+
+        <text class="kwkp6aL" x="54" y="220">kU, the heat loss</text>
+        <text class="kwkp6aS" x="54" y="238">recalibrate on new data</text>
+        <text class="kwkp6aL" x="254" y="220">heat per meter kWh</text>
+        <text class="kwkp6aS" x="254" y="238">what a reading delivers</text>
+        <text class="kwkp6aL" x="454" y="220">the reading itself</text>
+        <text class="kwkp6aK" x="454" y="238">new offset, new noise</text>
+        <text class="kwkp6aL" x="674" y="220">kU, unseen</text>
+        <text class="kwkp6aK" x="674" y="238">twin keeps 1.42</text>
+
+        <text class="kwkp6aN" x="30" y="284">Change entries are illustrative. kU 1.42 is floor 4's calibrated value at seed 1124; the bench's retrofit</text>
+        <text class="kwkp6aN" x="30" y="302">cuts the floor's true heat loss to 0.6 times at the start of week 2. Nothing in the twin's records says so.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - each logged change points at the number it makes stale; the copper one points at a number the twin still trusts.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>A change log row, field by field<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A row the twin can use carries eight fields. <strong>Asset id</strong> (KH-F4, the floor, never a sensor). <strong>Config version</strong>, from and to. <strong>Effective time</strong>, when the work finished, and <strong>logged time</strong>, when the row was written. <strong>What changed</strong>: the component, its state before and after. <strong>Who</strong>: the person or contractor who can be asked. <strong>Evidence</strong>: the work order, photos, a commissioning sheet. And the field most logs lack: <strong>which model parameters it touches</strong>.</p>
+        <p>That last field is what turns an audit trail into a data source. Without it, every change forces someone to guess which part of the model to distrust. With it, a configuration bump can trigger exactly the right recalibration and nothing else.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Which parameter each kind of change touches<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Insulation, windows, a sealed draught.</strong> The heat-loss multiplier kU on that floor. The engine's retrofit is exactly this: floor 4's kU times 0.6.</li>
+          <li><strong>A radiator or valve swap.</strong> How much heat reaches the room per kilowatt-hour on the heat meter. The meter still reads; what it means has moved.</li>
+          <li><strong>A moved or replaced sensor.</strong> The measurement itself: its offset, its noise, the air it sits in. The model may be fine and the twin will still see a shift. Sensor metadata and its triage live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</li>
+          <li><strong>A new tenant, a changed timetable.</strong> Not a configuration change but an As Used one: it moves inputs (occupancy), not parameters. Log it too, in the input feed, so the twin does not mistake it for a physical change.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>As Maintained is a phase with versions, not a status<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The AIAA and AIA (2020) paper names four life-cycle phases. It is tempting to read As Maintained as one state the asset reaches. For a twin it is a sequence: config 3, config 4, config 5, each with its own date range and its own fitted model. The test from practitioner session 1 still holds: given any hour in the past, can you say which configuration the floor was in, and which model version was fitted to it? If either answer is "probably", the log is the gap.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the cost of one unlogged change</span>
+      <h2>What one unlogged change costs</h2>
+      <span class="tag concept">7 min live</span>
+    </div>
+    <p class="lede">Run Kittiwake's twin twice on the same constructed world: once with the floor 4 retrofit happening and unlogged, once with no change at all. The twin's plan is identical in both runs, because the twin never heard of the retrofit. What changes is the building. The error shows up in the plan; the evidence shows up only in the surprises.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison, constructed, seed 1124. Left, the twin still fitted to configuration 3, kU 1.42 from week 1. Right, the real floor 4 in configuration 4, insulated at hour 168, losing 0.6 times the heat. Between them, in copper, nobody told the twin. Below left, the error in the plan: floor 4 plan 836 kilowatt hours against a true 513, plus 63.1 percent; building 5,153 against 4,732, plus 8.9 percent. Below right, the evidence in the surprises: mean surprise plus 0.015 C in week 1 and plus 0.638 C in week 2, z 11.44, band coverage 69.0 percent.">
+        <defs>
+          <filter id="kwkp6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="63" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp6bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp6bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp6bV { font: 800 18px Inter, sans-serif; fill: #033F6E; }
+          .kwkp6bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp6bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp6bH" x="30" y="30">FLOOR 4, WEEK 2: THE TWIN IN CONFIG 3, THE FLOOR IN CONFIG 4 (CONSTRUCTED, SEED 1124)</text>
+
+        <g filter="url(#kwkp6bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="54" width="250" height="92" rx="10" transform="rotate(-0.4 155 100)" fill="#EDF4FB"/>
+          <rect x="330" y="70" width="220" height="60" rx="8" transform="rotate(0.6 440 100)" fill="#C8733A"/>
+          <rect x="600" y="54" width="250" height="92" rx="10" transform="rotate(0.4 725 100)" fill="url(#kwkp6bHc)"/>
+          <path d="M284 100 L326 100" marker-end="url(#kwkp6bAr)"/>
+          <path d="M596 100 L554 100" marker-end="url(#kwkp6bAr)"/>
+          <path d="M400 134 L250 190" marker-end="url(#kwkp6bAr)"/>
+          <path d="M480 134 L630 190" marker-end="url(#kwkp6bAr)"/>
+          <rect x="30" y="194" width="390" height="104" rx="10" transform="rotate(0.3 225 246)" fill="#FFFFFF"/>
+          <rect x="460" y="194" width="390" height="104" rx="10" transform="rotate(-0.3 655 246)" fill="#FFFFFF"/>
+          <!-- doodle: a thermometer -->
+          <rect x="818" y="216" width="10" height="44" rx="5" fill="#FFFFFF"/>
+          <circle cx="823" cy="268" r="9" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp6bL" x="46" y="80">The twin's floor 4</text>
+        <text class="kwkp6bS" x="46" y="100">fitted to config 3, week 1</text>
+        <text class="kwkp6bS" x="46" y="118">kU 1.42 from calibration</text>
+        <text class="kwkp6bL" x="346" y="96">nobody told the twin</text>
+        <text class="kwkp6bK" x="346" y="114">no row, no version bump</text>
+        <text class="kwkp6bL" x="616" y="80">The real floor 4</text>
+        <text class="kwkp6bK" x="616" y="100">config 4 from hour 168</text>
+        <text class="kwkp6bK" x="616" y="118">loses 0.6x the heat</text>
+
+        <text class="kwkp6bA" x="46" y="218">THE ERROR APPEARS IN THE PLAN</text>
+        <text class="kwkp6bV" x="46" y="246">836 vs 513 kWh</text>
+        <text class="kwkp6bS" x="46" y="266">floor 4 plan vs true floor 4: +63.1%</text>
+        <text class="kwkp6bS" x="46" y="284">building 5,153 vs 4,732 kWh: +8.9%</text>
+
+        <text class="kwkp6bA" x="476" y="218">THE EVIDENCE IS IN THE SURPRISES</text>
+        <text class="kwkp6bV" x="476" y="246">+0.015 to +0.638 C</text>
+        <text class="kwkp6bS" x="476" y="266">mean surprise, week 1 to week 2, z 11.44</text>
+        <text class="kwkp6bS" x="476" y="284">floor 4 band coverage 69.0%</text>
+
+        <text class="kwkp6bN" x="30" y="320">The plan number has no warning on it. Only the surprise column says the floor and the model now disagree.</text>
+        <text class="kwkp6bN" x="30" y="338">Week 2 runs the night setback; energies are the twin's 24-hour-ahead plans against the constructed truth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper gap is a missing log row; everything below it is what that row costs.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwkp6-log">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Kittiwake's twin on all six floors, computed in your browser by the bench engine: calibrated on week 1, kept in sync by the Kalman filter (assumed sensor noise 0.4 C), then asked to plan week 2 under a night setback. "Unlogged" means the real floor 4 is insulated at the start of week 2 (heat loss times 0.6) and the twin is never told; "no change" means nothing happens. Synthetic and constructed: Kittiwake, its weather, readings and the retrofit are generated. True energy exists only because the world is constructed.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp6-seed">Seed for the constructed world</label>
+        <select class="sql-code" id="kwkp6-seed">
+          <option value="1124" selected>1124, the canon</option>
+          <option value="1">1</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <div class="kwkp6-btns">
+          <button class="btn primary" id="kwkp6-mode" type="button">Retrofit floor 4 at the start of week 2: unlogged</button>
+          <button class="btn" id="kwkp6-reset" type="button">Back to the canon settings</button>
+        </div>
+        <div id="kwkp6-out"></div>
+        <p class="sql-note" id="kwkp6-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp6-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the two runs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The twin's column does not move.</strong> Toggle between the modes: floor 4's plan stays at 836 kWh. The twin has no way to plan differently, because nothing it was given changed. The true floor 4 falls from 848 kWh with no change to 513 kWh with the retrofit, and the plan's error goes from -1.3 percent to +63.1 percent.</p>
+        <p><strong>One floor in six moves the building.</strong> The whole-building plan is 5,153 kWh in both runs; the truth falls from 5,067 to 4,732 kWh, so the building error goes from +1.7 to +8.9 percent. Any budget, setback decision or savings claim built on that plan carries the error with it. These are constructed numbers about heating energy, not a forecast of anyone's bill and not investment advice.</p>
+        <p><strong>It is not a quirk of one seed.</strong> Floor 4's plan error under the unlogged retrofit is +73.4 percent at seed 1, +73.2 at seed 7 and +67.0 at seed 42. Your numbers will differ by seed; the shape holds.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the filter hides it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The Kalman filter's job is to pull the twin's state toward the readings every hour. It does that job well: with the unlogged retrofit, tracking error against the true room is 0.258 C for the building and 0.399 C on floor 4. A dashboard of live temperatures would look healthy. But the filter corrects the state, not the parameters. Every hour the model predicts a colder floor than the one that exists, the sensor disagrees, and the filter quietly absorbs a surprise of about +0.6 C. The plan, which runs the model forward without readings, gets no such help.</p>
+        <p>So the evidence is in the innovations, as practitioner session 5 showed: floor 4's mean surprise moves from +0.015 C to +0.638 C (z 11.44), and its 95 percent band now covers only 69.0 percent of readings, against 92.1 percent for the building.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the research asks for<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The National Academies (2024) report concludes that verification, validation and uncertainty quantification for a twin must be a continual process that adapts to changes in the physical counterpart. A change log is the cheapest way to know when the counterpart changed. Without it, validation can only notice a change after it has already cost a plan, and only if someone is watching the surprises.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers logging as a pipeline</span>
+      <h2>Logging as a pipeline, from work order to model version</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A change log that depends on someone remembering to email the data team will be late or empty. Treat it as a pipeline instead: the work order is the source, the change log row is the record, and a configuration-version bump is an event the twin subscribes to. The figure is that pipeline, with the step that actually repairs the model in copper.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pipeline. A closed work order from facilities or a contractor becomes a change log row with asset id, config version 4 to 5, and touched parameters. The version bump triggers three steps: recheck the surprises since the effective time, recalibrate the touched parameter on post-change data (in copper), and version the model. The result is a new model version fitted to config 5, and the plans are re-run. Below, a dashed box: if the row is logged late, back-date it to the effective time and re-run from there.">
+        <defs>
+          <filter id="kwkp6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp6cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp6cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp6cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .kwkp6cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp6cH" x="30" y="30">FROM WORK ORDER TO MODEL VERSION</text>
+
+        <g filter="url(#kwkp6cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="112" width="160" height="82" rx="8" transform="rotate(-0.6 110 153)" fill="#FFFFFF"/>
+          <rect x="226" y="104" width="180" height="98" rx="8" transform="rotate(0.4 316 153)" fill="url(#kwkp6cHc)"/>
+          <rect x="450" y="54" width="210" height="58" rx="8" transform="rotate(0.5 555 83)" fill="#FFFFFF"/>
+          <rect x="450" y="132" width="210" height="58" rx="8" transform="rotate(-0.5 555 161)" fill="#C8733A"/>
+          <rect x="450" y="210" width="210" height="58" rx="8" transform="rotate(0.4 555 239)" fill="#FFFFFF"/>
+          <rect x="700" y="112" width="150" height="82" rx="8" transform="rotate(-0.4 775 153)" fill="#033F6E"/>
+          <path d="M192 153 L222 153" marker-end="url(#kwkp6cAr)"/>
+          <path d="M408 140 L446 88" marker-end="url(#kwkp6cAr)"/>
+          <path d="M408 160 L446 161" marker-end="url(#kwkp6cAr)"/>
+          <path d="M408 180 L446 236" marker-end="url(#kwkp6cAr)"/>
+          <path d="M662 88 L696 130" marker-end="url(#kwkp6cAr)"/>
+          <path d="M662 161 L696 158" marker-end="url(#kwkp6cAr)"/>
+          <path d="M662 236 L696 184" marker-end="url(#kwkp6cAr)"/>
+          <rect x="30" y="296" width="376" height="54" rx="8" transform="rotate(0.3 218 323)" fill="#EDF4FB" stroke-dasharray="7 5"/>
+          <path d="M316 292 L316 208" marker-end="url(#kwkp6cAr)"/>
+          <!-- doodle: a clipboard -->
+          <rect x="150" y="62" width="30" height="38" rx="3" fill="#FFFFFF"/>
+          <rect x="158" y="50" width="14" height="10" rx="2" fill="#FFFFFF"/>
+          <path d="M157 78 L173 78 M157 88 L173 88"/>
+        </g>
+
+        <text class="kwkp6cL" x="44" y="138">Work order closed</text>
+        <text class="kwkp6cS" x="44" y="158">facilities or</text>
+        <text class="kwkp6cS" x="44" y="174">contractor</text>
+
+        <text class="kwkp6cL" x="240" y="130">Change log row</text>
+        <text class="kwkp6cK" x="240" y="150">KH-F4, config 4 to 5</text>
+        <text class="kwkp6cK" x="240" y="168">effective, logged, who</text>
+        <text class="kwkp6cK" x="240" y="186">touches: [kU]</text>
+
+        <text class="kwkp6cL" x="466" y="80">Recheck the surprises</text>
+        <text class="kwkp6cS" x="466" y="98">since the effective time</text>
+        <text class="kwkp6cL" x="466" y="158">Recalibrate touched</text>
+        <text class="kwkp6cK" x="466" y="176">parameter, post-change data</text>
+        <text class="kwkp6cL" x="466" y="236">Version the model</text>
+        <text class="kwkp6cS" x="466" y="254">fitted_to: config 5</text>
+
+        <text class="kwkp6cW" x="714" y="140">Model v3</text>
+        <text class="kwkp6cW" x="714" y="160">fitted to config 5</text>
+        <text class="kwkp6cW" x="714" y="180">plans re-run</text>
+
+        <text class="kwkp6cL" x="46" y="320">Logged late? Back-date to the effective time</text>
+        <text class="kwkp6cS" x="46" y="338">and re-run every plan made since then</text>
+
+        <text class="kwkp6cN" x="30" y="372">The version bump is the event; the touched-parameters field decides what gets recalibrated.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper step is the repair; the other two make the repair checkable later.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Who logs, and where<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The people who change a building are facilities staff and contractors, not the twin's owners. They already write work orders. So the change log should be fed by the work-order system, not by a separate form: when a work order on a tracked asset closes, it must carry the asset id, the before and after, and a "touches" field picked from a short list (heat loss, thermal mass, heat delivery, sensor, none). Make "none" an explicit choice, so a blank never means "forgot". The design of maintenance management systems themselves is out of scope here; the twin only needs that one export.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What a config-version bump should trigger<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ol>
+          <li><strong>Recheck the surprises</strong> for that asset from the effective time: did the mean move, and by how much? A logged change that moves nothing is useful evidence too.</li>
+          <li><strong>Recalibrate the touched parameter</strong> on data from after the change only. Mixing pre-change weeks into the fit averages two buildings. Leave untouched parameters alone, so one retrofit does not reopen the whole model.</li>
+          <li><strong>Version the model</strong>: a new model version whose fitted_to points at the new configuration, with the old one kept, so every past prediction still names the model that made it.</li>
+        </ol>
+        <p>Then re-run any plan that is still live. Practitioner session 8 decides who may approve each of these steps.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When the log is late<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Logs will be late: the contractor closes the order a fortnight after the work. That is why the row carries two times. Back-date the configuration change to the effective time, re-run the surprise check and the recalibration from there, and re-issue any plan made in between with a note that it replaced an earlier one. A late row is a correction; a missing row is the failure Part 2 priced. Sensor metadata (install dates, positions, replacements) follows the same pattern and is covered in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the standards sit<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>ISO 23247-1:2021 frames a manufacturing twin around "observable manufacturing elements" (reported: the standard is paywalled and only its contents list was read). Read that loosely and a configuration change is something the twin must be able to observe. The standard's scope is manufacturing, not buildings, and no requirement from it is quoted here.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the change-log schema and join it to the surprises</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You will write a change-log schema the twin can read, then a fifteen-line Python check that joins a toy hourly surprise series to a toy change log. For every week whose mean surprise is beyond 0.3 C, it looks for a logged change that could explain it, and says so, or says "UNEXPLAINED: check the floor". The figure is the join.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 324" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn join of the build-along, toy data. Four weeks of hourly surprises: week 1 mean plus 0.007 C, week 2 plus 0.580, week 3 minus 0.003, week 4 minus 0.505. Two logged changes: CH-031 at hour 170, insulation, touches kU, under week 2; CH-032 at hour 400, sensor recalibrated, under week 3. Verdicts: week 1 ok, week 2 explained by CH-031, week 3 ok, week 4 in copper, unexplained, check the floor.">
+        <defs>
+          <filter id="kwkp6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="69" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp6dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp6dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp6dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp6dK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp6dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp6dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp6dH" x="30" y="30">THE JOIN: WEEKLY SURPRISE AGAINST THE CHANGE LOG (TOY DATA, random.Random(5))</text>
+        <text class="kwkp6dA" x="40" y="52">hourly surprises, 4 weeks</text>
+        <text class="kwkp6dA" x="840" y="52" text-anchor="end">flag when |mean| &gt; 0.3 C</text>
+
+        <g filter="url(#kwkp6dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="62" width="196" height="60" rx="6" transform="rotate(-0.4 138 92)" fill="url(#kwkp6dHc)"/>
+          <rect x="242" y="62" width="196" height="60" rx="6" transform="rotate(0.4 340 92)" fill="url(#kwkp6dHc)"/>
+          <rect x="444" y="62" width="196" height="60" rx="6" transform="rotate(-0.3 542 92)" fill="url(#kwkp6dHc)"/>
+          <rect x="646" y="62" width="196" height="60" rx="6" transform="rotate(0.3 744 92)" fill="url(#kwkp6dHc)"/>
+          <rect x="262" y="150" width="160" height="46" rx="6" transform="rotate(0.6 342 173)" fill="#EDF4FB"/>
+          <rect x="464" y="150" width="160" height="46" rx="6" transform="rotate(-0.6 544 173)" fill="#EDF4FB"/>
+          <path d="M276 146 L252 126" marker-end="url(#kwkp6dAr)"/>
+          <path d="M484 146 L518 126" marker-end="url(#kwkp6dAr)"/>
+          <path d="M342 198 L342 226" marker-end="url(#kwkp6dAr)"/>
+          <rect x="48" y="230" width="180" height="50" rx="6" transform="rotate(0.4 138 255)" fill="#FFFFFF"/>
+          <rect x="250" y="230" width="180" height="50" rx="6" transform="rotate(-0.4 340 255)" fill="#FFFFFF"/>
+          <rect x="452" y="230" width="180" height="50" rx="6" transform="rotate(0.4 542 255)" fill="#FFFFFF"/>
+          <rect x="654" y="230" width="180" height="50" rx="6" transform="rotate(-0.5 744 255)" fill="#C8733A"/>
+          <!-- doodle: a magnifier over week 4 -->
+          <circle cx="820" cy="176" r="11" fill="#FFFFFF"/>
+          <path d="M812 184 L800 196"/>
+        </g>
+
+        <text class="kwkp6dK" x="54" y="86">week 1</text>
+        <text class="kwkp6dL" x="54" y="108">mean +0.007 C</text>
+        <text class="kwkp6dK" x="256" y="86">week 2</text>
+        <text class="kwkp6dL" x="256" y="108">mean +0.580 C</text>
+        <text class="kwkp6dK" x="458" y="86">week 3</text>
+        <text class="kwkp6dL" x="458" y="108">mean -0.003 C</text>
+        <text class="kwkp6dK" x="660" y="86">week 4</text>
+        <text class="kwkp6dL" x="660" y="108">mean -0.505 C</text>
+
+        <text class="kwkp6dL" x="276" y="170">CH-031 · hour 170</text>
+        <text class="kwkp6dS" x="276" y="187">insulation, touches kU</text>
+        <text class="kwkp6dL" x="478" y="170">CH-032 · hour 400</text>
+        <text class="kwkp6dS" x="478" y="187">sensor recalibrated</text>
+        <text class="kwkp6dS" x="660" y="176">no row in the log</text>
+
+        <text class="kwkp6dL" x="62" y="252">week 1: ok</text>
+        <text class="kwkp6dS" x="62" y="268">under the threshold</text>
+        <text class="kwkp6dL" x="264" y="252">week 2: explained</text>
+        <text class="kwkp6dS" x="264" y="268">by change CH-031</text>
+        <text class="kwkp6dL" x="466" y="252">week 3: ok</text>
+        <text class="kwkp6dS" x="466" y="268">a change, no shift</text>
+        <text class="kwkp6dL" x="668" y="252">week 4: UNEXPLAINED</text>
+        <text class="kwkp6dK" x="668" y="268">check the floor</text>
+
+        <text class="kwkp6dN" x="30" y="304">A change explains a week if it took effect in that week or the 24 hours before. Toy data, not Kittiwake.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper verdict is the one the log cannot explain, and the one someone must walk the floor for.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the change-log schema</h4>
+        <p>One row per physical change, keyed on the asset, with both times and the touched parameters. Copy and adapt to an asset you know.</p>
+        <div class="prompt-box good"><span class="label">change_log.yaml</span>change_id: CH-031
+asset_id: KH-F4
+config_version: {from: 3, to: 4}
+effective: (date and hour the work finished)
+logged: (date and hour this row was written)
+component: roof insulation
+before: uninsulated
+after: insulated
+who: (work order owner, contractor)
+evidence: [work order id, photos]
+touches: [kU]          # pick from: kU, kC, heat_delivery, sensor, none
+recalibrate_from: effective</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the join</h4>
+        <p>Save as join.py in a scratch folder and run <code>python3 join.py</code>. The toy surprises carry a shift from hour 168 that a logged change explains, and one from hour 504 that nothing in the log explains.</p>
+        <div class="prompt-box good"><span class="label">join.py</span>import random
+rng = random.Random(5)
+# Toy hourly surprises for one floor, 4 weeks: noise, plus a shift from hour 168 to 335 and from hour 504.
+offset = lambda h: 0.6 if 168 &lt;= h &lt; 336 else (-0.5 if h &gt;= 504 else 0.0)
+surprise = [rng.gauss(0, 0.4) + offset(h) for h in range(672)]
+# Toy change log: (change_id, effective hour, what changed, parameter touched).
+change_log = [("CH-031", 170, "loft insulation added", "kU"),
+              ("CH-032", 400, "sensor recalibrated", "measurement")]
+for w in range(4):
+    week = surprise[w * 168:(w + 1) * 168]
+    m = sum(week) / len(week)
+    if abs(m) &lt;= 0.3:
+        print(f"week {w + 1}: mean surprise {m:+.3f} C, ok"); continue
+    hits = [c for c in change_log if w * 168 - 24 &lt;= c[1] &lt; (w + 1) * 168]
+    print(f"week {w + 1}: mean surprise {m:+.3f} C, " + (f"explained by change {hits[0][0]} ({hits[0][2]}, touches {hits[0][3]})" if hits else "UNEXPLAINED: check the floor"))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the output</h4>
+        <p>This is the exact output of the script above, run with python3. Week 2 is explained and names the parameter to recalibrate; week 4 is not.</p>
+        <div class="prompt-box good"><span class="label">Output</span>week 1: mean surprise +0.007 C, ok
+week 2: mean surprise +0.580 C, explained by change CH-031 (loft insulation added, touches kU)
+week 3: mean surprise -0.003 C, ok
+week 4: mean surprise -0.505 C, UNEXPLAINED: check the floor</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Act on each verdict</h4>
+        <p>An explained week becomes a recalibration ticket for the touched parameter, on data from the effective hour onward. An unexplained week becomes a walk to the floor: an open window, a failed valve, or an unlogged retrofit like Kittiwake's floor 4. Note week 3: CH-032 was logged and moved nothing, which is also worth recording.</p>
+        <div class="prompt-box good"><span class="label">verdict to action</span>explained by change X  -&gt; recalibrate X.touches on data after X.effective; bump model version
+UNEXPLAINED            -&gt; inspect the asset; if a change is found, log it back-dated, then as above
+logged, no shift       -&gt; keep the row; note "no measurable effect" against the change</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Break it on purpose</h4>
+        <p>Delete the CH-031 line from change_log and run it again. Then move CH-031's hour to 300. Run it and read the output each time: which week flips, and why does a change logged with the wrong time hurt almost as much as no row at all?</p>
+        <div class="prompt-box good"><span class="label">edits to try</span>1. change_log = [("CH-032", 400, "sensor recalibrated", "measurement")]
+2. ("CH-031", 300, "loft insulation added", "kU")</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Every row in the change log names the model parameters it touches, and carries the time the work happened as well as the time it was written. Those two fields turn a log into a trigger.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why is an insulation retrofit a data event for a twin, and not only a facilities event?</p>
+      <button class="qopt" type="button">A · Because it changes the sensor's clock</button>
+      <button class="qopt" type="button">B · Because it makes a fitted parameter (the floor's heat loss) describe a building that no longer exists</button>
+      <button class="qopt" type="button">C · Because the twin needs to redraw its 3D model</button>
+      <p class="qwhy">The model was fitted to the old configuration. In Kittiwake's constructed bench the unlogged retrofit leaves floor 4's plan +63.1 percent too high.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A change log row bumps floor 4 from config 4 to config 5 and lists "touches: [kU]". What should that trigger?</p>
+      <button class="qopt" type="button">A · Recalibrate every parameter on all the data ever collected</button>
+      <button class="qopt" type="button">B · Nothing until the next annual review</button>
+      <button class="qopt" type="button">C · Recheck the surprises from the effective time, recalibrate kU on post-change data only, and issue a new model version fitted to config 5</button>
+      <p class="qwhy">Pre-change data describes the old building; untouched parameters stay as they are; the new version keeps every past prediction traceable to the model that made it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">With the unlogged retrofit, floor 4's tracking error is still only 0.399 C. Why does the filter hide the problem?</p>
+      <button class="qopt" type="button">A · It corrects the twin's state toward the readings every hour, but not its parameters, so live temperatures look right while the plan runs on the old floor</button>
+      <button class="qopt" type="button">B · Because the sensor on floor 4 is broken</button>
+      <button class="qopt" type="button">C · Because the retrofit makes no difference to energy use</button>
+      <p class="qwhy">The surprises absorb the gap (mean +0.015 to +0.638 C, z 11.44). The plan, which runs without readings, carries it.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 7</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>In the widget, switch through seeds 1124, 1, 7 and 42 in both modes. For each seed, write down floor 4's plan error and the building's, unlogged against no change. Does the twin's own plan ever move?</li>
+      <li>Take one asset you know and list the last five physical changes to it. For each, fill in the "touches" field. How many could you not answer, and who would know?</li>
+      <li>Extend join.py so a change only explains a week if the sign of the shift matches what the change should do (insulation: room warmer than predicted, so a positive surprise). Run it and read the output.</li>
+      <li>Write the three-line runbook for a change row that arrives three weeks late: what you back-date, what you re-run, and what you tell whoever used the old plan.</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Configuration as data</span><span class="note">AIAA and AIA (2020): As Designed, As Built, As Used, As Maintained; updated throughout the life cycle. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Validation must follow change</span><span class="note">National Academies (2024): VVUQ as a continual process that adapts to changes in the physical counterpart. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The cost of one unlogged change</span><span class="note">Kittiwake Hall, constructed, computed in the page: floor 4 +63.1%, building +8.9%, coverage 69.0%, z 11.44.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The change-log join</span><span class="note">Toy data, random.Random(5); output copied from a real run.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Observable elements</span><span class="note">ISO 23247-1:2021, manufacturing framework. Reported; contents list read.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Maintenance management systems</span><span class="note">Out of scope: the twin needs one export from them, not their design.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensor metadata and triage</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>A retrofit is a data event.</strong> It makes a fitted parameter describe a building that is gone.</div>
+      <div class="cheat-item"><strong>Eight fields.</strong> Asset, config from and to, effective, logged, what changed, who, evidence, touches.</div>
+      <div class="cheat-item"><strong>Touches.</strong> Insulation: kU. Radiator: heat per meter kWh. Moved sensor: the measurement.</div>
+      <div class="cheat-item"><strong>The plan carries the error.</strong> Unlogged floor 4: +63.1%, building +8.9% (constructed).</div>
+      <div class="cheat-item"><strong>The filter hides it.</strong> It fixes the state, not the parameters; read the surprises.</div>
+      <div class="cheat-item"><strong>A bump triggers three things.</strong> Recheck surprises, recalibrate the touched parameter on post-change data, version the model.</div>
+      <div class="cheat-item"><strong>Late is fixable.</strong> Back-date to the effective time and re-run; missing is the failure.</div>
+      <div class="cheat-item"><strong>The join.</strong> Weekly |mean surprise| &gt; 0.3 C: explained by a change, or walk the floor.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>What-if runs with honest bands.</strong> Now that the twin is fitted to the building that exists, ask it what a setback week would use, and put a band around the answer that you can check.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 6 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p5-model-drift-or-asset-drift.html">← Prev: When the model drifts and when the asset does</a>
+        <a href="p7-what-if-runs-with-honest-bands.html">Next: What-if runs with honest bands →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var $ = function (id) { return document.getElementById(id); };
+  var seedSel = $("kwkp6-seed"), modeBtn = $("kwkp6-mode");
+  var out = $("kwkp6-out"), verdict = $("kwkp6-verdict"), self = $("kwkp6-self");
+  if (!seedSel || !out) return;
+  var unlogged = true, cache = {};
+
+  function pct(x) { return (x >= 0 ? "+" : "") + (100 * x).toFixed(1) + "%"; }
+  function c3(x) { return (x >= 0 ? "+" : "") + x.toFixed(3); }
+  function kwh(x) { return Math.round(x).toLocaleString("en-US"); }
+
+  function run(seed, b) {
+    var key = seed + "|" + b;
+    if (!cache[key]) cache[key] = DTW.custom(0.4, b, { seed: seed });
+    return cache[key];
+  }
+
+  function render() {
+    var seed = Number(seedSel.value);
+    modeBtn.textContent = "Retrofit floor 4 at the start of week 2: " + (unlogged ? "unlogged" : "no change");
+    out.innerHTML = '<p class="sql-note">Calibrating, filtering and planning six floors in your browser...</p>';
+    setTimeout(function () {
+      var r = run(seed, unlogged);
+      var html = '<table class="sql-table"><thead><tr><th>Floor</th><th>Twin plan, week 2</th><th>True energy</th><th>Plan error</th><th>Band coverage</th><th>Mean surprise, wk 1 to wk 2</th><th>z</th></tr></thead><tbody>';
+      r.floors.forEach(function (row, i) {
+        var flag = r.flagged.indexOf(i) >= 0;
+        html += "<tr><td>Floor " + (i + 1) + "</td><td>" + kwh(row.energy) + " kWh</td><td>" + kwh(row.eTrue) + " kWh</td><td" + (flag ? ' class="kwkp6-flag"' : "") + "><b>" + pct(row.eErr) + "</b></td><td>" + (100 * row.cover).toFixed(1) + "%</td><td>" + c3(row.shift.w1) + " to " + c3(row.shift.w2) + " C</td><td>" + row.shift.z.toFixed(2) + "</td></tr>";
+      });
+      html += "<tr><td><b>Building</b></td><td><b>" + kwh(r.energy) + " kWh</b></td><td><b>" + kwh(r.eTrue) + " kWh</b></td><td><b>" + pct(r.eErr) + "</b></td><td><b>" + (100 * r.cover).toFixed(1) + "%</b></td><td></td><td></td></tr>";
+      html += "</tbody></table>";
+      var canon = seed === 1124;
+      html += '<p class="sql-note">' + (canon ? "Seed 1124, the canon: the prose quotes these numbers." : "Not the canon seed: your numbers will differ from the prose; the shape holds.") + "</p>";
+      out.innerHTML = html;
+      var other = run(seed, !unlogged), f4 = r.floors[3];
+      if (unlogged) {
+        verdict.textContent = "Unlogged: the twin plans " + kwh(f4.energy) + " kWh for floor 4 and the insulated floor uses " + kwh(f4.eTrue) + " kWh, a plan error of " + pct(f4.eErr) + "; the building plan is off by " + pct(r.eErr) + ". The twin's plan is the same as with no change (" + kwh(other.floors[3].energy) + " kWh): it was never told. Only the surprises moved: floor 4 mean " + c3(f4.shift.w1) + " to " + c3(f4.shift.w2) + " C, z " + f4.shift.z.toFixed(2) + ", band coverage " + (100 * f4.cover).toFixed(1) + "%.";
+      } else {
+        verdict.textContent = "No change: floor 4's plan error is " + pct(f4.eErr) + " and the building's " + pct(r.eErr) + ". Toggle to unlogged and watch which column moves: the truth, not the twin's plan.";
+      }
+    }, 20);
+  }
+
+  modeBtn.addEventListener("click", function () { unlogged = !unlogged; render(); });
+  $("kwkp6-reset").addEventListener("click", function () { seedSel.value = "1124"; unlogged = true; render(); });
+  seedSel.addEventListener("change", render);
+
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed: Kittiwake Hall, every reading and the retrofit are generated (default seed 1124). The engine's " + st.checks.length + " self-checks pass in this browser, including that the unlogged retrofit is flagged on floor 4 and nowhere else."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #kwkp6-log .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp6-log table.sql-table { margin: .6rem 0 .2rem; font-size: .84rem; }
+  #kwkp6-log .kwkp6-btns { display: flex; flex-wrap: wrap; gap: .5rem; margin: .7rem 0 .3rem; }
+  #kwkp6-log td.kwkp6-flag { background: #FEF2F2; color: #991B1B; font-weight: 700; }
+  #kwkp6-log #kwkp6-out { overflow-x: auto; }
+</style>
+</body>
+</html>

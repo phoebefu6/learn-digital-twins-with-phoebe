@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 4 of 10. Keeping state in sync: the Kalman filter by hand. Predict, read, correct; where the gain settles and why; and how a twin corrects a building mass no sensor reads. Built on Kittiwake Hall, a constructed teaching building, with the gain computed live in the page.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Keeping state in sync: the Kalman filter by hand - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 4 of 10. Predict, read, correct: the four lines of a Kalman filter, the gain they settle on, and what happens when you lie about the sensor.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p4-the-kalman-filter-by-hand.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Keeping state in sync: the Kalman filter by hand - learn digital twins with phoebe">
+<meta name="twitter:description" content="Predict, read, correct: a Kalman filter in four lines, worked by hand.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 4 · Keeping state in sync: the Kalman filter by hand - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 4 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 4 of 10</div>
+    <h1>Keeping state in sync: the <span class="accent">Kalman filter</span> by hand</h1>
+    <p class="sub">A calibrated model still drifts away from the building hour by hour, because the weather, the people and the sensor all carry noise the model never sees. The Kalman filter is how a twin stays in sync: predict, read the sensor, correct by a share of the surprise. Tonight you work it by hand on one temperature, watch the gain settle to a number you can derive on paper, and see how Kittiwake Hall's twin (a constructed six-storey teaching building) corrects a building mass that no sensor ever reads.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Data scientists keeping a model in sync with sensors</span>
+      <span class="chip audience">Engineers who want the filter without the fog</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Predict, read, correct; the gain</span>
+      <span class="a3" style="flex:2">18-23 · Two states, one sensor</span>
+      <span class="a4" style="flex:5">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Two witnesses, both a little wrong</h2>
+    </div>
+    <p class="lede">Every hour, Kittiwake's twin (constructed) has two opinions about each floor's room temperature. The model says what physics and the inputs predict. The sensor says what it read, with noise of about 0.4 C. Neither is the truth. The Kalman filter is the disciplined way to weigh them, and the weight it lands on, the gain, is the most honest number a twin publishes about itself.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The four lines of a scalar Kalman filter, written and run by you in standard-library Python. The closed form for where the gain settles on a random walk, checked against your own run: 0.5198 for q = 0.09 and r = 0.16. A clear picture of what goes wrong when the sensor noise is assumed too small: the gain climbs to 0.999 and the filter copies the noise. And the one idea that makes a two-state twin work: the off-diagonal term of the covariance carries a correction to a state nobody measures.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a twin needs a filter at all<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Run a calibrated model open loop and its errors pile up: a cold morning it did not foresee, a full lecture hall, a door left open. Copy the sensor instead and you inherit every bit of its noise. In Kittiwake's bench (constructed, seed 1124) the calibrated model run open loop is 0.482 C from the true room in week 2, the sensors alone are 0.404 C off, and the filtered twin is 0.218 C off: better than either witness on its own.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report puts this loop at the centre of what a twin is: "The bidirectional interaction between the virtual and the physical is central to the digital twin." Its Conclusion 2-1 names the mechanism as dynamic data-driven model updating. A Kalman filter is the oldest and plainest form of that updating.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>State, x.</strong> What the twin believes right now: here, the room temperature (and later, the mass temperature).</li>
+          <li><strong>Variance, P.</strong> How unsure the twin is about its state, in degrees squared.</li>
+          <li><strong>Process variance, q.</strong> How much the real state can wander in one step that the model cannot foresee.</li>
+          <li><strong>Sensor variance, r.</strong> How noisy one reading is. A sensor with sd 0.4 C has r = 0.16.</li>
+          <li><strong>Innovation, or surprise.</strong> Reading minus prediction. Practitioner session 5 watches it for drift.</li>
+          <li><strong>Gain, K.</strong> The share of the surprise the twin accepts, between 0 and 1.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the predict and update steps, and the gain</span>
+      <h2>Predict, read, correct</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">Start with the smallest possible twin: one room, one number. Treat the room temperature as a random walk: each step it wanders by an amount with variance q that nothing predicts. The sensor reads it with noise of variance r. Each cycle the filter does two things. Predict: keep the estimate, add q to the variance. Update: compute the gain K = P / (P + r), move the estimate by K times the surprise, and multiply the variance by (1 - K).</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn single update cycle as three bell curves on a temperature axis. The prior, the twin's prediction, centred at 20.0 C with variance 0.16. The reading, centred at 21.0 C with the same variance 0.16. The posterior, in copper, centred halfway at 20.5 C, taller and narrower than both, with variance 0.08. With equal uncertainty the gain is 0.5.">
+        <defs>
+          <filter id="kwkp4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp4aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp4aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp4aH" x="30" y="30">ONE CYCLE: PREDICTION AND READING MULTIPLY INTO A NARROWER POSTERIOR</text>
+
+        <g filter="url(#kwkp4aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 256 L66 253 L92 248 L118 241 L144 231 L170 219 L196 205 L222 192 L248 181 L274 173 L300 170 L326 173 L352 181 L378 192 L404 205 L430 219 L456 231 L482 241 L508 248 L534 253 L560 256 Z" fill="#FFFFFF"/>
+          <path d="M300 256 L326 253 L352 248 L378 241 L404 231 L430 219 L456 205 L482 192 L508 181 L534 173 L560 170 L586 173 L612 181 L638 192 L664 205 L690 219 L716 231 L742 241 L768 248 L794 253 L820 256 Z" fill="url(#kwkp4aHc)"/>
+          <path d="M246 254 L265 250 L283 243 L301 233 L320 219 L338 202 L356 183 L375 164 L393 148 L412 137 L430 133 L448 137 L467 148 L485 164 L504 183 L522 202 L540 219 L559 233 L577 243 L595 250 L614 254 Z" fill="#C8733A"/>
+          <path d="M30 260 L850 260"/>
+          <path d="M300 256 L300 266 M430 256 L430 266 M560 256 L560 266"/>
+          <!-- doodle: a thermometer -->
+          <rect x="836" y="22" width="10" height="34" rx="5" fill="#FFFFFF"/>
+          <circle cx="841" cy="62" r="8" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp4aL" x="150" y="150">prior 20.0 C, variance 0.16</text>
+        <text class="kwkp4aL" x="540" y="150">reading 21.0 C, variance 0.16</text>
+        <text class="kwkp4aL" x="318" y="112">posterior 20.5 C, variance 0.08</text>
+        <text class="kwkp4aA" x="282" y="282">20.0 C</text>
+        <text class="kwkp4aA" x="412" y="282">20.5 C</text>
+        <text class="kwkp4aA" x="542" y="282">21.0 C</text>
+
+        <text class="kwkp4aN" x="30" y="306">Equal uncertainty on both sides: K = 0.16 / (0.16 + 0.16) = 0.5, so the posterior lands halfway and its variance halves.</text>
+        <text class="kwkp4aN" x="30" y="324">Illustrative numbers, the same case the engine checks on every load. The posterior is narrower than either input.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper curve is the twin's new belief: between the two witnesses, and surer than either.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The two steps, in words and in symbols<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Predict.</strong> For a random walk the best guess for the next step is the current estimate, x stays. But the room may have wandered, so the variance grows: P becomes P + q. Uncertainty always grows between readings.</p>
+        <p><strong>Update.</strong> The reading y arrives. The surprise is y - x. The gain K = P / (P + r) compares how unsure the twin is with how unsure the sensor is. The estimate moves by K times the surprise, and the variance shrinks to (1 - K) times P. Uncertainty always shrinks when evidence arrives.</p>
+        <p>In the figure the two witnesses are equally unsure, so K = 0.5 and the posterior sits halfway. Make the sensor noisier and K drops toward 0: the twin barely moves. Make the twin less sure and K rises toward 1: the twin follows the reading.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where the method comes from<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Kalman (1960), "A New Approach to Linear Filtering and Prediction Problems", Journal of Basic Engineering 82(1): 35-45, recast filtering in state-space form, with the error covariance following its own recursion alongside the estimate. That second recursion is the part people skip and the part that matters: the filter does not just track the state, it tracks how sure it is. The predict and update form taught here is the standard modern presentation of that idea.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The recursion is cheap: a handful of multiplications per reading, no history kept. That is what makes it practical for a twin that runs for years: it only ever carries the current state and its covariance forward.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the posterior is narrower than both<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Multiply two bell curves and you get a third bell curve whose precision (one over the variance) is the sum of the two precisions. Prior precision 1 / 0.16 plus reading precision 1 / 0.16 gives 2 / 0.16, so the posterior variance is 0.08. The update formula (1 - K) P is the same arithmetic written in a form that never divides by a tiny variance. Two independent witnesses always leave you surer than either one, provided they really are independent and you have their noise right.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the steady-state gain and the closed form</span>
+      <h2>Where the gain settles</h2>
+      <span class="tag concept">7 min live</span>
+    </div>
+    <p class="lede">Run the two steps over and over with fixed q and r and something useful happens: the variance and the gain stop changing, whatever the readings say. For a random walk you can solve for that resting point on paper. The variance just before an update settles at P = (q + sqrt(q² + 4qr)) / 2, and the gain at K = P / (P + r). With q = 0.09 and r = 0.16 that gives K = 0.5198, and the engine behind this page checks exactly that number every time it loads.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn sketch of the gain against steps 1 to 40, all with q 0.09 and starting variance 1. With the sensor assumed nearly perfect, r 0.0001, the gain sits at 0.999 from the start. With r 0.16, in copper, it starts at 0.872 and settles at 0.5198 within about six steps. With a noisy sensor, r 0.64, it starts at 0.630 and settles at 0.3112.">
+        <defs>
+          <filter id="kwkp4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp4bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp4bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp4bH" x="30" y="30">THE GAIN OVER 40 STEPS, q = 0.09, STARTING VARIANCE 1</text>
+
+        <g filter="url(#kwkp4bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 50 L100 260 L790 260"/>
+          <path d="M94 60 L100 60 M94 160 L100 160"/>
+          <path d="M100 60 L117 60 L780 60" stroke="#045C9F"/>
+          <path d="M100 86 L117 142 L135 153 L152 155 L170 156 L187 156 L780 156" stroke="#C8733A" stroke-width="3.5"/>
+          <path d="M100 134 L117 173 L135 187 L152 193 L170 195 L187 197 L222 198 L780 198" stroke="#2E6FAB"/>
+          <!-- doodle: a wall sensor -->
+          <rect x="826" y="18" width="30" height="24" rx="4" fill="#FFFFFF"/>
+          <path d="M832 30 Q837 24 842 30 Q847 36 851 30"/>
+        </g>
+
+        <text class="kwkp4bA" x="66" y="64">1.0</text>
+        <text class="kwkp4bA" x="66" y="164">0.5</text>
+        <text class="kwkp4bA" x="80" y="264">0</text>
+        <text class="kwkp4bA" x="96" y="282">step 1</text>
+        <text class="kwkp4bA" x="752" y="282">step 40</text>
+        <text class="kwkp4bL" x="470" y="82">r assumed 0.0001: gain 0.999, copies the sensor</text>
+        <text class="kwkp4bL" x="470" y="146">r 0.16: settles at 0.5198, the closed form</text>
+        <text class="kwkp4bL" x="470" y="220">r 0.64, a noisy sensor: settles at 0.3112</text>
+
+        <text class="kwkp4bN" x="30" y="306">Computed with the engine's own update. The start is forgotten within a few steps; only the ratio of q to r remains.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper line is the gain a twin settles into when it tells the truth about its sensor.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwkp4-gain">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The scalar gain recursion, computed in your browser by the bench engine's own update step (H = [1, 0]). You choose q and r; the variance starts at 1 (unsure) and the page runs 40 predict-update cycles. No readings are needed: the gain depends only on q and r, never on the data. Every number here is constructed by the arithmetic you choose; your numbers will differ.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp4-q">Process variance q: how much the room wanders per step</label>
+        <select class="sql-code" id="kwkp4-q">
+          <option value="0.01">0.01</option>
+          <option value="0.04">0.04</option>
+          <option value="0.09" selected>0.09 (sd 0.3 C, the bench's room)</option>
+          <option value="0.25">0.25</option>
+        </select>
+        <label class="sql-label" for="kwkp4-r">Sensor variance r the filter assumes</label>
+        <select class="sql-code" id="kwkp4-r">
+          <option value="0.01">0.01 (sd 0.1 C)</option>
+          <option value="0.04">0.04 (sd 0.2 C)</option>
+          <option value="0.16" selected>0.16 (sd 0.4 C, the bench's true sensor)</option>
+          <option value="0.64">0.64 (sd 0.8 C)</option>
+        </select>
+        <div id="kwkp4-plot"></div>
+        <div id="kwkp4-out"></div>
+        <p class="sql-note" id="kwkp4-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp4-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the widget<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>At the defaults</strong> the gain is 0.8720 after step 1 (the twin started unsure, so it trusts the first reading heavily), 0.5206 by step 5, and 0.5198 from step 10 on, equal to the closed form. The start is forgotten fast.</p>
+        <p><strong>Raise r</strong> to 0.64, a noisy sensor: the gain settles at 0.3112. The twin leans on its model and takes only a third of each surprise.</p>
+        <p><strong>Lower r</strong> to 0.01: the gain climbs to 0.9083 and the twin mostly follows the reading. Now try q = 0.01 with r = 0.04 and q = 0.04 with r = 0.16: both give 0.3904. The gain only knows the ratio of q to r.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The anti-lever: tell the filter the sensor is perfect<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Practitioner session 10 has a button for this. Assume a sensor sd of 0.01 C when the true noise is 0.4 C, and Kittiwake's filter sets its gain to 0.999 (constructed, seed 1124). The twin now copies every reading, noise included: its tracking error is 0.403 C against the sensors' own 0.404 C. All the work the model was doing is thrown away. Nothing errors, nothing looks broken; the twin simply becomes an expensive copy of the sensor, and its band of uncertainty shrinks to a width it cannot honour (practitioner session 7).</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Deriving the closed form on paper<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Call P the variance just before an update. After the update it is (1 - K) P = P r / (P + r). The next predict adds q. At the resting point that brings you back to P:</p>
+        <p><code>P = P r / (P + r) + q</code></p>
+        <p>Multiply through by (P + r) and tidy: P² - q P - q r = 0. Take the positive root: P = (q + sqrt(q² + 4qr)) / 2. With q = 0.09 and r = 0.16 this is 0.1732, and K = 0.1732 / (0.1732 + 0.16) = 0.5198. Divide both q and r by the same number and P scales with them while K does not: the ratio is all that matters.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers two states, the covariance, Q and R</span>
+      <h2>Two states, one sensor</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Kittiwake's twin (constructed) carries two temperatures per floor: the room air and the building mass. Only the room has a sensor. Yet every hour the mass estimate moves too. The reason sits in the 2x2 covariance: its off-diagonal term records that the room and the mass have been moving together in the model, and the update uses it to pass a share of the room's surprise on to the mass.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-state covariance as a mechanism. On the left the room air, measured every hour by a sensor. On the right the building mass, never measured. In the middle a 2 by 2 covariance grid: room variance top left, mass variance bottom right, and the room-mass cross term, in copper, on the off-diagonal. Below, the surprise from the room reading. Arrows carry it to the room with gain P room over S, about 0.445 per floor in the constructed bench, and to the mass with gain P room-mass over S, where S is P room plus r.">
+        <defs>
+          <filter id="kwkp4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp4cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp4cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp4cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp4cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp4cH" x="30" y="30">ONE SENSOR, TWO STATES: THE CROSS TERM CARRIES THE CORRECTION (CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp4cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="70" width="200" height="90" rx="10" transform="rotate(-0.5 140 115)" fill="#EDF4FB"/>
+          <rect x="640" y="70" width="200" height="90" rx="10" transform="rotate(0.5 740 115)" fill="#FFFFFF"/>
+          <rect x="330" y="60" width="110" height="70" rx="4" fill="#EDF4FB"/>
+          <rect x="440" y="60" width="110" height="70" rx="4" fill="#C8733A"/>
+          <rect x="330" y="130" width="110" height="70" rx="4" fill="#C8733A"/>
+          <rect x="440" y="130" width="110" height="70" rx="4" fill="#FFFFFF"/>
+          <rect x="330" y="236" width="220" height="48" rx="8" transform="rotate(0.4 440 260)" fill="url(#kwkp4cHc)"/>
+          <path d="M326 262 L146 166" marker-end="url(#kwkp4cAr)"/>
+          <path d="M554 262 L734 166" marker-end="url(#kwkp4cAr)"/>
+          <!-- doodle: a thermometer on the room -->
+          <rect x="252" y="66" width="9" height="30" rx="4.5" fill="#FFFFFF"/>
+          <circle cx="256.5" cy="101" r="7" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp4cL" x="56" y="96">Room air</text>
+        <text class="kwkp4cK" x="56" y="116">measured every hour</text>
+        <text class="kwkp4cK" x="56" y="134">sensor noise sd 0.4 C</text>
+        <text class="kwkp4cL" x="656" y="96">Building mass</text>
+        <text class="kwkp4cS" x="656" y="116">never measured</text>
+        <text class="kwkp4cS" x="656" y="134">corrected anyway</text>
+
+        <text class="kwkp4cL" x="342" y="92">P room</text>
+        <text class="kwkp4cK" x="452" y="92">P room-mass</text>
+        <text class="kwkp4cK" x="452" y="110">move together</text>
+        <text class="kwkp4cK" x="342" y="162">P room-mass</text>
+        <text class="kwkp4cK" x="342" y="180">same term</text>
+        <text class="kwkp4cL" x="452" y="162">P mass</text>
+        <text class="kwkp4cA" x="330" y="220">the 2x2 covariance</text>
+
+        <text class="kwkp4cK" x="346" y="258">surprise = reading - prior</text>
+        <text class="kwkp4cK" x="346" y="276">S = P room + r</text>
+
+        <text class="kwkp4cL" x="40" y="300">room: K = P room / S, about 0.445</text>
+        <text class="kwkp4cL" x="600" y="300">mass: K = P room-mass / S</text>
+
+        <text class="kwkp4cN" x="30" y="328">Without the cross term the mass could never be corrected: no sensor reads it. Gain on the room reading, week 2:</text>
+        <text class="kwkp4cN" x="30" y="346">0.445 to 0.448 per floor (constructed, seed 1124).</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper cells are why an unmeasured state still learns from a measured one.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What changes from one state to two<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The state becomes a pair [room, mass] and P becomes a 2x2 matrix. Predict runs the floor model from practitioner session 1 forward an hour and pushes the covariance through the same physics, then adds Q. Update looks exactly like the scalar case for the room, with S = P room + r, and adds a second gain for the mass: P room-mass / S. In Kittiwake's bench the gain on the room reading averages 0.445 to 0.448 per floor over week 2, and the filtered twin tracks the true room to 0.218 C, against 0.404 C for the sensors alone and 0.482 C for the calibrated model run open loop (constructed, seed 1124).</p>
+        <p>The bench uses the same q and r as your scalar run, (0.3 C)² for the room and (0.4 C)² for the sensor, yet settles lower than 0.5198. The physics is why: each hour the model pulls the room toward the mass, so the room's uncertainty carried over from the last hour shrinks before q is added, and the twin trusts its prediction a little more.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Bacher and Madsen (2011), in Energy and Buildings 43(7), describe building heat dynamics as grey-box stochastic differential equations: RC physics with noise terms on the states (record read, method reported). That shape, physics plus declared noise per state, is exactly what a Kalman filter needs as input.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Q is model humility; R must be the real sensor<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Q says how wrong the model may be each step.</strong> Kittiwake's bench declares q_room = 0.3 and q_mass = 0.05 per hour (as standard deviations, squared on the diagonal of Q). Too small a Q and the twin grows stubborn: it discounts real surprises. Too large and it chases noise. Q is a modelling choice; declare it in the model record, next to the parameters.</li>
+          <li><strong>R is not a choice, it is a fact about the sensor.</strong> Set it from the sensor's measured noise. Set it too small and you get the anti-lever: gain 0.999, a twin that copies the noise. How to measure a sensor's noise, and how clocks and gaps distort it, lives in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When the model is not linear<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Kittiwake's floor model is linear in its two temperatures, so the plain filter is exact for it. Many real assets are not. The extended, unscented and ensemble Kalman filters, and particle filters, are the families built for that case; they are named here, not taught. The National Academies (2024) treat data assimilation as part of a twin's verification, validation and uncertainty quantification, which they want run as a continual process rather than once at commissioning.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write a scalar Kalman filter and break it on purpose</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You will simulate a room temperature that wanders, read it through a noisy sensor, filter it with the four lines from Part 1, check the gain against the closed form, and then lie to the filter about the sensor and watch it copy the noise. Standard-library Python only. The figure is the loop you will write.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn flow of the four-line scalar Kalman update. Box 1, predict: p equals p plus q, the variance grows. Box 2, in copper, the gain: K equals p over p plus r, the share of the surprise to accept. Box 3, update: x equals x plus K times y minus x, move toward the reading. Box 4, shrink: p equals 1 minus K times p. A loop arrow runs from box 4 back to box 1 for the next reading.">
+        <defs>
+          <filter id="kwkp4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp4dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp4dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp4dK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp4dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp4dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp4dH" x="30" y="30">THE FOUR LINES YOU WILL WRITE, ONCE PER READING</text>
+
+        <g filter="url(#kwkp4dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="64" width="170" height="84" rx="8" transform="rotate(-0.5 115 106)" fill="#FFFFFF"/>
+          <rect x="240" y="64" width="170" height="84" rx="8" transform="rotate(0.5 325 106)" fill="#C8733A"/>
+          <rect x="450" y="64" width="170" height="84" rx="8" transform="rotate(-0.4 535 106)" fill="#EDF4FB"/>
+          <rect x="660" y="64" width="170" height="84" rx="8" transform="rotate(0.4 745 106)" fill="#FFFFFF"/>
+          <path d="M202 106 L236 106" marker-end="url(#kwkp4dAr)"/>
+          <path d="M412 106 L446 106" marker-end="url(#kwkp4dAr)"/>
+          <path d="M622 106 L656 106" marker-end="url(#kwkp4dAr)"/>
+          <path d="M745 152 L745 186 L115 186 L115 156" marker-end="url(#kwkp4dAr)"/>
+          <!-- doodle: a thermometer -->
+          <rect x="846" y="16" width="9" height="30" rx="4.5" fill="#FFFFFF"/>
+          <circle cx="850.5" cy="51" r="7" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp4dL" x="46" y="90">1 Predict</text>
+        <text class="kwkp4dK" x="46" y="114">p = p + q</text>
+        <text class="kwkp4dS" x="46" y="134">the variance grows</text>
+        <text class="kwkp4dL" x="256" y="90">2 Gain</text>
+        <text class="kwkp4dK" x="256" y="114">K = p / (p + r)</text>
+        <text class="kwkp4dK" x="256" y="134">share of the surprise</text>
+        <text class="kwkp4dL" x="466" y="90">3 Update</text>
+        <text class="kwkp4dK" x="466" y="114">x = x + K (y - x)</text>
+        <text class="kwkp4dS" x="466" y="134">move toward the reading</text>
+        <text class="kwkp4dL" x="676" y="90">4 Shrink</text>
+        <text class="kwkp4dK" x="676" y="114">p = (1 - K) p</text>
+        <text class="kwkp4dS" x="676" y="134">evidence makes it surer</text>
+        <text class="kwkp4dA" x="380" y="208">next reading y</text>
+
+        <text class="kwkp4dN" x="30" y="242">Four lines are the whole filter for one state. q is how far the room may wander in a step; r is the sensor's noise.</text>
+        <text class="kwkp4dN" x="30" y="260">Get r wrong and step 2 is wrong in every cycle after it, silently.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the only line where the sensor's honesty enters the filter.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Simulate a wandering room and a noisy sensor</h4>
+        <p>Make a scratch folder and start a file called kalman1d.py. The truth is a random walk from 20 C with step variance q = 0.09; the sensor adds noise with variance r = 0.16. The seed is fixed at 3 so the run is reproducible; the readings are constructed.</p>
+        <div class="prompt-box good"><span class="label">kalman1d.py, part 1</span># A scalar Kalman filter on a simulated room temperature (a random walk).
+import math
+import random
+
+def simulate(q, r, n=200, seed=3):
+    rng = random.Random(seed)
+    truth, readings, t = [], [], 20.0
+    for _ in range(n):
+        t += rng.gauss(0.0, math.sqrt(q))                 # the room wanders
+        truth.append(t)
+        readings.append(t + rng.gauss(0.0, math.sqrt(r)))  # the sensor is noisy
+    return truth, readings</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the filter and check the gain</h4>
+        <p>The loop is the four boxes in the figure. Append it, run 200 steps, and compare the final gain with the closed form from Part 2.</p>
+        <div class="prompt-box good"><span class="label">kalman1d.py, part 2</span>def kalman(readings, q, r):
+    x, p = readings[0], r            # start at the first reading, as unsure as the sensor
+    estimates, gain = [x], 0.0
+    for y in readings[1:]:
+        p = p + q                    # predict: a random walk keeps x, adds q to the variance
+        gain = p / (p + r)           # gain: how much of the surprise to accept
+        x = x + gain * (y - x)       # update: move by gain times the surprise
+        p = (1 - gain) * p           # the variance shrinks
+        estimates.append(x)
+    return estimates, gain
+
+def rmse(a, b):
+    return math.sqrt(sum((u - v) ** 2 for u, v in zip(a, b)) / len(a))
+
+q, r = 0.09, 0.16
+truth, readings = simulate(q, r)
+
+est, gain = kalman(readings, q, r)
+pp = (q + math.sqrt(q * q + 4 * q * r)) / 2
+print(f"final gain {gain:.4f}, closed form {pp / (pp + r):.4f}")</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Score raw readings against the filter</h4>
+        <p>Because the world is simulated you know the truth, which a real building never gives you. Measure both witnesses against it.</p>
+        <div class="prompt-box good"><span class="label">kalman1d.py, part 3</span>print(f"RMSE raw readings {rmse(readings, truth):.3f} C, filtered {rmse(est, truth):.3f} C")</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Lie to the filter about the sensor</h4>
+        <p>Same readings, but tell the filter r = 0.0001, a near-perfect sensor, while the true noise is still 0.16. Then run the whole file with <code>python3 kalman1d.py</code>.</p>
+        <div class="prompt-box good"><span class="label">kalman1d.py, part 4</span>est2, gain2 = kalman(readings, q, 0.0001)   # same data, sensor assumed almost perfect
+print(f"r assumed 0.0001: gain {gain2:.4f}, filtered RMSE {rmse(est2, truth):.3f} C")</div>
+        <div class="prompt-box good"><span class="label">Output</span>final gain 0.5198, closed form 0.5198
+RMSE raw readings 0.398 C, filtered 0.318 C
+r assumed 0.0001: gain 0.9989, filtered RMSE 0.398 C</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read what you just did</h4>
+        <p>The honest filter settled on exactly the closed-form gain and cut the error from 0.398 C to 0.318 C on this constructed walk. The lying filter set its gain to 0.9989 and its error went straight back to the sensor's 0.398 C: it copied the noise. That is the same anti-lever Kittiwake's bench shows at building scale (0.403 C against 0.404 C). Change the seed and your numbers will differ; the gap between honest and lying r will not.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Write r down as a measured fact about the sensor, with where it came from, and q down as a declared modelling choice. A filter is only as honest as those two numbers, and neither one ever throws an error when it is wrong.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Kittiwake's twin has a gain of about 0.445 on the room reading (constructed). What does that number mean?</p>
+      <button class="qopt" type="button">A · The sensor is right 44.5 percent of the time</button>
+      <button class="qopt" type="button">B · Each hour the twin moves its room estimate 44.5 percent of the way from its prediction toward the reading</button>
+      <button class="qopt" type="button">C · The model explains 44.5 percent of the variance</button>
+      <p class="qwhy">The gain is the share of the surprise the twin accepts. It comes from comparing the twin's own uncertainty with the sensor's: K = P / (P + r).</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The true sensor noise is 0.4 C, but the filter is told 0.01 C. What happens?</p>
+      <button class="qopt" type="button">A · The twin becomes more accurate, because it trusts better data</button>
+      <button class="qopt" type="button">B · The filter crashes with a numerical error</button>
+      <button class="qopt" type="button">C · The gain climbs to about 0.999 and the twin copies the noise: 0.403 C error against the sensors' own 0.404 C</button>
+      <p class="qwhy">Nothing errors. The twin silently throws away the model and becomes a copy of the sensor; in the bench its band also stops covering the readings it should (practitioner session 7).</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">No sensor reads Kittiwake's building mass. Why does its estimate still get corrected every hour?</p>
+      <button class="qopt" type="button">A · The off-diagonal term of the covariance records that room and mass move together, so the update passes a share of the room's surprise to the mass</button>
+      <button class="qopt" type="button">B · The twin copies the room reading into the mass</button>
+      <button class="qopt" type="button">C · It is recalibrated from the drawings every hour</button>
+      <p class="qwhy">The mass gain is P room-mass / S. With a zero cross term the mass would never learn anything from the sensor.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>Derive the closed form on paper from P = P r / (P + r) + q, then check it in the widget for q = 0.25 and r = 0.04.</li>
+      <li>In kalman1d.py, keep r honest but tell the filter q = 0.0001 (a stubborn model). Run it and read the output: which witness does the filter now ignore?</li>
+      <li>Add a line that stores the surprise y - x before each update, and print its mean over the last 100 steps. Practitioner session 5 uses exactly this column to catch a change in the building.</li>
+      <li>For a sensor you work with, write down where its noise figure comes from: a datasheet, a test you ran, or a guess. That is your r, with its provenance.</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Predict and update</span><span class="note">Kalman (1960), Journal of Basic Engineering 82(1): 35-45: state-space filtering with its own covariance recursion. Bibliographic record read.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The steady-state gain</span><span class="note">Closed form for a random walk, derived on the page; 0.5198 at q 0.09, r 0.16, checked by the engine's selfTest.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Data assimilation in a twin</span><span class="note">National Academies (2024): bidirectional interaction, dynamic data-driven updating, continual VVUQ. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Two states, one sensor</span><span class="note">Kittiwake Hall, constructed (seed 1124): gain 0.445 to 0.448, tracking 0.218 C vs sensors 0.404 C vs open loop 0.482 C.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The anti-lever</span><span class="note">Constructed: sensor sd assumed 0.01 C, gain 0.999, error 0.403 C. Build-along output run and copied.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Grey-box stochastic models</span><span class="note">Bacher and Madsen (2011), Energy and Buildings 43(7). Record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Nonlinear filters</span><span class="note">Extended, unscented and ensemble Kalman filters, particle filters: named only.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Measuring sensor noise</span><span class="note">Lives in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Predict.</strong> x by the model; P = P + q. Uncertainty grows between readings.</div>
+      <div class="cheat-item"><strong>Gain.</strong> K = P / (P + r): the share of the surprise to accept.</div>
+      <div class="cheat-item"><strong>Update.</strong> x = x + K (y - x); P = (1 - K) P.</div>
+      <div class="cheat-item"><strong>Steady state.</strong> P = (q + sqrt(q² + 4qr)) / 2; K = 0.5198 at q 0.09, r 0.16.</div>
+      <div class="cheat-item"><strong>Ratio only.</strong> The gain depends on q / r, never on the readings.</div>
+      <div class="cheat-item"><strong>r too small.</strong> Gain near 1, the twin copies the noise (constructed: 0.403 C vs 0.404 C).</div>
+      <div class="cheat-item"><strong>Two states.</strong> The cross term in P corrects the unmeasured mass.</div>
+      <div class="cheat-item"><strong>Q and R.</strong> Q is declared humility; R is a measured fact. Record both.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>When the model drifts and when the asset does.</strong> The surprises a filter produces every hour are a record of how well the twin still fits. Watch them, and an unlogged retrofit on one floor stands out from the rest.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 4 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p3-calibrating-a-model-to-measurements.html">← Prev: Calibrating a model to measurements</a>
+        <a href="p5-model-drift-or-asset-drift.html">Next: When the model drifts and when the asset does →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var qSel = document.getElementById("kwkp4-q");
+  var rSel = document.getElementById("kwkp4-r");
+  var plot = document.getElementById("kwkp4-plot");
+  var out = document.getElementById("kwkp4-out");
+  var verdict = document.getElementById("kwkp4-verdict");
+  var self = document.getElementById("kwkp4-self");
+  if (!qSel || !rSel || !out) return;
+  var STEPS = 40;
+  function gains(q, r) {
+    var p = 1, x = [0, 0], ks = [];
+    for (var i = 0; i < STEPS; i++) {
+      var u = DTW.update(x, [[p + q, 0], [0, 1]], 0, r);
+      ks.push(u.K[0]);
+      p = u.P[0][0];
+    }
+    return ks;
+  }
+  function draw(ks, kss) {
+    var W = 640, H = 200, L = 46, R = 20, T = 14, B = 30;
+    function X(i) { return L + i * (W - L - R) / (STEPS - 1); }
+    function Y(k) { return T + (1 - k) * (H - T - B); }
+    var pts = ks.map(function (k, i) { return X(i).toFixed(1) + "," + Y(k).toFixed(1); }).join(" ");
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Gain against step, 1 to 40, with the closed form as a dashed line" style="width:100%;max-width:40rem;height:auto;display:block;margin:.6rem 0">';
+    s += '<line x1="' + L + '" y1="' + Y(0) + '" x2="' + (W - R) + '" y2="' + Y(0) + '" stroke="#10202F" stroke-width="1.5"/>';
+    s += '<line x1="' + L + '" y1="' + Y(1) + '" x2="' + L + '" y2="' + Y(0) + '" stroke="#10202F" stroke-width="1.5"/>';
+    s += '<line x1="' + L + '" y1="' + Y(kss).toFixed(1) + '" x2="' + (W - R) + '" y2="' + Y(kss).toFixed(1) + '" stroke="#045C9F" stroke-width="1.5" stroke-dasharray="6 4"/>';
+    s += '<polyline points="' + pts + '" fill="none" stroke="#C8733A" stroke-width="3" stroke-linejoin="round"/>';
+    s += '<text x="' + (L - 8) + '" y="' + (Y(1) + 4) + '" text-anchor="end" style="font:700 11px Inter,sans-serif;fill:#045C9F">1.0</text>';
+    s += '<text x="' + (L - 8) + '" y="' + (Y(0.5) + 4) + '" text-anchor="end" style="font:700 11px Inter,sans-serif;fill:#045C9F">0.5</text>';
+    s += '<text x="' + (L - 8) + '" y="' + (Y(0) + 4) + '" text-anchor="end" style="font:700 11px Inter,sans-serif;fill:#045C9F">0</text>';
+    s += '<text x="' + L + '" y="' + (H - 8) + '" style="font:700 11px Inter,sans-serif;fill:#045C9F">step 1</text>';
+    s += '<text x="' + (W - R) + '" y="' + (H - 8) + '" text-anchor="end" style="font:700 11px Inter,sans-serif;fill:#045C9F">step 40</text>';
+    s += '</svg>';
+    plot.innerHTML = s;
+  }
+  function render() {
+    var q = Number(qSel.value), r = Number(rSel.value);
+    var ks = gains(q, r);
+    var Pp = (q + Math.sqrt(q * q + 4 * q * r)) / 2, kss = Pp / (Pp + r);
+    draw(ks, kss);
+    out.innerHTML = '<table class="sql-table"><thead><tr><th>Quantity</th><th>Value</th></tr></thead><tbody>' +
+      "<tr><td>Gain after step 1</td><td>" + ks[0].toFixed(4) + "</td></tr>" +
+      "<tr><td>Gain after step 5</td><td>" + ks[4].toFixed(4) + "</td></tr>" +
+      "<tr><td>Gain after step 10</td><td>" + ks[9].toFixed(4) + "</td></tr>" +
+      "<tr><td>Gain after step 40 (copper line)</td><td><b>" + ks[STEPS - 1].toFixed(4) + "</b></td></tr>" +
+      "<tr><td>Closed form P / (P + r) (dashed line)</td><td><b>" + kss.toFixed(4) + "</b></td></tr>" +
+      "<tr><td>Steady variance before an update, P</td><td>" + Pp.toFixed(4) + "</td></tr></tbody></table>";
+    var msg;
+    if (kss > 0.85) msg = "The gain is near 1: the twin follows almost every reading, noise included. Honest only if the sensor really is that much better than the model.";
+    else if (kss < 0.35) msg = "The gain is low: the twin leans on its model and takes a small share of each surprise. Right for a noisy sensor; stubborn if r is overstated.";
+    else msg = "A balanced gain: the twin splits the difference between its prediction and the reading in proportion to their uncertainty.";
+    verdict.textContent = msg + " q / r = " + (q / r).toFixed(4) + "; any pair with the same ratio gives the same gain.";
+  }
+  qSel.addEventListener("change", render);
+  rSel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Constructed arithmetic, computed with the bench engine's update. The engine's " + st.checks.length + " self-checks pass in this browser, including: " + st.checks[0].name + "."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwkp4-gain .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp4-gain table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

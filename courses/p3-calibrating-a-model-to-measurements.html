@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 3 of 10. Calibrating a model to measurements: a grid search over heat loss and thermal mass on one week of readings, why the week pins down heat loss and not mass, and how to judge a calibration on a week it never saw. Built on Kittiwake Hall, a constructed teaching building, with the error surface computed live in the page.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Calibrating a model to measurements - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 3 of 10. One week of readings pins down heat loss and loses the thermal mass: identifiability, by example, and how to check a fit on a week it never saw.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p3-calibrating-a-model-to-measurements.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Calibrating a model to measurements - learn digital twins with phoebe">
+<meta name="twitter:description" content="A grid search, a steep valley and a flat one: what one week of readings can and cannot tell a twin.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 3 · Calibrating a model to measurements - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 3 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 3 of 10</div>
+    <h1>Calibrating a model to <span class="accent">measurements</span></h1>
+    <p class="sub">The drawings say how Kittiwake Hall should lose heat and hold it. The building has its own opinion. Calibration is choosing parameter values so the model, run on its own, agrees with what the sensors actually recorded. Kittiwake Hall is a constructed six-storey teaching building; its numbers come from a seeded engine, not a real site. Tonight you search two parameters on one week of readings, watch the search nail heat loss and shrug at thermal mass, and learn to judge a fit on a week it never saw.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Working depth</span>
+      <span class="chip audience">Data scientists fitting a model to a twin</span>
+      <span class="chip audience">Engineers who own the parameters</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-19 · The search and the valley</span>
+      <span class="a3" style="flex:1.5">19-23 · Judging a fit</span>
+      <span class="a4" style="flex:5">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>From the drawings to the building you have</h2>
+    </div>
+    <p class="lede">In practitioner session 2 the grey box arrived with kU 1.50 and kC 1.62 on floor 1, "fitted on week 1". Tonight you open that box. kU multiplies the heat loss the drawings predict; kC multiplies the thermal mass. A search picks the pair that makes a week of simulated room temperatures look most like a week of readings. The answer it gives for one of them is trustworthy. The answer for the other is not, and the search will not tell you which is which unless you ask.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A calibration loop you can write from memory: guess the parameters, simulate the week open loop with the logged heat, score it against the readings, take the next guess. A way to see whether each parameter is actually pinned down: slice the error surface along it and read how flat the slice is. On Kittiwake's floors one week fixes the heat-loss multiplier within 0.08 and leaves the mass loose. And the habit of judging a calibration on a different week from the one you fitted, with the reported ASHRAE Guideline 14 criteria in their proper place.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a twin is calibrated at all<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A model built from drawings is a model of the building as designed. Kittiwake's real floors lose heat 1.15 to 1.45 times what the drawings say and hold 0.70 to 0.95 of the designed mass (constructed). Run the drawings' model through the setback week and it underestimates the heat the building used by 32.9 percent. Calibration is the step that moves the model from the drawn building to the built one, using the building's own records as evidence. Leader session 3 tells the story of that gap; tonight is the mechanics.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report calls verification, validation and uncertainty quantification "an area of particular need" for digital twins, and concludes it must be a continual process that adapts as the physical counterpart changes. A calibration is one act of that: it is valid for the building as it was during the data you used, and it expires when the building changes. Practitioner session 5 catches the moment it expires.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for calibration<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Parameter.</strong> A number inside the model you are allowed to change: here kU (heat-loss multiplier) and kC (thermal-mass multiplier).</li>
+          <li><strong>Open loop.</strong> Running the model on its inputs alone, never correcting it with a reading. Calibration scores open-loop runs, because a model that is corrected every hour can hide bad parameters.</li>
+          <li><strong>Objective.</strong> The single number the search tries to make small. Here the RMSE between simulated and measured room temperature.</li>
+          <li><strong>Warm-up.</strong> Hours at the start you do not score, because the model's starting state is a guess (here the first day).</li>
+          <li><strong>Identifiable.</strong> A parameter the data can pin down: changing it changes the fit a lot. A parameter that barely moves the fit is weakly identified, whatever value the search prints.</li>
+          <li><strong>Check period.</strong> Data the fit never saw, used only to judge it.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the calibration loop and the grid search</span>
+      <h2>Calibration is a loop with one number in it</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">Pick a kU and a kC. Start the model at the first reading, drive it through week 1 with the outdoor temperature, the sun, the timetable and the heat the meter logged, and never let it peek at the sensor. Compare the simulated room with the readings from hour 24 to hour 168. One number comes out. Change the guess, repeat, keep the best.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn calibration loop for Kittiwake, constructed. Guess kU from 0.5 to 2.0 and kC from 0.4 to 1.6. Simulate week 1 open loop, driven by the logged heat, starting at the first reading. Compare with the room readings for hours 24 to 168. In copper, the RMSE: one number per guess. Next guess: a coarse grid in steps of 0.1, then a fine grid in steps of 0.02 around the best. Below, the result for six floors: kU found 1.50, 1.20, 1.26, 1.42, 1.42, 1.28 against true 1.42, 1.19, 1.21, 1.41, 1.41, 1.21, with calibration RMSE 0.460 to 0.526 C against sensors whose own noise is 0.4 C.">
+        <defs>
+          <filter id="kwkp3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp3aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp3aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp3aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp3aH" x="30" y="30">CALIBRATION AS A LOOP (KITTIWAKE, CONSTRUCTED, WEEK 1)</text>
+
+        <g filter="url(#kwkp3aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="60" width="190" height="80" rx="8" transform="rotate(-0.5 125 100)" fill="#FFFFFF"/>
+          <rect x="300" y="60" width="260" height="80" rx="8" transform="rotate(0.4 430 100)" fill="#EDF4FB"/>
+          <rect x="640" y="60" width="210" height="80" rx="8" transform="rotate(-0.4 745 100)" fill="url(#kwkp3aHc)"/>
+          <rect x="640" y="190" width="210" height="80" rx="8" transform="rotate(0.5 745 230)" fill="#C8733A"/>
+          <rect x="300" y="190" width="260" height="80" rx="8" transform="rotate(-0.4 430 230)" fill="#FFFFFF"/>
+          <path d="M222 100 L296 100" marker-end="url(#kwkp3aAr)"/>
+          <path d="M562 100 L636 100" marker-end="url(#kwkp3aAr)"/>
+          <path d="M745 142 L745 186" marker-end="url(#kwkp3aAr)"/>
+          <path d="M638 230 L564 230" marker-end="url(#kwkp3aAr)"/>
+          <path d="M298 230 L125 230 L125 144" marker-end="url(#kwkp3aAr)"/>
+          <!-- doodle: a thermometer -->
+          <rect x="846" y="8" width="8" height="26" rx="4" fill="#FFFFFF"/>
+          <circle cx="850" cy="40" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp3aL" x="46" y="88">Guess kU, kC</text>
+        <text class="kwkp3aS" x="46" y="108">kU 0.5 to 2.0</text>
+        <text class="kwkp3aS" x="46" y="124">kC 0.4 to 1.6</text>
+
+        <text class="kwkp3aL" x="316" y="88">Simulate week 1, open loop</text>
+        <text class="kwkp3aK" x="316" y="108">driven by the logged heat, sun,</text>
+        <text class="kwkp3aK" x="316" y="124">weather; starts at the first reading</text>
+
+        <text class="kwkp3aL" x="656" y="88">Compare with readings</text>
+        <text class="kwkp3aK" x="656" y="108">hours 24 to 168</text>
+        <text class="kwkp3aK" x="656" y="124">(day 1 is warm-up)</text>
+
+        <text class="kwkp3aL" x="656" y="218">RMSE</text>
+        <text class="kwkp3aK" x="656" y="238">one number per guess:</text>
+        <text class="kwkp3aK" x="656" y="254">the thing the search shrinks</text>
+
+        <text class="kwkp3aL" x="316" y="218">Next guess</text>
+        <text class="kwkp3aS" x="316" y="238">coarse grid: steps of 0.1</text>
+        <text class="kwkp3aS" x="316" y="254">fine grid: 0.02 around the best</text>
+
+        <text class="kwkp3aN" x="30" y="296">kU found 1.50, 1.20, 1.26, 1.42, 1.42, 1.28 against true 1.42, 1.19, 1.21, 1.41, 1.41, 1.21 (floors 1 to 6).</text>
+        <text class="kwkp3aN" x="30" y="314">Best-fit RMSE against the sensors: 0.460 to 0.526 C. The sensors' own noise is 0.4 C.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the whole of what the search knows about a guess: one number.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why open loop, and why the logged heat<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Open loop.</strong> If the model were corrected by the sensor every hour, as the Kalman filter will do in practitioner session 4, a model with the wrong heat loss would still track the room, because the correction drags it back. Calibration needs the model to stand on its own legs for a week so its parameters are the only thing being judged.</p>
+        <p><strong>The logged heat, not the thermostat.</strong> The real thermostat responds to its own noisy sensor. If the twin simulated the thermostat, its heat would differ from what was actually delivered, and the search would bend kU to cover the difference. Driving the model with what the meter logged removes one excuse. Whether the meter's hours line up with the sensor's hours is a data-link question that belongs to <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>; a one-hour slip quietly biases every parameter.</p>
+        <p><strong>The result.</strong> Every floor's heat-loss multiplier lands within 0.08 of the truth (constructed). The best fits sit at 0.460 to 0.526 C, a little above the sensors' noise of 0.4 C. A fit that went far below the noise would be fitting the noise.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why a grid and not a clever optimiser<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>With two parameters a grid is cheap: 16 by 13 coarse points, then 11 by 11 fine points, about 330 one-week simulations per floor, each in a blink. More important, a grid shows you the whole surface. A gradient method would hand back a single pair and stay silent about how sure it is. With five or ten parameters the grid explodes and you need an optimiser, and then you need to ask the identifiability question in Part 2 explicitly, because nothing will show it to you by accident.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How the research does it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Bacher and Madsen (2011, Energy and Buildings 43(7)) model a building's heat dynamics as grey-box stochastic differential equations: an RC circuit from physics, parameters estimated from data. They grow the model one step at a time, adding nodes, and keep a larger model only when a likelihood-ratio test says the data support it (method reported from the paper's record and secondary summaries). That is the same question as tonight's, asked more formally: does the data have enough to say about this extra piece of the model?</p>
+        </div>
+        <p>The difference from Kittiwake's grid: their estimation treats the model as stochastic and fits it with a filter running inside the likelihood, rather than scoring a noise-free open-loop run. The grid is the version you can see; the likelihood route is the version that scales.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers identifiability: what one week can pin down</span>
+      <h2>A steep valley and a flat one</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">The search found kC 1.62, 1.00, 1.68, 0.90, 0.80 and 1.20 on the six floors. The true values are 0.85, 0.72, 0.89, 0.88, 0.90 and 0.76. Floor 4 looks fine; floor 3's mass is found at nearly double its true value. Nothing went wrong with the code. The week of readings simply does not carry much information about mass, and the error surface shows it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 404" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn sketch of the week-1 error surface for Kittiwake floor 3, constructed. Horizontal axis kU, the heat-loss multiplier, 0.5 to 2.0; vertical axis kC, the mass multiplier, 0.4 to 2.0. Contours are long thin ellipses: narrow across kU, stretched along kC. In copper, the valley floor where fits are nearly equal. The search's answer, kU 1.26 and kC 1.68, sits at the top of the floor; the true pair, kU 1.21 and kC 0.89, sits near the bottom of the same floor. Across kU the RMSE runs from 0.53 to 7.21 C; across kC from 0.48 to 1.02 C.">
+        <defs>
+          <filter id="kwkp3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp3bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp3bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp3bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp3bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp3bH" x="30" y="30">THE ERROR SURFACE, SKETCHED: FLOOR 3, WEEK 1 (CONSTRUCTED)</text>
+        <text class="kwkp3bA" x="30" y="50">kC, mass multiplier, 0.4 (bottom) to 2.0 (top)</text>
+
+        <g filter="url(#kwkp3bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M90 60 L90 340 L490 340"/>
+          <ellipse cx="286" cy="190" rx="160" ry="125" fill="#FFFFFF"/>
+          <ellipse cx="286" cy="190" rx="100" ry="115" fill="#EDF4FB"/>
+          <ellipse cx="286" cy="190" rx="50" ry="105" fill="url(#kwkp3bHc)"/>
+          <ellipse cx="286" cy="190" rx="14" ry="100" fill="#C8733A"/>
+          <circle cx="293" cy="116" r="6" fill="#10202F"/>
+          <circle cx="279" cy="254" r="6" fill="#FFFFFF"/>
+          <!-- legend swatches -->
+          <rect x="530" y="262" width="18" height="12" rx="2" fill="#C8733A"/>
+          <circle cx="539" cy="296" r="5" fill="#10202F"/>
+          <circle cx="539" cy="322" r="5" fill="#FFFFFF"/>
+          <!-- doodle: a thermometer -->
+          <rect x="846" y="8" width="8" height="26" rx="4" fill="#FFFFFF"/>
+          <circle cx="850" cy="40" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp3bA" x="140" y="366">kU, heat-loss multiplier, 0.5 (left) to 2.0 (right)</text>
+
+        <text class="kwkp3bL" x="530" y="80">Across kU (kC held at 1.68)</text>
+        <text class="kwkp3bS" x="530" y="100">RMSE 0.53 to 7.21 C, range 6.68 C</text>
+        <text class="kwkp3bS" x="530" y="116">steep: kU is pinned down</text>
+        <text class="kwkp3bL" x="530" y="152">Across kC (kU held at 1.26)</text>
+        <text class="kwkp3bS" x="530" y="172">RMSE 0.48 to 1.02 C, range 0.54 C</text>
+        <text class="kwkp3bS" x="530" y="188">flat: kC is not</text>
+        <text class="kwkp3bS" x="530" y="230">The contours are drawn by hand; the</text>
+        <text class="kwkp3bS" x="530" y="246">ranges are the widget's floor 3 values.</text>
+        <text class="kwkp3bK" x="556" y="272">valley floor: near-equal fits</text>
+        <text class="kwkp3bK" x="556" y="300">found: kU 1.26, kC 1.68</text>
+        <text class="kwkp3bK" x="556" y="326">true: kU 1.21, kC 0.89</text>
+
+        <text class="kwkp3bN" x="30" y="396">Narrow across kU, long along kC: the week can tell heat loss apart, and cannot tell mass apart.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper valley floor is where the data stops having an opinion; the search's answer and the truth both sit on it.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwkp3-surface">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Two slices through the week-1 error surface, computed in your browser by the bench engine. Synthetic and constructed: Kittiwake Hall, seed 1124, its weather, heat meters and readings are generated. For the chosen floor the engine calibrates kU and kC by grid search, then the page reruns the open-loop week (hours 24 to 168 scored against the sensors) for kC from 0.4 to 2.0 at the calibrated kU, and for kU from 0.5 to 2.0 at the calibrated kC. Copper bars are within 0.02 C of the row's best. The true values exist only because the world is constructed.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp3-floor">Floor</label>
+        <select class="sql-code" id="kwkp3-floor">
+          <option value="0">Floor 1 (end floor)</option>
+          <option value="1">Floor 2</option>
+          <option value="2" selected>Floor 3</option>
+          <option value="3">Floor 4</option>
+          <option value="4">Floor 5</option>
+          <option value="5">Floor 6 (end floor)</option>
+        </select>
+        <div id="kwkp3-rows"></div>
+        <div id="kwkp3-out"></div>
+        <p class="sql-note" id="kwkp3-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp3-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the two rows<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Across kU.</strong> On floor 3, moving kU from 0.5 to 2.0 sends the week's RMSE from 0.529 C at kU 1.3 up to 7.21 C: a range of 6.68 C, and only kU 1.3 is within 0.02 C of the best. The week has a lot to say about heat loss, because heat loss sets the level the room settles at for a given heat input, every hour of every day.</p>
+        <p><strong>Across kC.</strong> Moving kC from 0.4 to 2.0 changes the RMSE by 0.54 C in total, and every value from 1.4 to 2.0 is within 0.02 C of the best (0.480 C at kC 1.7). The flat run reaches the end of the row, so the valley floor carries on past it. Mass only shows itself in how fast the room drifts when the heat changes, and with a thermostat holding the room near its setpoint most of the week, those drifts are small.</p>
+        <p><strong>The truth scores worse.</strong> The true pair for floor 3 (kU 1.21, kC 0.89) gives 0.589 C, against 0.480 C for the pair the search found. In a flat direction, the search uses the loose parameter to soak up whatever else the model gets wrong: here, for instance, the twin assumes the floors are 80 percent full when the real occupancy runs 60 to 100 percent. A good fit is not evidence that every parameter is right.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What to do with a parameter the data cannot see<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Record it honestly.</strong> In the model record from practitioner session 1, kC's provenance reads "calibrated, weakly identified". That line is worth more than the second decimal place.</li>
+          <li><strong>Fix it from another source.</strong> If the drawings' mass is trusted more than one week's readings, hold kC at 1.0 and search kU alone.</li>
+          <li><strong>Feed it data that excites it.</strong> A week with a big change in heating, such as a setback, makes the room drift and gives mass something to explain.</li>
+          <li><strong>Check whether it matters for the decision.</strong> Part 3: the twin still predicted the setback week's energy within 1.7 percent.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Beyond the grid: methods named, not taught<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two slices are the cheapest identifiability test. The fuller versions: a profile of the objective along each parameter (re-optimising the others at every point, rather than holding them fixed as the widget does), the curvature of the objective at the best point, and Bayesian calibration, which returns a distribution over parameters instead of one pair, so a flat direction shows up as a wide spread. Bayesian calibration is named here only; formal VVUQ methods are a discipline of their own.</p>
+        <p>Floor 6 is worth a look in the widget: its kC row finds a lower RMSE than the search reported, because the valley is not lined up with the grid and the coarse-then-fine search settled in a slightly different spot. On a flat floor, small details of the search decide where you land.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers judging a calibration and checking it on another week</span>
+      <h2>Judge it on a week it never saw</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A calibration scored on the week it was fitted to is marking its own homework. Kittiwake's week 2 is the test: the real building turns on a 15 C night setback, a schedule the fit never saw. If the parameters describe the building rather than the week, the twin should still predict it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-week timeline for Kittiwake, constructed. Week 1, hatched: normal heating, the search fits kU and kC on hours 24 to 168, best-fit RMSE 0.460 to 0.526 C against the sensors. Arrow to week 2: the 15 C night setback the fit never saw. The design twin from the drawings estimates the setback week's energy 32.9 percent low and tracks the room with an error of 4.450 C. In copper, the calibrated twin: energy 1.7 percent high, tracking error 0.482 C. True energy in the setback week 5,067 kWh; calibrated per-floor energy error minus 1.2 to plus 3.5 percent.">
+        <defs>
+          <filter id="kwkp3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp3cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp3cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp3cV { font: 800 18px Inter, sans-serif; fill: #033F6E; }
+          .kwkp3cX { font: 800 18px Inter, sans-serif; fill: #10202F; }
+          .kwkp3cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp3cH" x="30" y="30">FIT ON ONE WEEK, CHECK ON ANOTHER (KITTIWAKE, CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp3cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="60" width="390" height="170" rx="10" transform="rotate(-0.3 225 145)" fill="url(#kwkp3cHc)"/>
+          <rect x="460" y="60" width="390" height="170" rx="10" transform="rotate(0.3 655 145)" fill="#EDF4FB"/>
+          <rect x="476" y="120" width="170" height="96" rx="8" transform="rotate(-0.6 561 168)" fill="#FFFFFF"/>
+          <rect x="664" y="120" width="170" height="96" rx="8" transform="rotate(0.6 749 168)" fill="#C8733A"/>
+          <path d="M422 145 L456 145" marker-end="url(#kwkp3cAr)"/>
+          <!-- doodle: a wall calendar -->
+          <rect x="822" y="10" width="28" height="24" rx="3" fill="#FFFFFF"/>
+          <path d="M822 18 L850 18 M830 6 L830 13 M842 6 L842 13"/>
+        </g>
+
+        <text class="kwkp3cL" x="46" y="86">WEEK 1: FIT</text>
+        <text class="kwkp3cK" x="46" y="112">normal heating: 21 C weekday days, 19 C otherwise</text>
+        <text class="kwkp3cK" x="46" y="134">search kU and kC on hours 24 to 168</text>
+        <text class="kwkp3cK" x="46" y="156">best-fit RMSE 0.460 to 0.526 C</text>
+        <text class="kwkp3cK" x="46" y="178">against the sensors, floors 1 to 6</text>
+        <text class="kwkp3cK" x="46" y="208">the fit sees only this week</text>
+
+        <text class="kwkp3cL" x="476" y="86">WEEK 2: CHECK</text>
+        <text class="kwkp3cS" x="476" y="106">15 C night setback, never seen by the fit</text>
+        <text class="kwkp3cL" x="490" y="142">design twin</text>
+        <text class="kwkp3cV" x="490" y="170">-32.9%</text>
+        <text class="kwkp3cS" x="490" y="188">energy, setback week</text>
+        <text class="kwkp3cS" x="490" y="204">tracking 4.450 C</text>
+        <text class="kwkp3cL" x="678" y="142">calibrated twin</text>
+        <text class="kwkp3cX" x="678" y="170">+1.7%</text>
+        <text class="kwkp3cK" x="678" y="188">energy, setback week</text>
+        <text class="kwkp3cK" x="678" y="204">tracking 0.482 C</text>
+
+        <text class="kwkp3cN" x="30" y="262">True energy in the setback week: 5,067 kWh. Calibrated per-floor energy error: -1.2 to +3.5 percent.</text>
+        <text class="kwkp3cN" x="30" y="280">Tracking error is open loop, against the true room, which only a constructed world has.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the only number that earns trust: the calibrated twin on a week it never saw.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the check week says<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Calibrated on week 1, the twin estimates the setback week's heat at 5,152 kWh against a true 5,067 kWh: 1.7 percent high. The drawings' twin says 3,402 kWh, 32.9 percent low. Open loop, the calibrated twin tracks the true room over week 2 with an RMSE of 0.482 C; the design twin's is 4.450 C. And this with kC wrong by nearly a factor of two on floor 3. For a week-ahead energy estimate, heat loss carries the answer; the loose parameter mostly did not matter for this decision. It could matter for a different one, such as how early to start heating on a cold Monday. Energy figures here are constructed teaching numbers, not investment advice.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The reported criteria, and what they judge<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>ASHRAE Guideline 14 (editions 2002 and 2014) is reported, via secondary papers, to treat a building energy model as calibrated when its <strong>hourly CV(RMSE) is at most 30 percent and its NMBE is within plus or minus 10 percent</strong>, or <strong>monthly 15 and 5 percent</strong>. The guideline is paywalled and was not read here. Three cautions travel with those numbers:</p>
+        <ul>
+          <li><strong>They judge energy.</strong> CV(RMSE) is the RMSE divided by the mean of the measured values; NMBE is the total bias divided by the total. They are written for metered energy use, not room temperatures, so you cannot apply 30 percent to Kittiwake's 0.48 C.</li>
+          <li><strong>The arithmetic varies.</strong> Editions differ, some versions divide by n and some by n - p (the number of parameters), and the sign convention of NMBE is not the same everywhere. Say which you used.</li>
+          <li><strong>Passing is not proof.</strong> Garrett and New (2016, ASHRAE Transactions) question whether these metrics are sufficient for calibration (reported). Tonight's floor 3 is the illustration: a fit can pass on its own week and still carry a wrong parameter.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Overfitting the calibration week<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>With two parameters and a week of hourly data, Kittiwake's fit stops at 0.460 to 0.526 C, just above the sensors' 0.4 C noise. Add parameters (a separate heat loss for every weekday, an occupancy factor for every day) and the week-1 RMSE will keep falling, eventually below the noise. That is the model learning the week's accidents. The symptom is a fit that improves on week 1 and gets worse on week 2. The defence is the one in the figure: fit on one period, judge on another, and keep the parameter count small enough that each one has something in the data to explain. Splitting time series into fit and check periods properly, with more than one split, is a forecasting discipline: <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time series forecasting</a> covers it.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Bacher and Madsen (2011) add model complexity only when a likelihood-ratio test says the extra piece is supported by the data (method reported). It is a guard against the same failure: a richer model that fits the training data better and the building no better.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Search two parameters and find the flat one</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">In practitioner session 2 you searched one parameter and found a clean valley. Now add the second. You will make a synthetic week for a toy floor with a known kU and kC, heated by a thermostat that reads a noisy sensor, with real occupancy the model does not know, then grid-search both parameters open loop and slice the surface. The figure is the grid you are about to fill: 16 values of kU, 17 of kC, 272 one-week simulations.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 366" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn grid for the build-along: kU from 0.5 to 2.0 across, 16 columns; kC from 0.4 to 2.0 up, 17 rows; 272 fits. In copper, the best cell: kU 1.30, kC 1.10. Hatched, the column cells within 0.02 C of the best: kC 1.0 to 1.3. Dashed, the true cell: kU 1.30, kC 0.80. Along kU the RMSE spreads 8.796 C; along kC 0.284 C. Toy model, random.Random(7).">
+        <defs>
+          <filter id="kwkp3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp3dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp3dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp3dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp3dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp3dH" x="30" y="30">THE GRID IN calib.py: 16 x 17 = 272 ONE-WEEK FITS</text>
+        <text class="kwkp3dA" x="30" y="50">kC, 17 values, 0.4 to 2.0</text>
+
+        <g filter="url(#kwkp3dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="90" y="60" width="320" height="238" rx="2" fill="#FFFFFF"/>
+          <path stroke="#C6D2DD" stroke-width="0.8" d="M110 60 L110 298 M130 60 L130 298 M150 60 L150 298 M170 60 L170 298 M190 60 L190 298 M210 60 L210 298 M230 60 L230 298 M250 60 L250 298 M270 60 L270 298 M290 60 L290 298 M310 60 L310 298 M330 60 L330 298 M350 60 L350 298 M370 60 L370 298 M390 60 L390 298 M90 74 L410 74 M90 88 L410 88 M90 102 L410 102 M90 116 L410 116 M90 130 L410 130 M90 144 L410 144 M90 158 L410 158 M90 172 L410 172 M90 186 L410 186 M90 200 L410 200 M90 214 L410 214 M90 228 L410 228 M90 242 L410 242 M90 256 L410 256 M90 270 L410 270 M90 284 L410 284"/>
+          <rect x="250" y="158" width="20" height="56" fill="url(#kwkp3dHc)"/>
+          <rect x="250" y="186" width="20" height="14" fill="#C8733A"/>
+          <rect x="250" y="228" width="20" height="14" stroke-dasharray="4 3"/>
+          <!-- doodle: a radiator -->
+          <rect x="818" y="12" width="32" height="22" rx="3" fill="#FFFFFF"/>
+          <path d="M826 14 L826 32 M834 14 L834 32 M842 14 L842 32"/>
+        </g>
+
+        <text class="kwkp3dS" x="60" y="72">2.0</text>
+        <text class="kwkp3dS" x="60" y="197">1.1</text>
+        <text class="kwkp3dS" x="252" y="314">1.3</text>
+        <text class="kwkp3dS" x="392" y="314">2.0</text>
+        <text class="kwkp3dA" x="160" y="334">kU, 16 values, 0.5 to 2.0</text>
+
+        <text class="kwkp3dL" x="460" y="84">What the output says, on the grid</text>
+        <text class="kwkp3dS" x="460" y="110">copper cell, the best: kU 1.30, kC 1.10</text>
+        <text class="kwkp3dS" x="460" y="130">dashed cell, the truth: kU 1.30, kC 0.80</text>
+        <text class="kwkp3dS" x="460" y="150">hatched: kC 1.0 to 1.3, all within 0.02 C</text>
+        <text class="kwkp3dL" x="460" y="190">along kU: RMSE spread 8.796 C</text>
+        <text class="kwkp3dL" x="460" y="212">along kC: RMSE spread 0.284 C</text>
+        <text class="kwkp3dS" x="460" y="240">one week fixes the column,</text>
+        <text class="kwkp3dS" x="460" y="256">not the row inside it</text>
+
+        <text class="kwkp3dN" x="30" y="356">Toy floor, random.Random(7), one synthetic week. Change anything and your numbers will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper cell is the search's answer; the hatched run is how far it could have moved for almost nothing.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the model and the synthetic week</h4>
+        <p>Make a scratch folder, create calib.py, and paste this first block. The "real" floor has kU 1.30 and kC 0.80. A thermostat reads a noisy sensor and sets the heat, the meter logs it, and the real occupants vary day to day.</p>
+        <div class="prompt-box good"><span class="label">calib.py, block 1 of 3</span># Grid search for two parameters on a toy two-node floor model.
+import math
+import random
+
+def step(ti, tm, to, q, kU, kC):
+    # One hour, 4 quarter-hour Euler steps. kU scales heat loss, kC scales the mass.
+    Ci, Cm, Rim, Rio, Rmo = 6.0, 20.0 * kC, 0.5, 10.0 / kU, 4.0 / kU
+    for _ in range(4):
+        dti = ((tm - ti) / Rim + (to - ti) / Rio + q) / Ci
+        dtm = ((ti - tm) / Rim + (to - tm) / Rmo) / Cm
+        ti, tm = ti + 0.25 * dti, tm + 0.25 * dtm
+    return ti, tm
+
+# A synthetic week. The "real" floor is heated by a thermostat that reads its own
+# noisy sensor, and the heat meter logs what went in, just as in a real building.
+rng = random.Random(7)
+H = 7 * 24 + 1
+TRUE_KU, TRUE_KC = 1.30, 0.80
+to = [5 + 3.5 * math.sin(2 * math.pi * (h - 9) / 24) + rng.gauss(0, 0.5) for h in range(H)]
+occ_day = [rng.uniform(0.6, 1.0) for d in range(7)]   # how full each day really was
+def occupied(h):
+    return 8 &lt;= h % 24 &lt; 18 and h // 24 &lt; 5
+ti, tm, meas, qlog = 19.0, 19.0, [], []
+for h in range(H):
+    y = ti + rng.gauss(0, 0.4)
+    meas.append(y)
+    setpoint = 21.0 if 7 &lt;= h % 24 &lt; 19 and h // 24 &lt; 5 else 19.0
+    q = min(20.0, max(0.0, 4.0 * (setpoint - y)))
+    qlog.append(q)
+    people = 2.5 * occ_day[h // 24] if occupied(h) else 0.0
+    ti, tm = step(ti, tm, to[h], q + people, TRUE_KU, TRUE_KC)
+    ti += rng.gauss(0, 0.12)
+</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the objective</h4>
+        <p>Append the score. The twin is driven by the logged heat and the timetable's guess of 2 kW of people, never by the true occupancy, and never looks at the sensor until it is scored. Day 1 is warm-up.</p>
+        <div class="prompt-box good"><span class="label">calib.py, block 2 of 3</span>def rmse(kU, kC):
+    # Open loop: start at the first reading, drive with the logged heat, never look at the sensor.
+    x_ti, x_tm, err = meas[0], meas[0], []
+    for h in range(1, H):
+        people = 2.0 if occupied(h - 1) else 0.0   # the timetable's guess, not the truth
+        x_ti, x_tm = step(x_ti, x_tm, to[h - 1], qlog[h - 1] + people, kU, kC)
+        if h &gt;= 24:  # skip day 1: warm-up
+            err.append((x_ti - meas[h]) ** 2)
+    return math.sqrt(sum(err) / len(err))
+</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Search the grid and slice it</h4>
+        <p>Append the search. It scores all 272 pairs, keeps the best, then reads the two slices through the best cell: how much the RMSE moves along each axis, and which values sit within 0.02 C of the best.</p>
+        <div class="prompt-box good"><span class="label">calib.py, block 3 of 3</span>kus = [round(0.5 + 0.1 * a, 1) for a in range(16)]   # 0.5 to 2.0
+kcs = [round(0.4 + 0.1 * b, 1) for b in range(17)]   # 0.4 to 2.0
+grid = {(u, c): rmse(u, c) for u in kus for c in kcs}
+best = min(grid, key=grid.get)
+print(f"true      kU {TRUE_KU:.2f}  kC {TRUE_KC:.2f}")
+print(f"best      kU {best[0]:.2f}  kC {best[1]:.2f}  RMSE {grid[best]:.3f} C")
+along_u = [grid[(u, best[1])] for u in kus]
+along_c = [grid[(best[0], c)] for c in kcs]
+print(f"along kU  RMSE {min(along_u):.3f} to {max(along_u):.3f} C (spread {max(along_u) - min(along_u):.3f})")
+print(f"along kC  RMSE {min(along_c):.3f} to {max(along_c):.3f} C (spread {max(along_c) - min(along_c):.3f})")
+near_u = [u for u in kus if grid[(u, best[1])] &lt;= grid[best] + 0.02]
+near_c = [c for c in kcs if grid[(best[0], c)] &lt;= grid[best] + 0.02]
+print(f"kU within 0.02 C of the best: {near_u[0]:.1f} to {near_u[-1]:.1f}")
+print(f"kC within 0.02 C of the best: {near_c[0]:.1f} to {near_c[-1]:.1f}")
+</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run it</h4>
+        <p>Run <code>python3 calib.py</code> from the scratch folder. This is the output from running exactly the three blocks above with Python 3; with the same seed you should see the same lines.</p>
+        <div class="prompt-box good"><span class="label">Output</span>true      kU 1.30  kC 0.80
+best      kU 1.30  kC 1.10  RMSE 0.422 C
+along kU  RMSE 0.422 to 9.217 C (spread 8.796)
+along kC  RMSE 0.422 to 0.706 C (spread 0.284)
+kU within 0.02 C of the best: 1.3 to 1.3
+kC within 0.02 C of the best: 1.0 to 1.3</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read the valley, then break it</h4>
+        <p>kU came back exactly; kC came back at 1.10 against a true 0.80, and four values of kC fit within 0.02 C of each other. The spread along kU is about 30 times the spread along kC. Now change things one at a time and rerun: the seed, the true kC, a 15 C night setpoint on two of the nights, the people guess set to the true occupancy. Run it and read the output; your numbers will differ. Write down which change makes kC identifiable.</p>
+        <div class="prompt-box good"><span class="label">One line for your model record</span>kU: {value: 1.30, from: calibration week 1, identified: yes, spread along kU 8.796 C}
+kC: {value: 1.10, from: calibration week 1, identified: weakly, 1.0 to 1.3 within 0.02 C}</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Never report a calibrated parameter without its slice. "kC 1.10" is a claim; "kC 1.10, anything from 1.0 to 1.3 fits as well" is the truth, and it tells the next person which number not to lean on.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Kittiwake's calibration recovers every floor's kU within 0.08 but finds floor 3's kC at 1.68 against a true 0.89 (constructed). Why is kC not identified from one week?</p>
+      <button class="qopt" type="button">A · The grid search has a bug in its kC loop</button>
+      <button class="qopt" type="button">B · The week barely changes when kC changes: with the thermostat holding the room steady, mass only shows in small drifts, so the error surface is nearly flat along kC</button>
+      <button class="qopt" type="button">C · Thermal mass cannot affect room temperature</button>
+      <p class="qwhy">Across kC on floor 3 the RMSE moves 0.54 C in total and every value from 1.4 to 2.0 fits within 0.02 C; across kU it moves 6.68 C. Mass matters to the physics, but this week does not exercise it enough to tell values apart.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why check a calibration on a different week from the one it was fitted to?</p>
+      <button class="qopt" type="button">A · Because the second week always has less sensor noise</button>
+      <button class="qopt" type="button">B · Because ASHRAE Guideline 14 requires exactly two weeks</button>
+      <button class="qopt" type="button">C · Because a fit scored on its own data can look good by learning that week's accidents; only data it never saw shows whether the parameters describe the building</button>
+      <p class="qwhy">Kittiwake's check week has a night setback the fit never saw. The calibrated twin predicts its energy within 1.7 percent; the design twin is 32.9 percent low (constructed).</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The ASHRAE Guideline 14 criteria (reported: hourly CV(RMSE) at most 30 percent, NMBE within 10 percent) judge what?</p>
+      <button class="qopt" type="button">A · How well a building energy model's predicted energy use matches metered energy, as a ratio to the measured values</button>
+      <button class="qopt" type="button">B · Whether each parameter of the model is correct</button>
+      <button class="qopt" type="button">C · The room-temperature error of a thermal twin, in degrees</button>
+      <p class="qwhy">They are ratios on energy, with edition, denominator and sign conventions that vary. Passing them does not show every parameter is right; floor 3's mass is the counterexample.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 4</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>In the widget, step through all six floors and write down, for each, the span of kC within 0.02 C of the row's best and whether the true kC falls inside it.</li>
+      <li>In calib.py, fit on a week that contains two 15 C nights and compare the kC span with tonight's 1.0 to 1.3. Did the setback make mass easier to see?</li>
+      <li>Hold kC at 1.0 (the drawings) and search kU alone. Does the best kU move, and does the best RMSE get worse by more than 0.02 C?</li>
+      <li>For a model you own, list each parameter with its provenance and mark the ones you have never sliced.</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Grey-box calibration</span><span class="note">Bacher and Madsen (2011), Energy and Buildings 43(7): grey-box models, likelihood-ratio model selection. Record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Calibration as continual VVUQ</span><span class="note">National Academies (2024): VVUQ an area of particular need, and continual as the asset changes. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Identifiability on Kittiwake</span><span class="note">Constructed, computed in the page: kU within 0.08 on every floor, kC not pinned by one week; floor 3 slices.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fit week vs check week</span><span class="note">Constructed: calibrated twin +1.7 percent on the setback week, design twin -32.9 percent.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">ASHRAE Guideline 14 criteria</span><span class="note">Hourly 30 / 10, monthly 15 / 5. Reported via secondary papers; paywalled; editions and conventions differ. Garrett and New (2016) reported.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Bayesian calibration</span><span class="note">Named only; formal VVUQ methods are out of scope.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Fit and check splits for time series</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time series forecasting</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Calibration.</strong> Choose parameters so the open-loop model matches past readings.</div>
+      <div class="cheat-item"><strong>Open loop.</strong> No sensor corrections while scoring, or bad parameters hide.</div>
+      <div class="cheat-item"><strong>Logged inputs.</strong> Drive the model with the heat that was delivered, not a simulated thermostat.</div>
+      <div class="cheat-item"><strong>Skip the warm-up.</strong> Do not score the hours where the starting state is a guess.</div>
+      <div class="cheat-item"><strong>Slice every parameter.</strong> A flat slice means the data cannot see it; record "weakly identified".</div>
+      <div class="cheat-item"><strong>The truth can score worse.</strong> A loose parameter soaks up other errors in the model.</div>
+      <div class="cheat-item"><strong>Check on unseen data.</strong> Fit one week, judge on another; Guideline 14 criteria (reported) judge energy.</div>
+      <div class="cheat-item"><strong>Constructed.</strong> Kittiwake's numbers are generated; your numbers will differ.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Keeping state in sync: the Kalman filter by hand.</strong> Calibration fixes the parameters; the filter keeps the state honest hour by hour. Predict, read, correct, and where the gain of 0.445 comes from.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 3 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p2-physics-data-or-both.html">← Prev: Physics, data or both</a>
+        <a href="p4-the-kalman-filter-by-hand.html">Next: Keeping state in sync: the Kalman filter by hand →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwkp3-floor");
+  var rows = document.getElementById("kwkp3-rows");
+  var out = document.getElementById("kwkp3-out");
+  var verdict = document.getElementById("kwkp3-verdict");
+  var self = document.getElementById("kwkp3-self");
+  if (!sel || !rows || !out) return;
+  var W = DTW.world(1124);
+  var CAP = 3.0;
+
+  // Week-1 open-loop RMSE against the sensors, hours 24 to 168, as the engine's calibration scores it.
+  function weekRmse(f, kU, kC) {
+    var p = DTW.params(f, kU, kC), x = [W.meas[f][0], W.meas[f][0]], s = 0, n = 0;
+    for (var i = 0; i < 168; i++) {
+      x = DTW.step(p, x, W.to[i], W.qlog[f][i] + W.sol[i] + W.occN[i]);
+      if (i + 1 >= 24) { var e = x[0] - W.meas[f][i + 1]; s += e * e; n++; }
+    }
+    return Math.sqrt(s / n);
+  }
+  function summarise(xs, rs) {
+    var m = Math.min.apply(null, rs), at = xs[rs.indexOf(m)], near = [];
+    rs.forEach(function (r, i) { if (r <= m + 0.02) near.push(xs[i]); });
+    return { min: m, at: at, range: Math.max.apply(null, rs) - m, lo: near[0], hi: near[near.length - 1], count: near.length };
+  }
+  function rowSvg(title, xs, rs, sm) {
+    var n = xs.length, x0 = 46, bw = 600 / n, h = 104, base = 128, s = "";
+    s += '<svg viewBox="0 0 680 182" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + title + ': week-1 RMSE for each value, lowest ' + sm.min.toFixed(3) + ' C at ' + sm.at.toFixed(1) + ', range ' + sm.range.toFixed(2) + ' C">';
+    s += '<text x="0" y="16" style="font: 700 12px Inter, sans-serif; fill: #10202F;">' + title + '</text>';
+    s += '<text x="0" y="' + (base - h + 4) + '" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A;">3 C</text>';
+    s += '<text x="0" y="' + (base + 4) + '" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A;">0</text>';
+    s += '<path d="M' + x0 + ' ' + base + ' L' + (x0 + 600) + ' ' + base + '" stroke="#10202F" stroke-width="1.2" fill="none"/>';
+    for (var i = 0; i < n; i++) {
+      var r = rs[i], capped = r > CAP, bh = Math.min(r, CAP) / CAP * h, bx = x0 + i * bw + 3;
+      var fill = r <= sm.min + 0.02 ? "#C8733A" : (capped ? "#B9D4EE" : "#045C9F");
+      s += '<rect x="' + bx.toFixed(1) + '" y="' + (base - bh).toFixed(1) + '" width="' + (bw - 6).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="' + fill + '" stroke="#10202F" stroke-width="0.8"/>';
+      s += '<text x="' + (bx + (bw - 6) / 2).toFixed(1) + '" y="' + (base + 16) + '" text-anchor="middle" style="font: 400 11px Inter, sans-serif; fill: #10202F;">' + xs[i].toFixed(1) + '</text>';
+    }
+    s += '<text x="' + x0 + '" y="' + (base + 34) + '" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A;">Lowest ' + sm.min.toFixed(3) + ' C at ' + sm.at.toFixed(1) + '; range across the row ' + sm.range.toFixed(2) + ' C; within 0.02 C of the lowest: ' + sm.lo.toFixed(1) + (sm.count > 1 ? ' to ' + sm.hi.toFixed(1) : ' only') + '.</text>';
+    s += '<text x="' + x0 + '" y="' + (base + 50) + '" style="font: 400 11px Inter, sans-serif; fill: #4A5A6A;">Copper: within 0.02 C of the lowest. Pale: above 3 C, cut at 3 C.</text>';
+    return s + "</svg>";
+  }
+  function render() {
+    var f = Number(sel.value), cal = DTW.calibrate(W, f);
+    var xc = [], rc = [], xu = [], ru = [], a;
+    for (a = 0; a <= 16; a++) { xc.push(Math.round((0.4 + 0.1 * a) * 10) / 10); rc.push(weekRmse(f, cal.kU, xc[a])); }
+    for (a = 0; a <= 15; a++) { xu.push(Math.round((0.5 + 0.1 * a) * 10) / 10); ru.push(weekRmse(f, xu[a], cal.kC)); }
+    var su = summarise(xu, ru), sc = summarise(xc, rc), rTrue = weekRmse(f, W.kU[f], W.kC[f]);
+    rows.innerHTML = rowSvg("Across kU (heat loss), kC held at " + cal.kC.toFixed(2), xu, ru, su) +
+      rowSvg("Across kC (mass), kU held at " + cal.kU.toFixed(2), xc, rc, sc);
+    out.innerHTML = '<table class="sql-table"><thead><tr><th>Floor ' + (f + 1) + '</th><th>kU</th><th>kC</th><th>Week-1 RMSE</th></tr></thead><tbody>' +
+      "<tr><td>Found by the engine's grid search</td><td><b>" + cal.kU.toFixed(2) + "</b></td><td><b>" + cal.kC.toFixed(2) + "</b></td><td>" + cal.rmse.toFixed(3) + " C</td></tr>" +
+      "<tr><td>True (constructed world only)</td><td>" + W.kU[f].toFixed(2) + "</td><td>" + W.kC[f].toFixed(2) + "</td><td>" + rTrue.toFixed(3) + " C</td></tr>" +
+      "<tr><td>Range across the row</td><td>" + su.range.toFixed(2) + " C</td><td>" + sc.range.toFixed(2) + " C</td><td>steep vs flat</td></tr></tbody></table>";
+    var ratio = su.range / sc.range;
+    var msg = "Floor " + (f + 1) + ": the kU row is about " + Math.round(ratio) + " times steeper than the kC row. kU found " + cal.kU.toFixed(2) + " against a true " + W.kU[f].toFixed(2) + "; kC found " + cal.kC.toFixed(2) + " against a true " + W.kC[f].toFixed(2) + ". ";
+    msg += rTrue > cal.rmse ? "The true pair scores " + rTrue.toFixed(3) + " C, worse than the found pair: a good fit is not a right parameter." : "The true pair scores " + rTrue.toFixed(3) + " C, as good as the found pair.";
+    if (sc.min < cal.rmse - 0.001) msg += " The kC row reaches " + sc.min.toFixed(3) + " C, below the search's " + cal.rmse.toFixed(3) + " C: on a flat valley the search's path decides where it stops.";
+    verdict.textContent = msg;
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed (seed 1124); your numbers will differ on another seed. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwkp3-surface .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp3-surface #kwkp3-rows svg { display: block; width: 100%; max-width: 680px; height: auto; margin: .7rem 0 .2rem; }
+  #kwkp3-surface table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

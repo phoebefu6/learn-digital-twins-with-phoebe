@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 7 of 10. A what-if is a forecast under a changed input, and it is only as honest as its band. Kittiwake Hall, a constructed teaching building, forecasts 24 hours ahead under a night setback with a 95 percent band that covers 96.8 percent of the readings; tell the twin its sensors are perfect and coverage falls to 77.4 percent. Not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="What-if runs with honest bands - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 7 of 10. Where a forecast band comes from, how to check it against the readings that arrive, and what it does not include.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p7-what-if-runs-with-honest-bands.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What-if runs with honest bands - learn digital twins with phoebe">
+<meta name="twitter:description" content="A forecast band you can check, and the count that tells you when it lies.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 7 · What-if runs with honest bands - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 7 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 7 of 10</div>
+    <h1>What-if runs with <span class="accent">honest bands</span></h1>
+    <p class="sub">The facilities team at Kittiwake Hall, a constructed six-storey teaching building, wants to know what a night setback will do before anyone turns the dial. The twin can answer, but an answer without a band is a guess in a suit. Tonight you take one forecast apart: where its 95 percent band comes from, how to check it against the readings that arrive, why a band that is too narrow is the most dangerous output a twin can produce, and what the band honestly leaves out. Energy figures are constructed and are not investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Modellers putting a band on a forecast</span>
+      <span class="chip audience">Analysts who report what a change will save</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-11 · The what-if</span>
+      <span class="a3" style="flex:4">11-23 · Building and checking a band</span>
+      <span class="a4" style="flex:7">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The question a twin exists to answer</h2>
+    </div>
+    <p class="lede">Tracking the room is the twin's homework. The exam is a question nobody can measure yet: "if we run a 15 C night setback next week, what happens?". The twin answers by running itself forward under the changed schedule. Kittiwake's twin (constructed) answers twice: every midnight of week 2 it forecasts the next 24 hours with a band, and once, at the end of week 1, it plans the whole week under both schedules to price the saving. Both answers are only worth something if you can say how wrong they are allowed to be.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The what-if as a fork: one state, two schedules, two futures, one of which is never measured. The band taken apart into its three terms: state uncertainty, sensor noise and the thermostat's own noise. A habit: count coverage after the fact, every week, and treat 77 percent under a "95 percent" label as a defect. A clear list of what the band does not contain. And a short Python script that shows a band shrinking and lying when you assume a sensor ten times better than it is.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a forecast without a band is not an answer<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"The setback will use 5,152 kWh" sounds exact. It is one number from one model, and the person deciding has no way to tell whether the twin means "give or take 10 kWh" or "give or take 1,000". The band is the twin's statement of how far the world may land from its prediction. It is also a claim that can be checked: say 95 percent, and about 95 of every 100 readings that later arrive should fall inside. A twin that reports a band has agreed to be graded.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report on digital twins lists a predictive capability and informing decisions among the defining features of a twin, and singles out uncertainty quantification as work still to be done. A what-if with a band is where those two meet: a prediction under a decision nobody has taken yet, with a stated, testable uncertainty.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>What-if.</strong> A forecast run under an input that differs from what actually happened or will happen by default: a new schedule, a new setpoint.</li>
+          <li><strong>Counterfactual.</strong> The future that did not happen. In a real building it is never measured; in Kittiwake it exists only because the world is constructed.</li>
+          <li><strong>Band.</strong> An interval around the forecast that the twin says will contain a stated share of the readings: here 95 percent, 1.96 standard deviations each side.</li>
+          <li><strong>Nominal.</strong> The share the band claims (95 percent).</li>
+          <li><strong>Coverage.</strong> The share it actually contained, counted after the readings arrived.</li>
+          <li><strong>Propagation.</strong> Carrying the twin's uncertainty forward hour by hour through the model, as the Kalman filter does between readings (practitioner session 4).</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the what-if and the counterfactual</span>
+      <h2>A what-if is a forecast under a changed input</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">The twin starts from the state the filter has kept in sync, then runs forward with no readings, its own thermostat and a schedule someone is considering. Run it twice from the same state, once per schedule, and the difference is the twin's estimate of what the change does. The figure is Kittiwake's week-ahead fork: one future is what the building really did, the other is a future nobody can visit.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn fork for Kittiwake Hall, constructed. On the left, in copper, one state: the twin's state at hour 168, the end of week 1. Two arrows leave it. The upper one goes to the night setback week that really ran: true heat 5,067 kWh, which the meter can check. The lower dashed one goes to the normal schedule that never ran: true heat 6,343 kWh, known only because the world is constructed. On the right, the setback saving: truth 20.1 percent, the calibrated twin 21.5 percent, the design-spec twin 23.9 percent.">
+        <defs>
+          <filter id="kwkp7aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp7aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp7aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp7aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp7aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp7aV { font: 800 18px Inter, sans-serif; fill: #033F6E; }
+          .kwkp7aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp7aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp7aH" x="30" y="30">ONE STATE, TWO SCHEDULES, TWO FUTURES (KITTIWAKE, CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp7aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="150" width="170" height="74" rx="8" transform="rotate(-0.6 115 187)" fill="#C8733A"/>
+          <rect x="300" y="60" width="250" height="90" rx="8" transform="rotate(0.4 425 105)" fill="#EDF4FB"/>
+          <rect x="300" y="230" width="250" height="90" rx="8" transform="rotate(-0.4 425 275)" fill="#FFFFFF" stroke-dasharray="7 5"/>
+          <rect x="600" y="60" width="250" height="260" rx="10" transform="rotate(0.3 725 190)" fill="#FFFFFF"/>
+          <path d="M204 176 L296 112" marker-end="url(#kwkp7aAr)"/>
+          <path d="M204 200 L296 266" stroke-dasharray="7 5" marker-end="url(#kwkp7aAr)"/>
+          <path d="M554 105 L596 105" marker-end="url(#kwkp7aAr)"/>
+          <path d="M554 275 L596 275" stroke-dasharray="7 5" marker-end="url(#kwkp7aAr)"/>
+          <!-- doodle: a thermometer -->
+          <rect x="846" y="12" width="10" height="26" rx="5" fill="#FFFFFF"/>
+          <circle cx="851" cy="44" r="7" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp7aL" x="46" y="176">One state</text>
+        <text class="kwkp7aK" x="46" y="196">the twin at hour 168,</text>
+        <text class="kwkp7aK" x="46" y="212">end of week 1</text>
+        <text class="kwkp7aS" x="30" y="252">same state, same weather,</text>
+        <text class="kwkp7aS" x="30" y="268">only the schedule differs</text>
+
+        <text class="kwkp7aL" x="316" y="86">Night setback: what ran</text>
+        <text class="kwkp7aK" x="316" y="108">true heat 5,067 kWh</text>
+        <text class="kwkp7aK" x="316" y="126">the heat meter can check this</text>
+
+        <text class="kwkp7aL" x="316" y="256">Normal schedule: never ran</text>
+        <text class="kwkp7aK" x="316" y="278">true heat 6,343 kWh (constructed)</text>
+        <text class="kwkp7aK" x="316" y="296">a real building cannot measure it</text>
+
+        <text class="kwkp7aL" x="616" y="86">Setback saving, by source</text>
+        <text class="kwkp7aV" x="616" y="132">20.1%</text>
+        <text class="kwkp7aS" x="694" y="130">truth (constructed)</text>
+        <text class="kwkp7aV" x="616" y="188">21.5%</text>
+        <text class="kwkp7aS" x="694" y="186">calibrated twin</text>
+        <text class="kwkp7aV" x="616" y="244">23.9%</text>
+        <text class="kwkp7aS" x="694" y="242">design-spec twin</text>
+        <text class="kwkp7aA" x="616" y="294">the drawings oversell it</text>
+
+        <text class="kwkp7aN" x="30" y="350">A real building runs one schedule, so the dashed future is never measured: every saving is a model output.</text>
+        <text class="kwkp7aN" x="30" y="368">Week-ahead plans from hour 168, seed 1124. Constructed numbers; not investment advice.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper state is shared by both futures; everything the twin says about the saving hangs on the model run from it.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Two what-ifs, two jobs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The 24-hour forecast.</strong> Each midnight of week 2 the twin takes its filtered state for each floor and runs 24 hours ahead under the night setback, with its own copy of the thermostat deciding the heat hour by hour. No readings enter during those 24 hours. Then the real readings arrive and the band can be graded. Over the seven midnights and six floors that is 1,008 forecast hours.</p>
+        <p><strong>The week-ahead plan.</strong> At hour 168 the twin runs the whole of week 2 twice from the same state: once under the setback, once under the normal schedule. The difference is its saving. In the constructed truth the setback took the building from 6,343 to 5,067 kWh, a 20.1 percent saving. The calibrated twin says 21.5 percent; the design-spec twin, built from the drawings, says 23.9 percent. Calibration did most of the work here (practitioner session 3), not the filter: a week-ahead plan runs on the parameters.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) position paper defines a twin as something that informs decisions that realize value, across the asset's life. A what-if is where that happens: the decision is taken on a future that the twin computed and nobody observed, so the twin's own calibration is all that stands between the plan and the building.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the twin runs its own thermostat<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Under the setback the heat is not an input any more: nobody has logged it, because it has not happened. The twin has to decide it the way the building would, from the setpoint and the room it predicts, 4 kW per degree below setpoint up to 20 kW. That makes the what-if a closed loop, and it is why the thermostat's noise ends up inside the band in Part 2. A what-if that replays last week's heat under next week's schedule is not a what-if; it is a mismatch.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the savings literature disagrees about<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Savings attributed to twins in published work vary widely and are disputed, and no single figure from that literature belongs on a slide. The disagreement has causes you can now name. Studies differ in the baseline (a counterfactual nobody measured, so it is itself a model), in what the twin is credited with (the setback saved the energy; the twin only helped choose it), in whether the twin was calibrated before the claim, and in whether any band was reported at all. Kittiwake shows the size of one of those effects in a constructed world: the same setback is worth 20.1, 21.5 or 23.9 percent depending on whose model you ask. When you read a savings claim, ask for the baseline, the model version that produced it, and the band. Leader session 4 turns this into a reading checklist.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers where the band comes from</span>
+      <h2>Where the band comes from</h2>
+      <span class="tag concept">8 min live</span>
+    </div>
+    <p class="lede">The band is 1.96 times the standard deviation of the reading the twin expects: the square root of its predicted state variance plus the sensor noise it assumes. The state variance is carried forward hour by hour through the model, exactly as the Kalman filter carries it between readings, and while the thermostat is between off and full power it also carries the thermostat's noise, because the real thermostat acts on a noisy sensor. The figure draws the three terms and where each enters.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn anatomy of the 95 percent band. Left, controller noise: the thermostat reads a noisy sensor, so its noise enters the room while heating is between 0 and 20 kW; an arrow feeds it into the middle box, state uncertainty P, which grows each hour ahead as A P A transpose plus Q. Right, in copper, sensor noise r, added at every reading, the one number the modeller assumes. Both state uncertainty and sensor noise feed the result: band equals 1.96 times the square root of P plus r, hour by hour; at the honest 0.4 C the mean width is 2.20 C and coverage 96.8 percent, constructed, seed 1124.">
+        <defs>
+          <filter id="kwkp7bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp7bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp7bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp7bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp7bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp7bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp7bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp7bH" x="30" y="30">WHAT GOES INTO THE BAND (KITTIWAKE, CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp7bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="60" width="220" height="104" rx="8" transform="rotate(-0.5 140 112)" fill="#EDF4FB"/>
+          <rect x="290" y="60" width="220" height="104" rx="8" transform="rotate(0.4 400 112)" fill="#FFFFFF"/>
+          <rect x="560" y="60" width="220" height="104" rx="8" transform="rotate(-0.4 670 112)" fill="#C8733A"/>
+          <rect x="200" y="214" width="480" height="64" rx="8" transform="rotate(0.3 440 246)" fill="url(#kwkp7bHc)"/>
+          <path d="M254 112 L286 112" marker-end="url(#kwkp7bAr)"/>
+          <path d="M400 168 L400 210" marker-end="url(#kwkp7bAr)"/>
+          <path d="M650 168 L600 210" marker-end="url(#kwkp7bAr)"/>
+          <!-- doodle: a thermostat dial -->
+          <circle cx="800" cy="246" r="20" fill="#FFFFFF"/>
+          <path d="M800 246 L812 234"/>
+        </g>
+
+        <text class="kwkp7bL" x="46" y="86">Controller noise</text>
+        <text class="kwkp7bK" x="46" y="106">the thermostat reads a</text>
+        <text class="kwkp7bK" x="46" y="124">noisy sensor, so its noise</text>
+        <text class="kwkp7bK" x="46" y="142">enters the room (0 to 20 kW)</text>
+
+        <text class="kwkp7bL" x="306" y="86">State uncertainty P</text>
+        <text class="kwkp7bK" x="306" y="106">how unsure the twin is of</text>
+        <text class="kwkp7bK" x="306" y="124">room and mass; grows each</text>
+        <text class="kwkp7bK" x="306" y="142">hour ahead: A P A' + Q</text>
+
+        <text class="kwkp7bL" x="576" y="86">Sensor noise r</text>
+        <text class="kwkp7bK" x="576" y="106">added at every reading;</text>
+        <text class="kwkp7bK" x="576" y="124">the one number you assume:</text>
+        <text class="kwkp7bK" x="576" y="142">0.4 C honest, 0.01 a lie</text>
+
+        <text class="kwkp7bL" x="216" y="240">95% band = 1.96 x sqrt(P + r), hour by hour</text>
+        <text class="kwkp7bK" x="216" y="262">honest 0.4 C: mean width 2.20 C, coverage 96.8%</text>
+
+        <text class="kwkp7bN" x="30" y="304">Parameter uncertainty (how unsure kU and kC are) is not one of the terms. Part 3 says what that costs.</text>
+        <text class="kwkp7bN" x="30" y="322">Seed 1124, constructed. The model, the propagation and the band are real code in the engine.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper term is the one a modeller sets by hand, and the one that decides whether the band tells the truth.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three terms, one square root<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>State uncertainty.</strong> At midnight the filter hands over its state and its covariance P: how unsure it is of the room air and the mass. Each hour ahead, P is pushed through the model (A P A') and the unmodelled disturbance Q is added, so it grows. With no readings arriving, nothing shrinks it.</p>
+        <p><strong>Controller noise.</strong> In the hours the thermostat is working (between 0 and 20 kW), the real building's heat depends on a noisy reading. The twin cannot know that noise, so it widens P by it. When the heater is off or flat out, a little sensor noise changes nothing and this term drops out.</p>
+        <p><strong>Sensor noise.</strong> The band is for the reading, not for the true room, so the sensor's own noise is added at the end. This term is not estimated by anything in the forecast; it is the number in the config file. At Kittiwake's honest 0.4 C the band is 2.20 C wide on average and covers 96.8 percent of the readings (per floor 94.0 to 99.4 percent).</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Kalman (1960) recast filtering and prediction in state-space form and showed that the error covariance obeys its own recursion. That recursion is the whole trick here: a forecast is the predict step run 24 times with no update, and the band is its covariance read off at each step.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="wk" id="kwkp7-band">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Synthetic and constructed, declared here: Kittiwake Hall, 6 floors, 14 days hourly; week 2 the real building runs a night setback (15 C nights and weekends); true sensor noise 0.4 C. The engine calibrates each floor on week 1, filters with the noise you choose, and forecasts 24 hours ahead from each midnight of week 2 with a 95 percent band. The chart redoes floor 1's first forecast (Monday of week 2) in this page's own code, mirroring the engine. At 0.4 C and seed 1124 it prints the canon figures; anything else, your numbers will differ.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp7-sd">Sensor noise the twin assumes (the true noise is 0.4 C)</label>
+        <select class="sql-code" id="kwkp7-sd">
+          <option value="0.4" selected>0.4 C, honest</option>
+          <option value="0.2">0.2 C</option>
+          <option value="0.1">0.1 C</option>
+          <option value="0.01">0.01 C, trust the sensors fully</option>
+        </select>
+        <label class="sql-label" for="kwkp7-seed">Seed for the constructed world</label>
+        <select class="sql-code" id="kwkp7-seed">
+          <option value="1124" selected>1124, the canon</option>
+          <option value="1">1</option>
+          <option value="7">7</option>
+          <option value="42">42</option>
+        </select>
+        <div id="kwkp7-chart"></div>
+        <div id="kwkp7-out"></div>
+        <p class="sql-note" id="kwkp7-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp7-self">...</div>
+    </div>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading floor 1's Monday<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>At the canon settings the chart starts from the filtered state at Monday midnight, 16.70 C, and the band is about 2.1 to 2.3 C wide all day. Twenty-two of the 24 readings land inside. The two that do not are worth reading. At 09:00 the forecast says 17.66 C and the sensor reads 16.44 C: the room recovered from the night more slowly than the twin thought. In practitioner session 1 the filter's one-hour-ahead prediction for the same hour was 17.42 C; nine hours of running blind cost a quarter of a degree more. At 19:00 the reading sits 1.15 C above the forecast as the evening setback begins.</p>
+        <p>Now pick 0.01 C. The band shrinks by about 40 percent and only 18 readings stay inside. The twin has not become better at forecasting; it has become surer of itself.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The closed-loop step, as the engine writes it<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In the hours the thermostat is between off and full power, its law (4 kW per degree below setpoint) is folded into the model, and the sensor noise it acts on is added to the process noise through the heat input's effect on the room and the mass (the column bq of the hourly map). The variable names follow <code>dtw-live.js</code>; read it there, then compare with the widget's script on this page.</p>
+        <div class="prompt-box good"><span class="label">whatIf, one hour of the band</span>if (q &gt; 0 &amp;&amp; q &lt; qMax) {
+  A  = A - bq * kp             // the loop: heat now depends on the room
+  Qe = Q + (bq * kp) r (bq * kp)'   // the thermostat's noisy reading enters
+}
+P  = A P A' + Qe               // carry the uncertainty one hour ahead
+sd = sqrt(P[room][room] + r)   // add the sensor's own noise
+band = prediction +/- 1.96 * sd</div>
+        <p>This is pseudocode, not something to run. Drop the controller term and the band narrows in the working hours; drop r and it collapses to the state alone. The engine's self-test plants exactly that second fault and proves a check catches it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers checking a band, and what it leaves out</span>
+      <h2>Checking a band</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">A band is checked after the fact, by counting. Every reading that arrives either fell inside the band the twin issued for that hour or it did not. Over a week, the share inside should sit near the nominal 95 percent. A little above means the band is slightly wide; far below means the twin is claiming a certainty it does not have. The figure plots Kittiwake's four settings against that line.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn plot of coverage against the assumed sensor noise, Kittiwake Hall, constructed, seed 1124. A dashed line marks the nominal 95 percent. Assumed 0.01 C: coverage 77.4 percent. 0.1 C: 80.7 percent. 0.2 C: 88.5 percent. 0.4 C, the honest value, in copper: 96.8 percent, just above the line. A side note: each reading is inside the band or not; count over a week; slightly above 95 is a little wide; far below means the band lies.">
+        <defs>
+          <filter id="kwkp7cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="77" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp7cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp7cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp7cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp7cV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwkp7cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp7cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp7cH" x="30" y="30">COVERAGE AGAINST THE NOMINAL 95% (KITTIWAKE, CONSTRUCTED, SEED 1124)</text>
+
+        <g filter="url(#kwkp7cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M90 60 L90 280 L560 280"/>
+          <path d="M90 105 L560 105" stroke="#045C9F" stroke-dasharray="8 6"/>
+          <rect x="600" y="60" width="250" height="220" rx="10" transform="rotate(0.4 725 170)" fill="#EDF4FB"/>
+          <circle cx="140" cy="228" r="7" fill="#FFFFFF"/>
+          <circle cx="250" cy="205" r="7" fill="#FFFFFF"/>
+          <circle cx="360" cy="151" r="7" fill="#FFFFFF"/>
+          <circle cx="470" cy="92" r="8" fill="#C8733A"/>
+          <!-- doodle: a thermometer -->
+          <rect x="836" y="10" width="10" height="24" rx="5" fill="#FFFFFF"/>
+          <circle cx="841" cy="40" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp7cS" x="52" y="74">100%</text>
+        <text class="kwkp7cS" x="58" y="144">90%</text>
+        <text class="kwkp7cS" x="58" y="214">80%</text>
+        <text class="kwkp7cS" x="58" y="284">70%</text>
+        <text class="kwkp7cA" x="440" y="124">nominal 95%</text>
+
+        <text class="kwkp7cV" x="154" y="252">77.4%</text>
+        <text class="kwkp7cV" x="264" y="229">80.7%</text>
+        <text class="kwkp7cV" x="374" y="175">88.5%</text>
+        <text class="kwkp7cV" x="484" y="84">96.8%</text>
+
+        <text class="kwkp7cS" x="122" y="300">0.01 C</text>
+        <text class="kwkp7cS" x="236" y="300">0.1 C</text>
+        <text class="kwkp7cS" x="346" y="300">0.2 C</text>
+        <text class="kwkp7cS" x="440" y="300">0.4 C, honest</text>
+        <text class="kwkp7cA" x="90" y="324">sensor noise the twin assumes (the true noise is 0.4 C)</text>
+
+        <text class="kwkp7cL" x="616" y="86">Read it after the fact</text>
+        <text class="kwkp7cS" x="616" y="110">each reading that arrives is</text>
+        <text class="kwkp7cS" x="616" y="128">inside its band or not</text>
+        <text class="kwkp7cS" x="616" y="152">count a week: 1,008 forecast</text>
+        <text class="kwkp7cS" x="616" y="170">hours over six floors</text>
+        <text class="kwkp7cS" x="616" y="194">just above 95: a little wide</text>
+        <text class="kwkp7cS" x="616" y="212">near 95: honest</text>
+        <text class="kwkp7cS" x="616" y="236">far below: the band claims a</text>
+        <text class="kwkp7cS" x="616" y="254">certainty it does not have</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - only the copper point, the honest noise, lands near the line; every smaller assumption buys a narrower band and loses coverage.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Coverage is a count, and it is never finished<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Kittiwake's honest band covers 96.8 percent: slightly conservative, which is the safe side to miss on. The anti-lever, 0.01 C, covers 77.4 percent while still calling itself 95. Its band is 1.28 C wide instead of 2.20, and it looks more professional on a chart, which is exactly the problem. A narrow band is not a precise twin; it is a claim, and the count says the claim is false. Run the count every week, per floor, because a building changes and a band that was honest in March can drift.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) call verification, validation and uncertainty quantification "an area of particular need" for digital twins, and conclude that it must be continual, adapting as the physical counterpart changes. A weekly coverage count per floor is the smallest working version of that.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What this band does not include<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The band assumes the model's parameters are right. They are not known exactly. Practitioner session 3 showed that one week of data pins down each floor's heat loss (kU within 0.08) but not its thermal mass (floor 3: kC 1.68 found against 0.89 true). That uncertainty is nowhere in the 2.20 C. For a 24-hour room forecast it matters little, because the filter has just reset the state. For the saving it matters a lot: a week-ahead plan runs on the parameters, so a band on "21.5 percent" would need the parameter uncertainty propagated too. The honest sentence is "21.5 percent, from a twin whose band covers room readings; no band on the saving itself". Methods that add parameter uncertainty (Bayesian calibration, sensitivity analysis) exist and are named here only.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Forecast intervals in general<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A twin's band is one kind of forecast interval: model-based, propagated through physics. Empirical intervals, quantile methods and how to score interval forecasts in general belong to forecasting, and live in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time-series forecasting</a>. The one habit that transfers both ways: whatever produced the interval, count its coverage on data it has not seen.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Make a band, then make it lie</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You will build a one-number room in Python: it drifts toward 18 C, gets a small random push every hour, and is read by a sensor with 0.4 C of noise. A scalar Kalman filter keeps it in sync; every midnight you forecast 24 hours ahead, carrying the variance forward, and count how many readings land inside the 95 percent band. Then you assume a sensor ten times better than the real one and count again. The figure is the count you should get.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn coverage count from the build-along script, constructed with random.Random(9). Honest noise 0.4 C: 1,317 of 1,392 readings inside the band, coverage 94.6 percent, mean width 2.02 C. Assumed 0.04 C: 1,024 of 1,392 inside, coverage 73.6 percent, mean width 1.22 C. A dashed line marks the nominal 95 percent; the copper gap is the coverage the too-small noise lost.">
+        <defs>
+          <filter id="kwkp7dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp7dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp7dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp7dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp7dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp7dV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwkp7dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp7dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp7dH" x="30" y="30">THE COUNT YOUR SCRIPT PRINTS (CONSTRUCTED, RANDOM SEED 9)</text>
+        <text class="kwkp7dA" x="700" y="56">nominal 95%</text>
+
+        <g filter="url(#kwkp7dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="200" y="80" width="568" height="40" rx="4" transform="rotate(-0.2 484 100)" fill="url(#kwkp7dHc)"/>
+          <rect x="200" y="170" width="442" height="40" rx="4" transform="rotate(0.2 421 190)" fill="#FFFFFF"/>
+          <rect x="642" y="170" width="128" height="40" rx="4" transform="rotate(0.3 706 190)" fill="#C8733A"/>
+          <path d="M770 64 L770 230" stroke="#045C9F" stroke-dasharray="8 6"/>
+          <!-- doodle: a thermometer -->
+          <rect x="836" y="150" width="10" height="44" rx="5" fill="#FFFFFF"/>
+          <circle cx="841" cy="202" r="8" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp7dL" x="30" y="96">honest 0.4 C</text>
+        <text class="kwkp7dS" x="30" y="112">1,317 of 1,392 inside</text>
+        <text class="kwkp7dS" x="30" y="128">mean width 2.02 C</text>
+        <text class="kwkp7dV" x="784" y="106">94.6%</text>
+
+        <text class="kwkp7dL" x="30" y="186">assumed 0.04 C</text>
+        <text class="kwkp7dS" x="30" y="202">1,024 of 1,392 inside</text>
+        <text class="kwkp7dS" x="30" y="218">mean width 1.22 C</text>
+        <text class="kwkp7dV" x="570" y="196">73.6%</text>
+        <text class="kwkp7dS" x="646" y="232">short of nominal</text>
+
+        <text class="kwkp7dN" x="30" y="264">60 constructed days, 58 midnights x 24 hours ahead. Same world, same readings: only the assumed noise changed.</text>
+        <text class="kwkp7dN" x="30" y="282">Run it with python3 -I and your counts should match these exactly; change the seed and they will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper gap is what the assumption cost: the band shrank by 40 percent and stopped telling the truth.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Build the constructed room</h4>
+        <p>Make a scratch folder, open band.py, and start with the world. The room keeps 90 percent of its gap to 18 C each hour, gets a push with sd 0.15 C, and the sensor adds sd 0.4 C. Everything is seeded so your run matches the page.</p>
+        <div class="prompt-box good"><span class="label">band.py, part 1</span>import math
+import random
+
+rng = random.Random(9)
+A, MU = 0.9, 18.0        # each hour the room keeps 90 percent of its gap to 18 C
+Q_SD, R_SD = 0.15, 0.4   # true hourly disturbance and true sensor noise, in C
+HOURS, H = 24 * 60, 24   # 60 constructed days; 24-hour forecasts
+
+# The constructed world: a true room and the readings of a noisy sensor.
+x, reads = MU, []
+for t in range(HOURS):
+    x = MU + A * (x - MU) + rng.gauss(0, Q_SD)
+    reads.append(x + rng.gauss(0, R_SD))</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Filter, forecast and count</h4>
+        <p>One function, given the sensor noise the twin assumes. It filters hour by hour; at each midnight it runs 24 predict steps with no update, carrying the variance forward, and checks each reading against 1.96 times the square root of state variance plus sensor variance.</p>
+        <div class="prompt-box good"><span class="label">band.py, part 2</span>def coverage(r_sd):
+    r, q = r_sd ** 2, Q_SD ** 2
+    m, p = reads[0], r
+    hits = total = 0
+    width = 0.0
+    for t in range(1, HOURS):
+        m, p = MU + A * (m - MU), A * A * p + q        # predict one hour
+        k = p / (p + r)                                # update on the reading
+        m, p = m + k * (reads[t] - m), (1 - k) * p
+        if t % 24 == 0 and t + H &lt; HOURS:              # each midnight: 24 h ahead
+            fm, fp = m, p
+            for h in range(1, H + 1):
+                fm, fp = MU + A * (fm - MU), A * A * fp + q
+                half = 1.96 * math.sqrt(fp + r)        # state variance + sensor variance
+                hits += abs(reads[t + h] - fm) &lt;= half
+                total += 1
+                width += 2 * half
+    return hits, total, width / total</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Count twice and compare</h4>
+        <p>Run the honest noise and a noise ten times too small on the same readings. Save, then run <code>python3 -I band.py</code> from the scratch folder.</p>
+        <div class="prompt-box good"><span class="label">band.py, part 3</span>for label, sd in [("honest noise 0.4 C", 0.4), ("assumed 0.04 C", 0.04)]:
+    hits, total, w = coverage(sd)
+    print(f"{label}: {hits} of {total} readings inside, coverage {100 * hits / total:.1f}%, mean width {w:.2f} C")</div>
+        <div class="prompt-box good"><span class="label">Output</span>honest noise 0.4 C: 1317 of 1392 readings inside, coverage 94.6%, mean width 2.02 C
+assumed 0.04 C: 1024 of 1392 readings inside, coverage 73.6%, mean width 1.22 C</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read what you made</h4>
+        <p>The honest band lands at 94.6 percent, within a point of nominal. The overconfident one is 40 percent narrower and covers 73.6 percent: the same shape as Kittiwake's 96.8 against 77.4. Note what did not change: the readings, the model, the forecast line. Only the claim about the noise changed, and it changed two things at once, because the filter also trusted each reading more and the band forgot the noise every reading carries.</p>
+        <div class="prompt-box good"><span class="label">two edits to try, one at a time</span>Q_SD = 0.6      # a jumpier room: does the wrong r still hurt as much?
+H = 6           # shorter forecasts: is the band mostly state or mostly sensor?</div>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Never ship a band you have not counted. Store every band the twin issues next to the reading that later arrived, and report coverage per asset per week beside the forecast itself. A band that has never been graded is decoration.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Told the sensors had 0.01 C of noise, Kittiwake's band shrank from 2.20 C to 1.28 C and covered 77.4 percent of the readings instead of 96.8. Why did the narrower band cover less?</p>
+      <button class="qopt" type="button">A · The forecast line got worse, so readings drifted away from it</button>
+      <button class="qopt" type="button">B · The band left out noise that is really in every reading, so it claimed more certainty than the world allows</button>
+      <button class="qopt" type="button">C · Narrower bands always cover less, whatever the assumption</button>
+      <p class="qwhy">The readings still carry 0.4 C of noise. A band built on 0.01 C omits it, so far more readings fall outside while the label still says 95 percent. The energy estimate was unchanged; only the claim of certainty moved.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">In Kittiwake's week-ahead what-if, what is the counterfactual?</p>
+      <button class="qopt" type="button">A · The setback week, as the heat meter recorded it</button>
+      <button class="qopt" type="button">B · The design-spec twin's forecast</button>
+      <button class="qopt" type="button">C · The week the building would have had under the normal schedule, which never ran and which a real building can never measure</button>
+      <p class="qwhy">Only one schedule runs. The 6,343 kWh baseline exists only because Kittiwake is constructed; in a real building the baseline is itself a model output, which is why savings claims need a stated baseline.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Which uncertainty is NOT inside Kittiwake's 2.20 C band?</p>
+      <button class="qopt" type="button">A · Uncertainty about the parameters kU and kC, such as the weakly identified thermal mass</button>
+      <button class="qopt" type="button">B · The sensor's own noise</button>
+      <button class="qopt" type="button">C · The noise the thermostat acts on while it is heating</button>
+      <p class="qwhy">The band propagates state uncertainty and adds sensor and controller noise, all for fixed parameters. A band on the saving would need the parameter uncertainty too; tonight it is named, not added.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 8</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>In the widget, run all four noise settings for seed 1124 and write down coverage and width for each. Then pick seed 42 and do the same. Which numbers moved with the seed, and which shape held?</li>
+      <li>In band.py, try an assumed noise that is too large (0.8 C). Predict the coverage before you run it, then run it. Write one sentence on whether a too-wide band is a smaller or a different failure.</li>
+      <li>Add a column to the hourly row from practitioner session 1: "inside the band issued at midnight, yes or no". Write the weekly query that turns it into coverage per floor.</li>
+      <li>Find one forecast you or your team report without a band. Write the sentence you would add so a reader knows how far to trust it, and how you would check that sentence a week later.</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Predictive capability and continual VVUQ</span><span class="note">National Academies (2024): a twin predicts and informs decisions; VVUQ is an area of particular need and continual. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Propagating the covariance</span><span class="note">Kalman (1960), Journal of Basic Engineering 82(1): the error covariance obeys its own recursion. Bibliographic record read.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Kittiwake's what-if and band</span><span class="note">Constructed, computed in the page: saving 20.1 true, 21.5 calibrated, 23.9 design; band 2.20 C, coverage 96.8 percent; 77.4 at 0.01 C.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Counting coverage</span><span class="note">Build-along script, constructed, run and printed: 94.6 percent honest, 73.6 percent at a noise ten times too small.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Savings attributed to twins</span><span class="note">Contested in the literature; the disagreement is taught, no percentage from it is quoted.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Parameter uncertainty methods</span><span class="note">Bayesian calibration and sensitivity analysis are named only; the band here assumes fixed parameters.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Forecast intervals in general</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time-series forecasting</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>What-if.</strong> The twin run forward from a synced state under a changed input, with its own controller.</div>
+      <div class="cheat-item"><strong>Counterfactual.</strong> The future that did not run; in a real building it is a model output, never a measurement.</div>
+      <div class="cheat-item"><strong>The band.</strong> 1.96 x sqrt(predicted state variance + assumed sensor variance), hour by hour.</div>
+      <div class="cheat-item"><strong>Closed loop.</strong> While the thermostat works, its noisy reading widens the state variance too.</div>
+      <div class="cheat-item"><strong>Coverage.</strong> Share of arriving readings inside the band; check it weekly, per asset.</div>
+      <div class="cheat-item"><strong>Honest vs lying.</strong> Kittiwake: 96.8 percent at 0.4 C, 77.4 percent at 0.01 C, both labelled 95.</div>
+      <div class="cheat-item"><strong>Not in the band.</strong> Parameter uncertainty; a band on a saving needs it.</div>
+      <div class="cheat-item"><strong>Constructed.</strong> Kittiwake's numbers are generated; your numbers will differ. Not investment advice.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Twin governance: versions, owners, who may act on it.</strong> A band is only useful if someone owns it. Model versions, who signs off a recalibration, and who is allowed to act on a twin's advice.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 7 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p6-the-change-log-is-a-data-source.html">← Prev: The change log is a data source</a>
+        <a href="p8-twin-governance.html">Next: Twin governance: versions, owners, who may act on it →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var $ = function (id) { return document.getElementById(id); };
+  var sdSel = $("kwkp7-sd"), seedSel = $("kwkp7-seed");
+  var out = $("kwkp7-out"), chart = $("kwkp7-chart"), verdict = $("kwkp7-verdict"), self = $("kwkp7-self");
+  if (!sdSel || !out) return;
+  var Z = 1.959963984540054, WD = DTW.WORLD;
+  window.KWK_P7 = { last: null };
+
+  function mm(A, B) { return [[A[0][0] * B[0][0] + A[0][1] * B[1][0], A[0][0] * B[0][1] + A[0][1] * B[1][1]], [A[1][0] * B[0][0] + A[1][1] * B[1][0], A[1][0] * B[0][1] + A[1][1] * B[1][1]]]; }
+  function prop(A, P, Q) { var M = mm(mm(A, P), [[A[0][0], A[1][0]], [A[0][1], A[1][1]]]); return [[M[0][0] + Q[0][0], M[0][1] + Q[0][1]], [M[1][0] + Q[1][0], M[1][1] + Q[1][1]]]; }
+  function setpoint(d, h) { var dow = d % 7, on = dow < 5 && h >= WD.dayOn && h < WD.dayOff; return on ? WD.tDay : WD.tSetback; }
+  function heat(ts, tr) { var q = WD.kp * (ts - tr); return q < 0 ? 0 : (q > WD.qMax ? WD.qMax : q); }
+
+  // Floor 1, first midnight of week 2: one 24 h what-if, mirroring the engine's whatIf (closed-loop covariance).
+  function forecast(seed, sd) {
+    var W = DTW.world(seed, false), cal = DTW.calibrate(W, 0), p = DTW.params(0, cal.kU, cal.kC);
+    var o = { seed: seed, sensorSdAssumed: sd, qi: DTW.DEFAULTS.qi, qm: DTW.DEFAULTS.qm };
+    var k = DTW.kalman(W, 0, p, o), r = sd * sd, Q = [[o.qi * o.qi, 0], [0, o.qm * o.qm]];
+    var z = DTW.step(p, [0, 0], 0, 0), c1 = DTW.step(p, [1, 0], 0, 0), c2 = DTW.step(p, [0, 1], 0, 0), bq = DTW.step(p, [0, 0], 0, 1);
+    var A0 = [[c1[0] - z[0], c2[0] - z[0]], [c1[1] - z[1], c2[1] - z[1]]];
+    var d = 7, t0 = 168, x = k.x[t0].slice(), P = k.P[t0], rows = [], inb = 0;
+    for (var h = 0; h < 24; h++) {
+      var i = t0 + h, q = heat(setpoint(d, h), x[0]);
+      x = DTW.step(p, x, W.to[i], q + W.sol[i] + W.occN[i]);
+      var A = A0, Qe = Q;
+      if (q > 0 && q < WD.qMax) {
+        A = [[A0[0][0] - bq[0] * WD.kp, A0[0][1]], [A0[1][0] - bq[1] * WD.kp, A0[1][1]]];
+        var g0 = bq[0] * WD.kp, g1 = bq[1] * WD.kp;
+        Qe = [[Q[0][0] + g0 * g0 * r, g0 * g1 * r], [g0 * g1 * r, Q[1][1] + g1 * g1 * r]];
+      }
+      P = prop(A, P, Qe);
+      var half = Z * Math.sqrt(P[0][0] + r), y = W.meas[0][i + 1], inside = Math.abs(y - x[0]) <= half;
+      if (inside) inb++;
+      rows.push({ hr: h + 1, m: x[0], half: half, y: y, inside: inside });
+    }
+    return { rows: rows, inb: inb, start: k.x[t0][0] };
+  }
+
+  function drawChart(F) {
+    var X0 = 70, X1 = 850, Y0 = 40, Y1 = 260, lo = Infinity, hi = -Infinity;
+    F.rows.forEach(function (r) { lo = Math.min(lo, r.m - r.half, r.y); hi = Math.max(hi, r.m + r.half, r.y); });
+    lo = Math.floor(lo) - 0.5; hi = Math.ceil(hi) + 0.5;
+    function sx(hr) { return X0 + (X1 - X0) * (hr - 1) / 23; }
+    function sy(t) { return Y1 - (Y1 - Y0) * (t - lo) / (hi - lo); }
+    var up = F.rows.map(function (r) { return sx(r.hr).toFixed(1) + "," + sy(r.m + r.half).toFixed(1); });
+    var dn = F.rows.slice().reverse().map(function (r) { return sx(r.hr).toFixed(1) + "," + sy(r.m - r.half).toFixed(1); });
+    var line = F.rows.map(function (r) { return sx(r.hr).toFixed(1) + "," + sy(r.m).toFixed(1); }).join(" ");
+    var s = '<svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Floor 1, Monday of week 2: the twin\'s 24-hour forecast, its 95 percent band and the readings that arrived; ' + F.inb + ' of 24 inside." style="width:100%;height:auto;margin:.6rem 0 .2rem">';
+    s += '<text x="70" y="22" style="font:600 12px Inter, sans-serif;fill:#10202F">Floor 1, Monday of week 2, from midnight: ' + F.inb + ' of 24 readings inside the band</text>';
+    for (var t = Math.ceil(lo); t <= Math.floor(hi); t++) {
+      s += '<line x1="' + X0 + '" x2="' + X1 + '" y1="' + sy(t).toFixed(1) + '" y2="' + sy(t).toFixed(1) + '" stroke="#E3EAF1" stroke-width="1"/>';
+      s += '<text x="' + (X0 - 8) + '" y="' + (sy(t) + 4).toFixed(1) + '" text-anchor="end" style="font:400 11px Inter, sans-serif;fill:#4A5A6A">' + t + ' C</text>';
+    }
+    s += '<polygon points="' + up.concat(dn).join(" ") + '" fill="#EDF4FB" stroke="#B9D4EE" stroke-width="1.5"/>';
+    s += '<polyline points="' + line + '" fill="none" stroke="#033F6E" stroke-width="2.2"/>';
+    F.rows.forEach(function (r) {
+      s += '<circle cx="' + sx(r.hr).toFixed(1) + '" cy="' + sy(r.y).toFixed(1) + '" r="' + (r.inside ? 4 : 5.5) + '" fill="' + (r.inside ? "#FFFFFF" : "#C8733A") + '" stroke="' + (r.inside ? "#045C9F" : "#10202F") + '" stroke-width="1.6"/>';
+    });
+    s += '<line x1="' + X0 + '" x2="' + X1 + '" y1="' + Y1 + '" y2="' + Y1 + '" stroke="#C6D2DD" stroke-width="1.2"/>';
+    for (var hr = 3; hr <= 24; hr += 3) {
+      s += '<text x="' + sx(hr).toFixed(1) + '" y="' + (Y1 + 18) + '" text-anchor="middle" style="font:400 11px Inter, sans-serif;fill:#4A5A6A">' + (hr < 10 ? "0" : "") + hr + ':00</text>';
+    }
+    s += '<text x="70" y="294" style="font:400 11px Inter, sans-serif;fill:#4A5A6A">Line: forecast. Shaded: 95% band. Open dots: readings inside. Copper dots: readings outside.</text>';
+    s += "</svg>";
+    chart.innerHTML = s;
+  }
+
+  function pct(x) { return (100 * x).toFixed(1) + "%"; }
+
+  function render() {
+    var sd = Number(sdSel.value), seed = Number(seedSel.value);
+    out.innerHTML = '<p class="sql-note">Calibrating, filtering and forecasting six floors in your browser...</p>';
+    setTimeout(function () {
+      var run = DTW.custom(sd, false, { seed: seed }), F = forecast(seed, sd);
+      window.KWK_P7.last = { custom: run, forecast: F };
+      drawChart(F);
+      var html = '<table class="sql-table"><thead><tr><th>Week 2, 24 h what-ifs</th>';
+      run.floors.forEach(function (f, i) { html += "<th>Floor " + (i + 1) + "</th>"; });
+      html += "<th>All floors</th></tr></thead><tbody><tr><td>Coverage (nominal 95%)</td>";
+      run.floors.forEach(function (f) { html += "<td>" + pct(f.cover) + "</td>"; });
+      html += "<td><b>" + pct(run.cover) + "</b></td></tr><tr><td>Mean band width</td>";
+      run.floors.forEach(function (f) { html += "<td>" + f.width.toFixed(2) + " C</td>"; });
+      html += "<td><b>" + run.width.toFixed(2) + " C</b></td></tr></tbody></table>";
+      var canon = sd === 0.4 && seed === 1124;
+      html += '<p class="sql-note">' + (canon ? "The canon settings." : "Not the canon settings: your numbers will differ from the figures in the prose.") + " Constructed: every reading and every true room is generated.</p>";
+      out.innerHTML = html;
+      var miss = F.rows.filter(function (r) { return !r.inside; }).map(function (r) { return (r.hr < 10 ? "0" : "") + r.hr + ":00"; });
+      var msg = "Assumed noise " + sd + " C, seed " + seed + ": the 24-hour band is " + run.width.toFixed(2) + " C wide on average and covered " + pct(run.cover) + " of the 1,008 readings that then arrived. Floor 1's first day: " + F.inb + " of 24 inside" + (miss.length ? " (outside at " + miss.join(", ") + ")" : "") + ".";
+      if (run.cover >= 0.93) msg += " Close to nominal: the band is telling the truth about itself.";
+      else msg += " Well below nominal: the twin assumes less noise than the sensors have (0.4 C), so the band is narrower than the world and the 95 percent label is false.";
+      verdict.textContent = msg;
+    }, 20);
+  }
+
+  [sdSel, seedSel].forEach(function (el) { el.addEventListener("change", render); });
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed. The engine's " + st.checks.length + " self-checks pass in this browser, including the one that the honest band covers 90 to 99.5 percent of week-2 readings."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+  render();
+})();
+</script>
+<style>
+  #kwkp7-band .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp7-band table.sql-table { margin: .6rem 0 .2rem; font-size: .8rem; }
+  #kwkp7-band #kwkp7-out, #kwkp7-band #kwkp7-chart { overflow-x: auto; }
+</style>
+</body>
+</html>

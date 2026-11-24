@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 1 of 10. Anatomy of a twin: the asset as a versioned record, the model as a file of parameters, the data link as an hourly row, and the decision log. Built on Kittiwake Hall, a constructed teaching building, with one hour of its twin computed live in the page.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Anatomy of a twin - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 1 of 10. Asset, model, data link, decisions: what each looks like as data, and one hour of a thermal twin worked through by hand.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p1-anatomy-of-a-twin.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anatomy of a twin - learn digital twins with phoebe">
+<meta name="twitter:description" content="A twin as four kinds of data, and one hour of it by hand.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 1 · Anatomy of a twin - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 1 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 1 of 10</div>
+    <h1>Anatomy of a <span class="accent">twin</span></h1>
+    <p class="sub">A twin arrives as a slide with four boxes. You will build it as four kinds of data: the asset as a versioned record, the model as a file of parameters, the data link as one row per hour, and a log of the decisions made with it. Kittiwake Hall, a constructed six-storey teaching building, is the case; its facilities team wants a thermal twin of each floor to plan heating. Tonight you read one hour of that twin field by field, with the real engine computing it in the page, and write the four schemas everything else in the track builds on.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Data engineers and analysts building a twin</span>
+      <span class="chip audience">Modellers who need the data side</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-18 · Asset and model</span>
+      <span class="a3" style="flex:3">18-23 · Link and decisions</span>
+      <span class="a4" style="flex:5">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Kittiwake's twin, as data</h2>
+    </div>
+    <p class="lede">Kittiwake Hall (constructed) has six floors, one room sensor and one heat meter per floor, a weather feed, a timetable, and the drawings. The twin's job is to answer "what would this heating schedule use next week, and how sure are you?". Before any model is fitted, someone has to decide what the twin stores, keyed how, and versioned how. Get that wrong and every later session inherits it.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Four schemas for any twin: an asset record with a configuration version, a model record with parameters and where each came from, an hourly row that separates inputs, measurements and the twin's own predictions, and a decision log. One hour of Kittiwake's twin read field by field: the twin predicts the room, the sensor disagrees, the surprise is multiplied by a gain of about 0.445, and the state moves. And a ten-line Python function for one hour of a two-node floor model that you run yourself.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a twin needs four schemas, not one table<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A warehouse table has rows of events and columns of attributes. A twin mixes four things with different lifetimes. The asset changes rarely and must be versioned (a retrofit is a new configuration). The model changes when someone recalibrates it, and every prediction must say which model made it. The data link produces a row every hour. Decisions happen weekly and must point at the prediction they relied on. Put them in one table and you lose the ability to ask "which model, of which version of the building, said this?".</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) position paper describes a twin following its asset through As Designed, As Built, As Used and As Maintained, and names models, and data from both the models and the physical asset, as critical elements. Those phases are versions of the asset record; the models and their outputs are separate records that must point at them.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for the data side<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Configuration version.</strong> An id for the asset as it physically is; it changes with every logged physical change.</li>
+          <li><strong>Input.</strong> Something the twin is given and does not predict: weather, sun, the heat meter, the timetable.</li>
+          <li><strong>Measurement.</strong> Something the twin predicts and then checks: here, the room sensor.</li>
+          <li><strong>Prior and posterior.</strong> The twin's estimate before and after it sees the hour's measurement.</li>
+          <li><strong>Innovation.</strong> Measurement minus prior: the surprise. Practitioner session 5 watches it for drift.</li>
+          <li><strong>Gain.</strong> The share of the surprise the twin accepts. Practitioner session 4 derives it.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the asset record and the model record</span>
+      <h2>The asset is a record with versions; the model is a file with parameters</h2>
+      <span class="tag concept">15 min live</span>
+    </div>
+    <p class="lede">The asset record says which physical thing this is and which configuration it is in. The model record says which equations, which parameter values, and where each value came from. The figure draws both for floor 4 and the link between them: a model is fitted to one configuration, and stops being trustworthy the day the configuration changes.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn pair of records for Kittiwake floor 4. Left, the asset record: floor id, configuration version 3, as-designed date, a change log with two entries, and the sensor and meter ids attached. Right, the model record: a two-node thermal model, version 2, fitted to configuration 3 on week 1, with parameters: room capacity 6 kWh per kelvin from the drawings, mass 20 kWh per kelvin times kC, heat-loss multiplier kU 1.42 from calibration, kC 0.90 from calibration but poorly identified. In copper, the pointer from the model to the configuration it was fitted to.">
+        <defs>
+          <filter id="kwkp1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="21" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp1aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp1aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp1aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp1aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp1aH" x="30" y="30">FLOOR 4: THE ASSET RECORD AND THE MODEL RECORD (CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp1aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="340" height="230" rx="10" transform="rotate(-0.4 200 165)" fill="#FFFFFF"/>
+          <rect x="46" y="186" width="308" height="52" rx="6" fill="url(#kwkp1aHc)"/>
+          <rect x="510" y="50" width="340" height="230" rx="10" transform="rotate(0.4 680 165)" fill="#EDF4FB"/>
+          <rect x="390" y="96" width="100" height="40" rx="6" transform="rotate(-1 440 116)" fill="#C8733A"/>
+          <path d="M508 116 L494 116" marker-end="url(#kwkp1aAr)"/>
+          <path d="M386 116 L372 116" marker-end="url(#kwkp1aAr)"/>
+          <!-- doodle: a key -->
+          <circle cx="836" cy="32" r="7" fill="#FFFFFF"/>
+          <path d="M843 32 L862 32 M856 32 L856 38"/>
+        </g>
+
+        <text class="kwkp1aL" x="46" y="76">Asset record</text>
+        <text class="kwkp1aK" x="46" y="98">floor_id: KH-F4</text>
+        <text class="kwkp1aK" x="46" y="116">config_version: 3</text>
+        <text class="kwkp1aK" x="46" y="134">as_designed: the drawings</text>
+        <text class="kwkp1aK" x="46" y="152">sensors: T-F4-01, meter H-F4</text>
+        <text class="kwkp1aK" x="58" y="206">change log: v2 new windows</text>
+        <text class="kwkp1aK" x="58" y="224">v3 radiator swapped</text>
+        <text class="kwkp1aS" x="46" y="262">every physical change: a new version</text>
+
+        <text class="kwkp1aK" x="404" y="114">fitted to</text>
+        <text class="kwkp1aK" x="404" y="130">config 3</text>
+
+        <text class="kwkp1aL" x="526" y="76">Model record</text>
+        <text class="kwkp1aK" x="526" y="98">model: 2-node RC, version 2</text>
+        <text class="kwkp1aK" x="526" y="116">room 6 kWh/K: drawings</text>
+        <text class="kwkp1aK" x="526" y="134">mass 20 kWh/K x kC: drawings</text>
+        <text class="kwkp1aK" x="526" y="152">kU 1.42: calibrated, week 1</text>
+        <text class="kwkp1aK" x="526" y="170">kC 0.90: calibrated, weak</text>
+        <text class="kwkp1aK" x="526" y="188">sensor noise 0.4 C: assumed</text>
+        <text class="kwkp1aA" x="526" y="222">each value says where</text>
+        <text class="kwkp1aA" x="526" y="238">it came from</text>
+
+        <text class="kwkp1aN" x="30" y="316">Change log entries here are illustrative. kU and kC are the bench's calibrated values for floor 4, seed 1124 (true 1.41</text>
+        <text class="kwkp1aN" x="30" y="334">and 0.88). A model fitted to config 3 says nothing trustworthy about config 4 until someone checks.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper pointer is the field most twins lack: which configuration of the asset this model was fitted to.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The asset record<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Key it on the physical thing (floor KH-F4), not on a sensor: sensors are replaced, floors are not. Give it a configuration version that increments on every logged physical change, and a change log with date, what changed, who logged it. The sensors and meters attached to it are their own records with install dates. The test: given any hour in the past, can you say which configuration the floor was in? If not, practitioner session 6 is your next job.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The model record<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A model record names the structure (here two thermal nodes per floor: room air and building mass), a version, and every parameter with its value and its provenance: from the drawings, from calibration on which data, or assumed. In Kittiwake's bench, calibration recovers each floor's heat-loss multiplier within 0.08 but cannot pin down the mass from one week (floor 4: 0.90 found against 0.88 true; floor 3: 1.68 found against 0.89 true). A provenance field that says "calibrated, weakly identified" is the honest record of that. Practitioner session 3 shows why.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where this sits in the standards<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>ISO 23247-1:2021 sets out a digital twin framework for manufacturing and, from its published contents, frames the twin around "observable manufacturing elements" (reported: the standard is paywalled and its clauses were not read here). The National Academies (2024) report asks for twins to be defined at a fidelity that is fit for purpose. Neither prescribes a schema; both assume you can say what is being observed and what the model claims about it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the hourly row and one hour of the twin</span>
+      <h2>One hour of the twin, field by field</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Each hour the twin does three things in order: it predicts the room from the last state and the hour's inputs, it reads the sensor, and it corrects its state by a share of the surprise. The row it writes must keep these apart, because practitioner sessions 4, 5 and 7 each need a different column.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn hourly row for Kittiwake floor 1, Monday 09:00 of week 2, constructed. Inputs from the hour before: outdoor minus 1.40 C, sun 0.67 kW, heat meter 20.00 kW, timetable 2 kW of people. The twin predicts the room at 17.42 C. The sensor reads 16.44 C. The surprise is minus 0.99 C. The gain is 0.445. The corrected state, in copper, is 16.99 C. The true room, known only in a constructed world, is 17.14 C.">
+        <defs>
+          <filter id="kwkp1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp1bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp1bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp1bV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwkp1bX { font: 800 16px Inter, sans-serif; fill: #10202F; }
+          .kwkp1bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp1bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp1bH" x="30" y="30">FLOOR 1, MONDAY 09:00, WEEK 2 (CONSTRUCTED, SEED 1124)</text>
+        <text class="kwkp1bA" x="30" y="58">INPUTS, given</text>
+        <text class="kwkp1bA" x="330" y="58">THE TWIN, predicts then corrects</text>
+        <text class="kwkp1bA" x="690" y="58">CHECK ONLY</text>
+
+        <g filter="url(#kwkp1bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="70" width="260" height="170" rx="10" transform="rotate(-0.4 160 155)" fill="url(#kwkp1bHc)"/>
+          <rect x="330" y="70" width="150" height="70" rx="8" transform="rotate(0.5 405 105)" fill="#FFFFFF"/>
+          <rect x="500" y="70" width="150" height="70" rx="8" transform="rotate(-0.5 575 105)" fill="#FFFFFF"/>
+          <rect x="330" y="170" width="150" height="70" rx="8" transform="rotate(-0.4 405 205)" fill="#EDF4FB"/>
+          <rect x="500" y="170" width="150" height="70" rx="8" transform="rotate(0.4 575 205)" fill="#C8733A"/>
+          <rect x="690" y="70" width="160" height="70" rx="8" transform="rotate(0.5 770 105)" fill="#FFFFFF" stroke-dasharray="6 4"/>
+          <path d="M292 105 L326 105" marker-end="url(#kwkp1bAr)"/>
+          <path d="M405 142 L405 166" marker-end="url(#kwkp1bAr)"/>
+          <path d="M575 142 L575 166" marker-end="url(#kwkp1bAr)"/>
+          <path d="M482 205 L496 205" marker-end="url(#kwkp1bAr)"/>
+        </g>
+
+        <text class="kwkp1bK" x="46" y="96">outdoor: -1.40 C</text>
+        <text class="kwkp1bK" x="46" y="120">sun: 0.67 kW</text>
+        <text class="kwkp1bK" x="46" y="144">heat meter: 20.00 kW</text>
+        <text class="kwkp1bK" x="46" y="168">timetable: 2 kW people</text>
+        <text class="kwkp1bK" x="46" y="200">all from the hour before</text>
+        <text class="kwkp1bK" x="46" y="218">(08:00 to 09:00)</text>
+
+        <text class="kwkp1bL" x="346" y="94">prior (predict)</text>
+        <text class="kwkp1bV" x="346" y="124">17.42 C</text>
+        <text class="kwkp1bL" x="516" y="94">sensor reads</text>
+        <text class="kwkp1bV" x="516" y="124">16.44 C</text>
+        <text class="kwkp1bL" x="346" y="194">surprise x gain</text>
+        <text class="kwkp1bK" x="346" y="220">-0.99 C x 0.445</text>
+        <text class="kwkp1bL" x="516" y="194">posterior</text>
+        <text class="kwkp1bX" x="516" y="224">16.99 C</text>
+        <text class="kwkp1bL" x="706" y="94">true room</text>
+        <text class="kwkp1bV" x="706" y="124">17.14 C</text>
+
+        <text class="kwkp1bS" x="690" y="168">only a constructed</text>
+        <text class="kwkp1bS" x="690" y="184">world has this column</text>
+
+        <text class="kwkp1bN" x="30" y="282">The corrected state lands between the prediction and the reading, and here closer to the truth than either.</text>
+        <text class="kwkp1bN" x="30" y="300">The room is still recovering from the 15 C night setback: the heater is at its full 20 kW.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the twin's new state, the one number the next hour starts from.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwkp1-hour">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">One hour of floor 1's twin, computed in your browser by the bench engine: calibrated on week 1, then kept in sync on Monday of week 2, the first morning of the night setback. Synthetic and constructed: Kittiwake, its weather and readings are generated (seed 1124). The true room exists only because the world is constructed.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp1-h">Hour on Monday, week 2</label>
+        <select class="sql-code" id="kwkp1-h"></select>
+        <div id="kwkp1-out"></div>
+        <p class="sql-note" id="kwkp1-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp1-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the row<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Inputs carry the previous hour.</strong> The heat meter's 20.00 kW is what went in between 08:00 and 09:00. Mixing up which hour an input belongs to is the most common bug in a twin's data link, and it does not throw an error: it just makes the model a little worse everywhere.</p>
+        <p><strong>The prior is the model's claim.</strong> 17.42 C from physics and inputs alone. The sensor says 16.44. The surprise, -0.99 C, is the single most useful number the twin produces.</p>
+        <p><strong>The posterior is a compromise.</strong> With a gain of 0.445 the twin moves 44.5 percent of the way toward the reading: 16.99 C. In this hour the truth (17.14 C) was between them. Step through the hours: sometimes the reading is closer, sometimes the prior. On average the blend wins (0.218 C against the sensors' 0.404 C over the week, practitioner session 10).</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the mass is in the state but not in the row<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The twin also carries the temperature of the building's mass, which no sensor reads. The update moves it too, through how the room and the mass have moved together in the model. Store it in the twin's state table, with the model version that produced it, but never in the measurement columns: it is an estimate, not an observation.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the data link and the decision log</span>
+      <h2>The link and the log</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The data link is everything that turns the building into hourly rows: feeds, clocks, gap-filling, the meter's units. The decision log closes the loop: what was decided, on which prediction, from which model version. The figure shows the four records and the keys that join them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn join diagram of the four records. The hourly row carries floor id and hour, and points to the asset's configuration version and the model version that predicted it. The decision log row, in copper, carries the decision, the date, the prediction it relied on and the model version, so any decision can be traced back to which model of which configuration said what.">
+        <defs>
+          <filter id="kwkp1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="27" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp1cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp1cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp1cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp1cH" x="30" y="30">FOUR RECORDS AND THE KEYS THAT JOIN THEM</text>
+
+        <g filter="url(#kwkp1cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="56" width="180" height="84" rx="8" transform="rotate(-0.6 120 98)" fill="#FFFFFF"/>
+          <rect x="30" y="176" width="180" height="84" rx="8" transform="rotate(0.6 120 218)" fill="#EDF4FB"/>
+          <rect x="330" y="110" width="210" height="100" rx="8" transform="rotate(0.3 435 160)" fill="url(#kwkp1cHc)"/>
+          <rect x="660" y="110" width="190" height="100" rx="8" transform="rotate(-0.5 755 160)" fill="#C8733A"/>
+          <path d="M326 140 L214 102" marker-end="url(#kwkp1cAr)"/>
+          <path d="M326 182 L214 214" marker-end="url(#kwkp1cAr)"/>
+          <path d="M656 160 L544 160" marker-end="url(#kwkp1cAr)"/>
+        </g>
+
+        <text class="kwkp1cL" x="46" y="82">Asset record</text>
+        <text class="kwkp1cS" x="46" y="102">floor_id, config_version</text>
+        <text class="kwkp1cS" x="46" y="120">change log</text>
+        <text class="kwkp1cL" x="46" y="202">Model record</text>
+        <text class="kwkp1cS" x="46" y="222">model_version, params</text>
+        <text class="kwkp1cS" x="46" y="240">fitted_to config</text>
+        <text class="kwkp1cL" x="346" y="136">Hourly row</text>
+        <text class="kwkp1cK" x="346" y="156">floor_id, hour, inputs,</text>
+        <text class="kwkp1cK" x="346" y="174">reading, prior, surprise,</text>
+        <text class="kwkp1cK" x="346" y="192">config and model versions</text>
+        <text class="kwkp1cL" x="676" y="136">Decision log</text>
+        <text class="kwkp1cK" x="676" y="156">what, when, who,</text>
+        <text class="kwkp1cK" x="676" y="174">prediction relied on,</text>
+        <text class="kwkp1cK" x="676" y="192">model_version</text>
+
+        <text class="kwkp1cN" x="30" y="290">Any decision traces back: which prediction, from which model, of which configuration of the building.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper record is the one that turns a model into a twin someone can be held to.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What belongs to the data link, and what does not<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Clocks, resampling, gaps, sensor triage and missing readings are their own discipline and live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>. For a twin, the link has one extra duty: tell the twin when a reading is missing rather than filling it silently, so the twin can predict through the gap and not mistake an interpolation for evidence.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the decision log is part of the twin<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The National Academies (2024) definition ends with "informs decisions that realize value". Without a log you cannot check whether the twin's advice was any good, and you cannot tell which past decisions to revisit when a model version turns out to be wrong. Practitioner session 8 builds governance on this log.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write Kittiwake's four schemas and run one hour</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You will write the four schemas for Kittiwake's twin, then run one hour of a floor model in Python and see what heat does in an hour. The figure is the model you will code: two temperatures, three heat paths, one input.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-node model for the build-along code. Outdoors at 5 C. Room air starts at 20 C with capacity 6 kWh per kelvin; building mass starts at 19 C with capacity 20 kWh per kelvin. Heat paths: room to outdoors resistance 10, mass to outdoors 4, room to mass 0.5 kelvin per kW. 6 kW of heat into the room, in copper. One hour in four quarter-hour steps: the room ends at 20.36 C with the heat on, 19.48 C with it off.">
+        <defs>
+          <filter id="kwkp1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp1dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp1dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp1dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp1dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp1dK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp1dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp1dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp1dH" x="30" y="30">THE MODEL IN THE CODE BELOW</text>
+
+        <g filter="url(#kwkp1dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="60" width="160" height="60" rx="8" transform="rotate(-0.5 120 90)" fill="#FFFFFF"/>
+          <rect x="340" y="60" width="180" height="60" rx="8" transform="rotate(0.5 430 90)" fill="#EDF4FB"/>
+          <rect x="340" y="170" width="180" height="60" rx="8" transform="rotate(-0.5 430 200)" fill="url(#kwkp1dHc)"/>
+          <rect x="640" y="60" width="180" height="60" rx="8" transform="rotate(0.6 730 90)" fill="#C8733A"/>
+          <path d="M202 90 L336 90"/>
+          <path d="M202 104 L336 192"/>
+          <path d="M430 122 L430 166"/>
+          <path d="M636 90 L524 90" marker-end="url(#kwkp1dAr)"/>
+        </g>
+
+        <text class="kwkp1dL" x="56" y="86">Outdoors</text>
+        <text class="kwkp1dS" x="56" y="104">to = 5 C</text>
+        <text class="kwkp1dL" x="356" y="86">Room air</text>
+        <text class="kwkp1dS" x="356" y="104">ti = 20 C, Ci 6</text>
+        <text class="kwkp1dK" x="356" y="196">Mass</text>
+        <text class="kwkp1dK" x="356" y="214">tm = 19 C, Cm 20</text>
+        <text class="kwkp1dK" x="656" y="86">Heat in</text>
+        <text class="kwkp1dK" x="656" y="104">q = 6 kW</text>
+        <text class="kwkp1dA" x="240" y="80">Rio 10</text>
+        <text class="kwkp1dA" x="210" y="160">Rmo 4</text>
+        <text class="kwkp1dA" x="440" y="148">Rim 0.5</text>
+
+        <text class="kwkp1dN" x="30" y="262">After one hour: room 20.36 C with the heat on, 19.48 C with it off. Units: kWh/K and K/kW.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper input is the one the twin gets from the heat meter; everything else is physics and parameters.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the asset record</h4>
+        <p>One record per floor, keyed on the floor, with a configuration version and a change log. Copy and adapt.</p>
+        <div class="prompt-box good"><span class="label">asset.yaml</span>floor_id: KH-F4
+config_version: 3
+as_designed: drawings, 6 storeys, end floors lose 1.3x
+change_log:
+  - version: 3
+    date: (when)
+    change: radiator swapped
+    logged_by: (who)
+attached: [T-F4-01, H-F4]</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the model record</h4>
+        <p>Every parameter with value and provenance. Mark the weakly identified one.</p>
+        <div class="prompt-box good"><span class="label">model.yaml</span>model_version: 2
+structure: 2-node RC per floor (room air, mass)
+fitted_to: {floor_id: KH-F4, config_version: 3, data: week 1}
+params:
+  Ci: {value: 6.0, unit: kWh/K, from: drawings}
+  kU: {value: 1.42, from: calibration week 1}
+  kC: {value: 0.90, from: calibration week 1, note: weakly identified}
+  sensor_sd: {value: 0.4, unit: C, from: assumed}</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Write the hourly row and the decision log</h4>
+        <p>Keep inputs, the reading, and the twin's own numbers in separate, named columns, each row carrying both versions.</p>
+        <div class="prompt-box good"><span class="label">hourly_row and decision_log</span>hourly_row: floor_id, hour, to_c, sun_kw, heat_kw, timetable_kw,
+            reading_c, prior_c, surprise_c, gain, posterior_c,
+            config_version, model_version
+decision_log: decision_id, date, decision, owner,
+              prediction_relied_on, band, model_version</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Run one hour of the floor model</h4>
+        <p>Save as step.py in a scratch folder and run <code>python3 step.py</code>. These are the lines the engine uses, without the filter.</p>
+        <div class="prompt-box good"><span class="label">step.py</span># One hour of a 2-node RC floor model, explicit Euler in 4 quarter-hour steps.
+def step(ti, tm, to, q, Ci=6.0, Cm=20.0, Rim=0.5, Rio=10.0, Rmo=4.0):
+    for _ in range(4):
+        dti = ((tm - ti) / Rim + (to - ti) / Rio + q) / Ci
+        dtm = ((ti - tm) / Rim + (to - tm) / Rmo) / Cm
+        ti, tm = ti + 0.25 * dti, tm + 0.25 * dtm
+    return ti, tm
+
+# Room 20 C, mass 19 C, 5 C outside, 6 kW of heat into the room for one hour.
+ti, tm = step(20.0, 19.0, 5.0, 6.0)
+print(f"room {ti:.2f} C, mass {tm:.2f} C")
+# The same hour with no heat at all.
+ti0, tm0 = step(20.0, 19.0, 5.0, 0.0)
+print(f"no heat: room {ti0:.2f} C, mass {tm0:.2f} C")</div>
+        <div class="prompt-box good"><span class="label">Output</span>room 20.36 C, mass 18.94 C
+no heat: room 19.48 C, mass 18.91 C</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read what an hour does</h4>
+        <p>Six kilowatts for an hour moved the room by less than a degree, and the mass barely moved. Change kU by dividing Rio and Rmo by 1.4 and run again: the floor you actually have, not the one you drew. Leader session 3 is about that difference.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Every number a twin writes carries two versions: the configuration of the asset and the version of the model. Without them, no prediction can be checked later and no decision can be traced.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">What should an asset record for one of Kittiwake's floors be keyed on?</p>
+      <button class="qopt" type="button">A · The room sensor's id</button>
+      <button class="qopt" type="button">B · The model version</button>
+      <button class="qopt" type="button">C · The floor itself, with a configuration version that changes on every logged physical change</button>
+      <p class="qwhy">Sensors are replaced and models are refitted; the floor stays. The configuration version is how a later reader knows which building a model was fitted to.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">At 09:00 the twin predicted 17.42 C, the sensor read 16.44 C and the gain is 0.445 (constructed). What is the posterior?</p>
+      <button class="qopt" type="button">A · About 16.99 C: the prediction plus 0.445 times the surprise of -0.99 C</button>
+      <button class="qopt" type="button">B · 16.44 C, the sensor is always right</button>
+      <button class="qopt" type="button">C · 17.42 C, the model is always right</button>
+      <p class="qwhy">The twin moves 44.5 percent of the way toward the reading. In this hour the true room (17.14 C) was between the two.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why must the hourly row store the prior and the surprise, not only the posterior?</p>
+      <button class="qopt" type="button">A · To save space</button>
+      <button class="qopt" type="button">B · Because the surprises over time are how you detect that the model or the building changed, and the posterior has already absorbed them</button>
+      <button class="qopt" type="button">C · Because the sensor needs them</button>
+      <p class="qwhy">After correction the posterior looks fine even when the model is wrong. Practitioner session 5 detects an unlogged retrofit from the surprises alone.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 2</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>Step the widget through all 24 hours of Monday and count the hours in which the posterior was closer to the true room than the reading was. Write the count down.</li>
+      <li>Add a column to the hourly row for "reading missing", and write one sentence on what the twin should do in that hour.</li>
+      <li>In step.py, set q to 20 kW and to 0 kW and run each for 8 hours in a loop. How long does the mass take to move one degree?</li>
+      <li>For an asset you know, list what would be its configuration versions over the last five years.</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Four parts as four records</span><span class="note">AIAA and AIA (2020): model, asset, data transfer; As Designed to As Maintained. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Twin vs simulation</span><span class="note">National Academies (2024): updated with data, informs decisions. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">One hour of the twin</span><span class="note">Constructed, computed in the page: prior 17.42, reading 16.44, gain 0.445, posterior 16.99 C.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A two-node floor model</span><span class="note">The grey-box family of Bacher and Madsen (2011), Energy and Buildings 43(7). Record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Observable elements</span><span class="note">ISO 23247-1:2021, manufacturing framework. Reported; contents list read.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The gain</span><span class="note">Used tonight; derived in practitioner session 4 (Kalman 1960).</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Clocks, gaps and sensor triage</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>Four records.</strong> Asset, model, hourly row, decision log.</div>
+      <div class="cheat-item"><strong>Asset key.</strong> The physical thing plus a configuration version.</div>
+      <div class="cheat-item"><strong>Model record.</strong> Structure, version, every parameter with value and provenance.</div>
+      <div class="cheat-item"><strong>Hourly row.</strong> Inputs, reading, prior, surprise, gain, posterior, both versions.</div>
+      <div class="cheat-item"><strong>Inputs lag.</strong> The heat meter value belongs to the hour before the reading.</div>
+      <div class="cheat-item"><strong>The update.</strong> Posterior = prior + gain x (reading - prior).</div>
+      <div class="cheat-item"><strong>Estimates are not observations.</strong> The mass temperature lives in the state table, never in measurements.</div>
+      <div class="cheat-item"><strong>Constructed.</strong> Kittiwake's numbers are generated; your numbers will differ.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Physics, data or both.</strong> White box, black box and grey box: what each kind of model needs, and why a building twin usually ends up in between.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 1 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="../index.html">← All sessions</a>
+        <a href="p2-physics-data-or-both.html">Next: Physics, data or both →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwkp1-h");
+  var out = document.getElementById("kwkp1-out");
+  var verdict = document.getElementById("kwkp1-verdict");
+  var self = document.getElementById("kwkp1-self");
+  if (!sel || !out) return;
+  var W = DTW.world(1124);
+  var cal = DTW.calibrate(W, 0);
+  var p = DTW.params(0, cal.kU, cal.kC);
+  var k = DTW.kalman(W, 0, p, DTW.DEFAULTS);
+  for (var h = 1; h < 24; h++) {
+    var o = document.createElement("option");
+    o.value = String(168 + h);
+    o.textContent = (h < 10 ? "0" : "") + h + ":00";
+    sel.appendChild(o);
+  }
+  sel.value = "177";
+  function f2(x) { return x.toFixed(2); }
+  function render() {
+    var t = Number(sel.value), prior = W.meas[0][t] - k.innov[t];
+    out.innerHTML = '<table class="sql-table"><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>' +
+      "<tr><td>Inputs, previous hour: outdoor / sun / heat meter / timetable</td><td>" + f2(W.to[t - 1]) + " C / " + f2(W.sol[t - 1]) + " kW / " + f2(W.qlog[0][t - 1]) + " kW / " + f2(W.occN[t - 1]) + " kW</td></tr>" +
+      "<tr><td>Prior: the twin's prediction of the room</td><td><b>" + f2(prior) + " C</b></td></tr>" +
+      "<tr><td>Reading: the room sensor</td><td><b>" + f2(W.meas[0][t]) + " C</b></td></tr>" +
+      "<tr><td>Surprise x gain</td><td>" + f2(k.innov[t]) + " C x " + k.gain[t].toFixed(3) + "</td></tr>" +
+      "<tr><td>Posterior: the twin's new state</td><td><b>" + f2(k.ti[t]) + " C</b></td></tr>" +
+      "<tr><td>True room (constructed world only)</td><td>" + f2(W.truth[0][t]) + " C</td></tr></tbody></table>";
+    var ep = Math.abs(k.ti[t] - W.truth[0][t]), er = Math.abs(W.meas[0][t] - W.truth[0][t]), ef = Math.abs(prior - W.truth[0][t]);
+    verdict.textContent = "This hour: the posterior is " + ep.toFixed(2) + " C from the true room, the reading " + er.toFixed(2) + " C and the prior " + ef.toFixed(2) + " C. " +
+      (ep <= er ? "The blend beat the sensor this hour." : "The sensor happened to be closer this hour; over the week the blend wins.") + " Floor 1, calibrated kU " + cal.kU.toFixed(2) + ".";
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed (seed 1124). The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwkp1-hour .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp1-hour table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

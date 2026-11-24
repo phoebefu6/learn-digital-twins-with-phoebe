@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Practitioner session 2 of 10. Physics, data or both: white box, black box and grey box models of one floor of Kittiwake Hall, a constructed teaching building, and a live comparison of what happens when each has to predict a heating schedule it never saw.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Physics, data or both - learn digital twins with phoebe">
+<meta property="og:description" content="Practitioner session 2 of 10. White, black and grey box models of one floor, and where they part: the week the schedule changes.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/p2-physics-data-or-both.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Physics, data or both - learn digital twins with phoebe">
+<meta name="twitter:description" content="Three kinds of model, one floor, and the week they part ways.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Practitioner session 2 · Physics, data or both - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Practitioner session 2 of 10</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Practitioner session 2 of 10</div>
+    <h1>Physics, data or <span class="accent">both</span></h1>
+    <p class="sub">Every twin has a model inside it, and that model was built one of three ways: from physics alone, from data alone, or from physics with a few numbers fitted to data. On a normal week all three can look fine. Tonight you watch them part on Kittiwake Hall, a constructed six-storey teaching building, in the week its facilities team switches on a night setback the records have never seen. Then you fit a grey-box parameter yourself in twenty lines of Python.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Data scientists choosing a model for a twin</span>
+      <span class="chip audience">Engineers who own the physics</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-13 · Three boxes</span>
+      <span class="a3" style="flex:3">13-23 · Where they part, and choosing</span>
+      <span class="a4" style="flex:5">23-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The model inside Kittiwake's twin</h2>
+    </div>
+    <p class="lede">Last session gave Kittiwake Hall (constructed) a model record: structure, version, parameters, provenance. Tonight is about the first field of that record. Is the structure physics someone wrote down, a pattern a fitting routine found, or physics with a few values learned from the meters? The answer decides what the twin can be trusted to say about a schedule nobody has run yet, which is the only question the facilities team really cares about.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A clear picture of white, black and grey box models and what each one needs: drawings, data, or both. A live comparison on Kittiwake floor 1 in which a regression that looks good in the week it learned from falls apart in the setback week, while the grey box holds. A decision grid you can use on your own asset. And a Python grey-box fit that finds a heat-loss multiplier from a noisy two-day record.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three ways to build the model<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A <strong>white box</strong> model is written from first principles: walls, windows and air volumes go in, equations come out, and every number comes from the drawings. A <strong>black box</strong> model knows no physics at all: it learns a mapping from inputs to the next reading from whatever data it is given. A <strong>grey box</strong> keeps the physical structure and lets the data set a few of its values. The difference that matters in a twin is not accuracy on last week. It is what each one does when tomorrow looks unlike anything in its record.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) position paper on digital twins says the virtual representation can be driven purely by data, purely by physics, or by a hybrid of the two. It does not rank them. That choice is left to whoever builds the twin, which is why it belongs in the model record with a reason next to it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Words for tonight<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>RC network.</strong> A building drawn as an electrical circuit: thermal resistances (R) for heat paths, capacitances (C) for things that store heat. Kittiwake's twin uses two nodes per floor, room air and building mass.</li>
+          <li><strong>Open loop.</strong> Run the model forward on its own predictions, with no sensor correction. Tonight every model runs open loop, so you see the model and not the filter.</li>
+          <li><strong>One-step-ahead.</strong> Predict the next hour from the real current reading. Easy to score well on; it hides how errors compound.</li>
+          <li><strong>Interpolation.</strong> Predicting inside the range of conditions the model was fitted on.</li>
+          <li><strong>Extrapolation.</strong> Predicting outside it: a new schedule, a colder week, a retrofit.</li>
+          <li><strong>Identifiable.</strong> A parameter the data can pin down. Practitioner session 3 shows a week of data pins down heat loss but not thermal mass.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers white, black and grey box models</span>
+      <h2>White box, black box, grey box</h2>
+      <span class="tag concept">10 min live</span>
+    </div>
+    <p class="lede">Here are the three models of the same floor, Kittiwake floor 1, drawn side by side. The white box and the grey box have the same circuit; they differ only in where two numbers came from. The black box has no circuit at all, just six weights learned from a week of hourly rows.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of three models of Kittiwake floor 1, constructed. Left, the white box: room air and building mass nodes joined to the outdoors, capacities 6 and 20 kWh per kelvin, heat-loss and mass multipliers kU and kC both 1.0 as drawn; it needs the drawings. Middle, the black box: the current reading, outdoor temperature, heat meter, sun and timetable feed six weights that output the next reading, with no walls and no mass; it needs data covering the case. Right, the grey box: the same circuit as the white box, with kU 1.50 and kC 1.62 fitted on week 1, in copper; it needs both.">
+        <defs>
+          <filter id="kwkp2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp2aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp2aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp2aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp2aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp2aH" x="30" y="30">ONE FLOOR, THREE MODELS (KITTIWAKE FLOOR 1, CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp2aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panels -->
+          <rect x="30" y="50" width="260" height="292" rx="10" transform="rotate(-0.4 160 196)" fill="#FFFFFF"/>
+          <rect x="310" y="50" width="260" height="292" rx="10" transform="rotate(0.3 440 196)" fill="#FFFFFF"/>
+          <rect x="590" y="50" width="260" height="292" rx="10" transform="rotate(-0.3 720 196)" fill="#EDF4FB"/>
+          <!-- white box circuit -->
+          <rect x="46" y="100" width="104" height="36" rx="6" fill="#EDF4FB"/>
+          <rect x="46" y="166" width="104" height="36" rx="6" fill="#EDF4FB"/>
+          <rect x="190" y="132" width="86" height="36" rx="6" fill="#FFFFFF"/>
+          <path d="M152 118 L188 142"/>
+          <path d="M152 184 L188 160"/>
+          <path d="M98 138 L98 164"/>
+          <!-- black box -->
+          <rect x="326" y="96" width="110" height="112" rx="6" fill="url(#kwkp2aHc)"/>
+          <rect x="460" y="130" width="96" height="40" rx="6" fill="#FFFFFF"/>
+          <path d="M438 150 L456 150" marker-end="url(#kwkp2aAr)"/>
+          <path d="M508 172 L508 196" marker-end="url(#kwkp2aAr)"/>
+          <!-- grey box circuit -->
+          <rect x="606" y="100" width="104" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="606" y="166" width="104" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="750" y="132" width="86" height="36" rx="6" fill="#FFFFFF"/>
+          <path d="M712 118 L748 142"/>
+          <path d="M712 184 L748 160"/>
+          <path d="M658 138 L658 164"/>
+          <rect x="606" y="216" width="230" height="46" rx="6" transform="rotate(-0.6 721 239)" fill="#C8733A"/>
+          <!-- doodle: a thermometer -->
+          <rect x="838" y="12" width="10" height="24" rx="5" fill="#FFFFFF"/>
+          <circle cx="843" cy="40" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp2aL" x="46" y="80">White box: physics only</text>
+        <text class="kwkp2aK" x="58" y="122">room air</text>
+        <text class="kwkp2aK" x="58" y="188">mass</text>
+        <text class="kwkp2aK" x="202" y="154">outdoors</text>
+        <text class="kwkp2aK" x="46" y="236">Ci 6, Cm 20 kWh/K</text>
+        <text class="kwkp2aK" x="46" y="254">kU 1.0, kC 1.0: as drawn</text>
+        <text class="kwkp2aS" x="46" y="282">every value from the drawings</text>
+        <text class="kwkp2aA" x="46" y="322">needs: the drawings</text>
+
+        <text class="kwkp2aL" x="326" y="80">Black box: data only</text>
+        <text class="kwkp2aK" x="336" y="120">reading now</text>
+        <text class="kwkp2aK" x="336" y="138">outdoor</text>
+        <text class="kwkp2aK" x="336" y="156">heat meter</text>
+        <text class="kwkp2aK" x="336" y="174">sun</text>
+        <text class="kwkp2aK" x="336" y="192">timetable</text>
+        <text class="kwkp2aK" x="472" y="155">6 weights</text>
+        <text class="kwkp2aK" x="466" y="214">next reading</text>
+        <text class="kwkp2aS" x="326" y="254">no walls, no mass</text>
+        <text class="kwkp2aS" x="326" y="272">fitted by least squares</text>
+        <text class="kwkp2aA" x="326" y="322">needs: data covering the case</text>
+
+        <text class="kwkp2aL" x="606" y="80">Grey box: physics + data</text>
+        <text class="kwkp2aK" x="618" y="122">room air</text>
+        <text class="kwkp2aK" x="618" y="188">mass</text>
+        <text class="kwkp2aK" x="762" y="154">outdoors</text>
+        <text class="kwkp2aK" x="618" y="236">kU 1.50, kC 1.62</text>
+        <text class="kwkp2aK" x="618" y="252">fitted on week 1</text>
+        <text class="kwkp2aS" x="606" y="282">same circuit, two numbers learned</text>
+        <text class="kwkp2aA" x="606" y="322">needs: drawings and data</text>
+
+        <text class="kwkp2aN" x="30" y="370">AIAA and AIA (2020): a model can be data-driven, physics-based or hybrid. True floor 1: kU 1.42, kC 0.85.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the whole difference between white and grey: two numbers that came from the meters instead of the drawings.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What each one needs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>White box: the drawings.</strong> No data at all, which is why it is the only option before a building is occupied. The price is the as-built gap: Kittiwake's real floors lose heat 1.15 to 1.45 times faster than the drawings say, and the design-spec twin is off by 2.35 to 5.81 C per floor in the setback week (constructed). Leader session 3 is about that gap.</p>
+        <p><strong>Black box: data, and the right data.</strong> No drawings, no physics, no engineer. It needs hourly records that already contain the conditions you will ask it about, because it has no other way to know what they do.</p>
+        <p><strong>Grey box: both.</strong> The drawings fix the shape (two nodes, three heat paths); the data sets the few values the drawings got wrong. Fewer numbers to fit than a black box, and every one of them means something you can check on site.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A grey box in the literature<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Bacher and Madsen (2011), in Energy and Buildings, set out a procedure for choosing a grey-box model of a building's heat dynamics. As reported in summaries of the paper, the models are stochastic differential equations with RC structure, and the procedure starts small and adds nodes one at a time, keeping a bigger model only when a likelihood-ratio test says the data supports it. Kittiwake's two-node twin is a small member of that family.</p>
+        </div>
+        <p>The point to carry: grey box is not "a bit of physics sprinkled on machine learning". It is a physical model whose parameters are estimated statistically, with a rule for when the data justifies more structure.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where neural surrogates sit<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A neural network trained to imitate a simulator, or to learn a building straight from its meters, is a black box with more capacity. More capacity helps it fit what it has seen; it does not tell it anything about what it has not. Physics-informed variants put equations back in the loss and move toward grey. They are named here only; the same question decides whether to trust one: was the regime you are asking about in its training data, or in its structure?</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers interpolation, extrapolation and the setback week</span>
+      <h2>Extrapolation is where they part</h2>
+      <span class="tag concept">7 min live</span>
+    </div>
+    <p class="lede">In week 1 Kittiwake runs its normal schedule: 21 C on weekday days, 19 C otherwise. In week 2 the real building turns on a night setback to 15 C. Fit the black box on week 1 only, give the grey box its week-1 calibration, and run all three forward through both weeks with no sensor correction. The widget does it in your browser.</p>
+
+    <div class="wk" id="kwkp2-box">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Synthetic and constructed (seed 1124): Kittiwake Hall, 14 days hourly, week 1 normal heating, week 2 a 15 C night setback. White box: the drawings' parameters, open loop. Black box: least squares on week 1 only (hours 24 to 168), predicting the next reading from a constant, the current reading, outdoor temperature, heat meter, sun and timetable, then run on its own predictions through both weeks. Grey box: the engine's week-1 grid-search calibration of kU and kC, open loop. Errors are against the true room, which exists only because the world is constructed.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwkp2-f">Floor</label>
+        <select class="sql-code" id="kwkp2-f">
+          <option value="0" selected>Floor 1 (end floor)</option>
+          <option value="1">Floor 2</option>
+          <option value="2">Floor 3</option>
+          <option value="3">Floor 4</option>
+          <option value="4">Floor 5</option>
+          <option value="5">Floor 6 (end floor)</option>
+        </select>
+        <div id="kwkp2-out"></div>
+        <p class="sql-note" id="kwkp2-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwkp2-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading floor 1<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Week 1, the week everyone tests on.</strong> The white box is 4.314 C off the true room: the drawings are wrong about this floor. The black box is 0.414 C off and the grey box 0.257 C. If you stopped here, the regression looks nearly as good as the physics, with no engineer needed.</p>
+        <p><strong>Week 2, the week that matters.</strong> The grey box goes to 0.545 C. The black box goes to 2.133 C, five times its week-1 error. The white box, still carrying the drawings' error, goes to 5.657 C. Pick another floor: the black box's week-2 error sits between 1.908 and 2.245 C on every floor, the grey box's between 0.295 and 0.620 C. Your numbers will differ on another world; the shape is the lesson.</p>
+        <p><strong>Not every floor is a clean win.</strong> On floor 2 the drawings happen to be closer, and the black box (2.080 C) edges the white box (2.352 C) in week 2. The grey box still beats both. The data can rescue the physics, and the physics can rescue the data; neither alone is safe.</p>
+      </div>
+    </details>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn temperature ranges for Kittiwake floor 1, constructed, on an axis from 11 to 22 C. The true room in week 1, the training week, ranged from 16.5 to 20.5 C. In week 2, the setback week, it ranged from 12.9 to 19.5 C; the part from 12.9 to 16.5 C, in copper, is below anything the regression was trained on. The building mass, which no sensor reads, was estimated at 13.7 to 17.0 C in week 1 and 11.8 to 14.1 C in week 2, mostly outside its week-1 range. Setpoints marked: setback 15, night 19, day 21.">
+        <defs>
+          <filter id="kwkp2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="33" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp2bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp2bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp2bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp2bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp2bH" x="30" y="30">WHAT THE REGRESSION SAW, AND WHAT IT WAS ASKED (FLOOR 1, CONSTRUCTED)</text>
+
+        <g filter="url(#kwkp2bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- room, week 1: 16.50 to 20.53 -->
+          <rect x="450" y="56" width="212" height="30" rx="5" transform="rotate(-0.4 556 71)" fill="url(#kwkp2bHc)"/>
+          <!-- room, week 2: 12.90 to 19.50, copper below 16.50 -->
+          <rect x="234" y="106" width="396" height="30" rx="5" transform="rotate(0.3 432 121)" fill="#FFFFFF"/>
+          <rect x="234" y="106" width="216" height="30" rx="5" transform="rotate(0.3 342 121)" fill="#C8733A"/>
+          <!-- mass, week 1: 13.73 to 16.99 -->
+          <rect x="284" y="186" width="196" height="30" rx="5" transform="rotate(-0.3 382 201)" fill="url(#kwkp2bHc)"/>
+          <!-- mass, week 2: 11.82 to 14.12 -->
+          <rect x="169" y="236" width="138" height="30" rx="5" transform="rotate(0.4 238 251)" fill="#FFFFFF"/>
+          <!-- axis -->
+          <path d="M120 300 L790 300"/>
+          <path d="M120 294 L120 306 M180 294 L180 306 M240 294 L240 306 M300 294 L300 306 M360 294 L360 306 M420 294 L420 306 M480 294 L480 306 M540 294 L540 306 M600 294 L600 306 M660 294 L660 306 M720 294 L720 306 M780 294 L780 306"/>
+          <!-- doodle: a thermometer -->
+          <rect x="838" y="12" width="10" height="24" rx="5" fill="#FFFFFF"/>
+          <circle cx="843" cy="40" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwkp2bL" x="690" y="70">Room, week 1</text>
+        <text class="kwkp2bS" x="690" y="86">trained on: 16.5 to 20.5 C</text>
+        <text class="kwkp2bK" x="244" y="125">below anything in week 1</text>
+        <text class="kwkp2bL" x="690" y="120">Room, week 2</text>
+        <text class="kwkp2bS" x="690" y="136">asked about: 12.9 to 19.5 C</text>
+        <text class="kwkp2bA" x="30" y="170">THE NODE NO SENSOR READS</text>
+        <text class="kwkp2bL" x="690" y="200">Mass, week 1</text>
+        <text class="kwkp2bS" x="690" y="216">13.7 to 17.0 C (estimated)</text>
+        <text class="kwkp2bL" x="690" y="250">Mass, week 2</text>
+        <text class="kwkp2bS" x="690" y="266">11.8 to 14.1 C (estimated)</text>
+
+        <text class="kwkp2bA" x="114" y="322">11</text>
+        <text class="kwkp2bA" x="234" y="322">13</text>
+        <text class="kwkp2bA" x="354" y="322">15</text>
+        <text class="kwkp2bA" x="474" y="322">17</text>
+        <text class="kwkp2bA" x="594" y="322">19</text>
+        <text class="kwkp2bA" x="714" y="322">21</text>
+        <text class="kwkp2bA" x="800" y="322">C</text>
+        <text class="kwkp2bS" x="326" y="340">setback 15</text>
+        <text class="kwkp2bS" x="574" y="340">night 19</text>
+        <text class="kwkp2bS" x="700" y="340">day 21</text>
+
+        <text class="kwkp2bN" x="30" y="370">The regression was fitted where the copper region never happened, and the mass it cannot see left its range.</text>
+        <text class="kwkp2bN" x="30" y="388">Mass ranges are the grey box's open-loop estimate; true room ranges are the constructed world's.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper stretch is the setback week's cold nights, a region the black box never saw and the physics never needed to.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the black box breaks: two mechanisms<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>It never saw the regime.</strong> In week 1 floor 1's room never went below 16.5 C. In the setback week it reaches 12.9 C. A regression is a summary of the rows it was fitted on; outside them it is a guess with the confidence of a formula.</p>
+        <p><strong>It cannot see the hidden state.</strong> The widget prints the fitted weights: on floor 1 the regression keeps about half of the current reading (weight 0.525) and adds a constant of about 7.08 C. That constant is quietly standing in for the building mass, which sat in one band all of week 1. In week 2 the mass cools by a couple of degrees, and a constant cannot follow it. The grey box carries the mass as a state, so it can.</p>
+        <p>Both mechanisms have the same fix: either put the regime into the training data, or put the physics into the model.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The trap of scoring one step ahead<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Score the same regression one hour ahead, feeding it the real reading each hour, and it looks much better, because every hour starts from the truth plus sensor noise. A twin asked "what will this schedule use next week?" never gets those readings: it runs on its own predictions for a week. Score the model the way it will be used. The widget runs every model open loop for exactly that reason.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report concludes that verification, validation and uncertainty quantification for twins must be continual and adapt to changes in the physical counterpart. A schedule change is such a change. A model validated on the old schedule is validated on the old schedule, and the check has to be run again.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers choosing a model for the job</span>
+      <h2>Choosing</h2>
+      <span class="tag concept">3 min live</span>
+    </div>
+    <p class="lede">Two questions settle most of it. What do you have: drawings, data, or both? And will the twin be asked about conditions outside its record: a new schedule, a retrofit, a colder winter? The grid answers both at once.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn decision grid. Columns: drawings only, data only, both. Rows: the twin is asked about the same schedule as its data, or about a new schedule it must extrapolate to. Same schedule: white box then measure; black box can be fine because it interpolates; grey or black box. New schedule: white box with a wide band; data only is the risky cell in red, the regime is not in the data; with both, grey box, in copper.">
+        <defs>
+          <filter id="kwkp2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="35" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp2cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp2cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp2cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp2cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp2cH" x="30" y="30">WHICH MODEL, GIVEN WHAT YOU HAVE AND WHAT YOU WILL ASK</text>
+        <text class="kwkp2cA" x="210" y="66">DRAWINGS ONLY</text>
+        <text class="kwkp2cA" x="430" y="66">DATA ONLY</text>
+        <text class="kwkp2cA" x="650" y="66">BOTH</text>
+
+        <g filter="url(#kwkp2cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="200" y="80" width="206" height="90" rx="8" transform="rotate(-0.4 303 125)" fill="#FFFFFF"/>
+          <rect x="420" y="80" width="206" height="90" rx="8" transform="rotate(0.4 523 125)" fill="#EDF4FB"/>
+          <rect x="640" y="80" width="206" height="90" rx="8" transform="rotate(-0.3 743 125)" fill="#EDF4FB"/>
+          <rect x="200" y="186" width="206" height="90" rx="8" transform="rotate(0.3 303 231)" fill="#FFFFFF"/>
+          <rect x="420" y="186" width="206" height="90" rx="8" transform="rotate(-0.4 523 231)" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="640" y="186" width="206" height="90" rx="8" transform="rotate(0.4 743 231)" fill="#C8733A"/>
+          <!-- doodle: a building -->
+          <rect x="40" y="250" width="34" height="44" rx="2" fill="#FFFFFF"/>
+          <path d="M48 260 L54 260 M60 260 L66 260 M48 272 L54 272 M60 272 L66 272 M48 284 L54 284 M60 284 L66 284"/>
+        </g>
+
+        <text class="kwkp2cL" x="30" y="114">Same schedule</text>
+        <text class="kwkp2cL" x="30" y="130">as the data</text>
+        <text class="kwkp2cL" x="30" y="220">New schedule:</text>
+        <text class="kwkp2cL" x="30" y="236">must extrapolate</text>
+
+        <text class="kwkp2cL" x="214" y="106">White box, then measure</text>
+        <text class="kwkp2cS" x="214" y="126">the drawings are a prior,</text>
+        <text class="kwkp2cS" x="214" y="142">not evidence</text>
+        <text class="kwkp2cL" x="434" y="106">Black box can be fine</text>
+        <text class="kwkp2cS" x="434" y="126">interpolation, with plenty</text>
+        <text class="kwkp2cS" x="434" y="142">of rows like tomorrow</text>
+        <text class="kwkp2cL" x="654" y="106">Grey box or black box</text>
+        <text class="kwkp2cS" x="654" y="126">grey if you must explain</text>
+        <text class="kwkp2cS" x="654" y="142">the parameters</text>
+
+        <text class="kwkp2cL" x="214" y="212">White box, wide band</text>
+        <text class="kwkp2cS" x="214" y="232">physics extrapolates,</text>
+        <text class="kwkp2cS" x="214" y="248">wrong values come along</text>
+        <text class="kwkp2cL" x="434" y="212">Risky</text>
+        <text class="kwkp2cK" x="434" y="232">the regime is not in</text>
+        <text class="kwkp2cK" x="434" y="248">the data; collect it first</text>
+        <text class="kwkp2cL" x="654" y="212">Grey box</text>
+        <text class="kwkp2cK" x="654" y="232">structure from physics,</text>
+        <text class="kwkp2cK" x="654" y="248">values from the meters</text>
+
+        <text class="kwkp2cN" x="30" y="316">Kittiwake's setback trial is the copper cell: drawings, a week of data, and a schedule never run.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper cell is where most building twins live: they exist to answer "what if we ran it differently?".</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Hybrid models in practice<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most working building twins sit in the copper cell, and "hybrid" covers more than grey box. Two common shapes: a physical model with fitted parameters (tonight's grey box), and a physical model with a data-driven correction trained on its residuals. The second is only as safe as the residual model is on the new regime, so the same extrapolation question applies to the correction.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report concludes a twin should be defined at a fidelity and resolution that make it fit for purpose. Read that as a model-choice rule: the question the twin must answer decides how much physics it needs, not the other way round.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>When a black box is fine<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When the twin is only asked about conditions well inside its record, and the record is long. A model that forecasts tomorrow's load under the same schedule, trained on several winters, is interpolating, and a black box may well beat a hand-tuned physical model there. Forecasting methods for that job, and how to test them honestly, live in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time-series forecasting</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Physics gives you parameters you can audit<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A grey box's fitted kU of 1.50 on floor 1 says something about the building: this floor loses heat about one and a half times faster than drawn (constructed; true 1.42). A facilities engineer can go and look for the reason. The black box's weight of 0.525 on the current reading says nothing anyone can check on site. Leader session 3 builds on this: the gap between the drawn and the built building is itself a finding, and only a physical model gives it a name.</p>
+        <p>The grey box's kC of 1.62 against a true 0.85 is a warning, not a finding. A week of data could not pin the mass down. Practitioner session 3 shows why, and why the twin still predicted the setback week well.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ BUILD-ALONG ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Fit a grey box in Python</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You will build a grey box from scratch: the physics is fixed, one number is unknown, and the data finds it. To see whether the fit works you need to know the answer, so you generate a toy two-day record from a known heat-loss multiplier, add sensor noise, and check the search gets it back. The figure is the loop you will write.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn fit loop. Guess kU from 0.80 to 2.00; simulate 48 hours with the step function; compare to the noisy record as RMSE; keep the guess if it is the smallest so far. A path returns to the next guess in steps of 0.05. After 25 guesses, in copper: best kU 1.30 against a true 1.30, RMSE 0.345 C.">
+        <defs>
+          <filter id="kwkp2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkp2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkp2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkp2dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkp2dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkp2dK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkp2dA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwkp2dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwkp2dH" x="30" y="28">THE FIT LOOP IN THE CODE BELOW</text>
+        <text class="kwkp2dA" x="330" y="58">next kU, 0.05 higher</text>
+
+        <g filter="url(#kwkp2dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="90" width="180" height="60" rx="8" transform="rotate(-0.5 120 120)" fill="#FFFFFF"/>
+          <rect x="240" y="90" width="180" height="60" rx="8" transform="rotate(0.4 330 120)" fill="#EDF4FB"/>
+          <rect x="450" y="90" width="180" height="60" rx="8" transform="rotate(-0.4 540 120)" fill="url(#kwkp2dHc)"/>
+          <rect x="660" y="90" width="180" height="60" rx="8" transform="rotate(0.5 750 120)" fill="#FFFFFF"/>
+          <rect x="610" y="196" width="230" height="56" rx="8" transform="rotate(-0.6 725 224)" fill="#C8733A"/>
+          <path d="M212 120 L236 120" marker-end="url(#kwkp2dAr)"/>
+          <path d="M422 120 L446 120" marker-end="url(#kwkp2dAr)"/>
+          <path d="M632 120 L656 120" marker-end="url(#kwkp2dAr)"/>
+          <path d="M750 88 L750 66 L120 66 L120 86" marker-end="url(#kwkp2dAr)"/>
+          <path d="M750 152 L750 192" marker-end="url(#kwkp2dAr)"/>
+          <!-- doodle: a radiator -->
+          <path d="M40 210 L40 250 M52 210 L52 250 M64 210 L64 250 M76 210 L76 250 M34 214 L82 214 M34 246 L82 246"/>
+        </g>
+
+        <text class="kwkp2dL" x="44" y="114">Guess kU</text>
+        <text class="kwkp2dS" x="44" y="132">0.80 to 2.00</text>
+        <text class="kwkp2dL" x="254" y="114">Simulate 48 h</text>
+        <text class="kwkp2dS" x="254" y="132">step() with that kU</text>
+        <text class="kwkp2dL" x="464" y="114">Compare</text>
+        <text class="kwkp2dK" x="464" y="132">RMSE vs the record</text>
+        <text class="kwkp2dL" x="674" y="114">Keep if smallest</text>
+        <text class="kwkp2dS" x="674" y="132">so far</text>
+
+        <text class="kwkp2dL" x="626" y="220">After 25 guesses: kU 1.30</text>
+        <text class="kwkp2dK" x="626" y="238">true 1.30, RMSE 0.345 C</text>
+
+        <text class="kwkp2dS" x="110" y="222">the physics never changes;</text>
+        <text class="kwkp2dS" x="110" y="240">one number is searched</text>
+
+        <text class="kwkp2dN" x="30" y="276">The record is toy data generated with kU 1.30 and sensor noise sd 0.4 C, seeded so the run repeats.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the whole output of a grey-box fit: a physical number, found from data, that you can check against the building.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Write the one-hour step function</h4>
+        <p>This is practitioner session 1's step function with one change: the two heat paths to outdoors are multiplied by kU, the heat-loss multiplier you will fit. Everything else stays from the drawings.</p>
+        <div class="prompt-box good"><span class="label">fit.py, part 1</span># Grey-box fit: the physics is fixed, one parameter (kU) is found from data.
+import random
+
+def step(ti, tm, to, q, kU, Ci=6.0, Cm=20.0, Rim=0.5, Rio=10.0, Rmo=4.0):
+    for _ in range(4):
+        dti = ((tm - ti) / Rim + (to - ti) * kU / Rio + q) / Ci
+        dtm = ((ti - tm) / Rim + (to - tm) * kU / Rmo) / Cm
+        ti, tm = ti + 0.25 * dti, tm + 0.25 * dtm
+    return ti, tm</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Generate a toy two-day record with a known answer</h4>
+        <p>Fixed inputs you choose: a still 5 C outside, 8 kW of heat from 07:00 to 19:00. The "real" floor has kU 1.3. Add sensor noise from a seeded generator so everyone gets the same record.</p>
+        <div class="prompt-box good"><span class="label">fit.py, part 2</span>def simulate(kU, hours=48):
+    ti, tm, out = 20.0, 19.0, [20.0]
+    for h in range(hours):
+        to = 5.0                              # a still, cold two days
+        q = 8.0 if 7 &lt;= h % 24 &lt; 19 else 0.0  # heat on 07:00 to 19:00
+        ti, tm = step(ti, tm, to, q, kU)
+        out.append(ti)
+    return out
+
+# A toy record with a known answer: kU = 1.3, plus sensor noise.
+rng = random.Random(1)
+record = [t + rng.gauss(0.0, 0.4) for t in simulate(1.3)]</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Grid-search kU from 0.8 to 2.0</h4>
+        <p>Twenty-five guesses, 0.05 apart. For each, simulate the two days and measure how far the simulation is from the record. Print every fourth guess so you can see the error fall and rise.</p>
+        <div class="prompt-box good"><span class="label">fit.py, part 3</span>def rmse(a, b):
+    return (sum((x - y) ** 2 for x, y in zip(a, b)) / len(a)) ** 0.5
+
+best = None
+for i in range(25):                           # kU from 0.80 to 2.00 by 0.05
+    kU = round(0.8 + 0.05 * i, 2)
+    r = rmse(simulate(kU), record)
+    if best is None or r &lt; best[1]:
+        best = (kU, r)
+    if i % 4 == 0:
+        print(f"kU {kU:.2f}  rmse {r:.3f} C")</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Print the best kU and run it</h4>
+        <p>Save all three parts as fit.py in a scratch folder and run <code>python3 fit.py</code>. This is the exact output of that file.</p>
+        <div class="prompt-box good"><span class="label">fit.py, part 4</span>print(f"best kU {best[0]:.2f}, rmse {best[1]:.3f} C (true kU 1.30)")</div>
+        <div class="prompt-box good"><span class="label">Output</span>kU 0.80  rmse 1.986 C
+kU 1.00  rmse 1.146 C
+kU 1.20  rmse 0.456 C
+kU 1.40  rmse 0.539 C
+kU 1.60  rmse 1.138 C
+kU 1.80  rmse 1.733 C
+kU 2.00  rmse 2.291 C
+best kU 1.30, rmse 0.345 C (true kU 1.30)</div>
+      </div></div>
+      <div class="step"><div>
+        <h4>Read it</h4>
+        <p>The search found the true 1.30. The error is a valley: steep on both sides, lowest at the answer. Notice the best RMSE, 0.345 C, is about the size of the sensor noise you added; a fit cannot get much below the noise without fitting the noise itself. Now break it: change the seed, or set the noise to 1.0, or fit on 12 hours instead of 48, and watch how sure the valley stays. Run it and read the output; your numbers will differ. Practitioner session 3 adds the second parameter, kC, and finds a valley that is not a valley.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Before you trust a fitting routine on real data, run it on toy data where you know the answer. If it cannot find a number you planted, it will not find the one in the building.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Kittiwake switches on a 15 C night setback that never appeared in its week-1 record. Which model held up best on floor 1 (constructed)?</p>
+      <button class="qopt" type="button">A · The black box, because it was the most accurate in week 1</button>
+      <button class="qopt" type="button">B · The white box, because physics always extrapolates correctly</button>
+      <button class="qopt" type="button">C · The grey box: physical structure that extrapolates, with heat loss fitted to the real floor (0.545 C in week 2, against 2.133 C for the black box)</button>
+      <p class="qwhy">The black box was close in week 1 and five times worse in week 2. The white box extrapolates, but carries the drawings' wrong values with it (5.657 C). The grey box has both the structure and the fitted values.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">What does a grey-box model fit from data?</p>
+      <button class="qopt" type="button">A · A few physically meaningful parameters inside a structure fixed by physics, such as the heat-loss multiplier kU</button>
+      <button class="qopt" type="button">B · The structure of the model, from scratch</button>
+      <button class="qopt" type="button">C · Nothing; it is the drawings with noise added</button>
+      <p class="qwhy">The circuit comes from physics; the data sets values like kU and kC. That is why a fitted kU of 1.50 can be checked on site and a regression weight cannot.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why does a black box need the regime you will ask about in its training data?</p>
+      <button class="qopt" type="button">A · Because least squares cannot fit more than six weights</button>
+      <button class="qopt" type="button">B · Because it has no physics to tell it what happens outside the rows it saw, and it cannot see hidden states like the mass that shift in a new regime</button>
+      <button class="qopt" type="button">C · Because black boxes cannot be run open loop</button>
+      <p class="qwhy">The regression summarises week 1. Its constant stood in for a mass that sat in one band; in the setback week the mass cooled and the constant could not follow.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 3</span>
+      <h2>Homework</h2>
+    </div>
+    <ol>
+      <li>Step the widget through all six floors and write down each model's week-2 error. On which floor is the white box closest to the grey box, and what does that say about that floor's drawings?</li>
+      <li>In fit.py, fit on the first 12 hours of the record only (slice both lists) and run it again. Does the search still find 1.30? Write down what changed in the printed errors.</li>
+      <li>Change the heat in simulate() to 8 kW all day and night, so the record has no switch-off. Fit again and explain in one sentence why the answer moved, or did not.</li>
+      <li>For a model you use at work, place it on the decision grid: what do you have, and will it be asked about conditions outside its record?</li>
+    </ol>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Data-driven, physics-based or hybrid</span><span class="note">AIAA and AIA (2020) position paper. Read at source; paraphrased.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Grey-box building models</span><span class="note">Bacher and Madsen (2011), Energy and Buildings 43(7). Record read; method reported.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Fit for purpose; continual VVUQ</span><span class="note">National Academies (2024). Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">White, black and grey box on one floor</span><span class="note">Constructed, computed in the page: floor 1 week 2 errors 5.657, 2.133 and 0.545 C.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A grey-box fit by grid search</span><span class="note">Toy record, run with python3: kU 1.30 recovered.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Identifiability of thermal mass</span><span class="note">Named tonight; taught in practitioner session 3.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Neural surrogates</span><span class="note">Named only.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Forecasting methods</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-timeseries-forecasting-with-phoebe/">learn time-series forecasting</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>White box.</strong> Physics only; every value from the drawings. Needs no data, inherits the as-built gap.</div>
+      <div class="cheat-item"><strong>Black box.</strong> Data only; no structure. Fine inside its record, a guess outside it.</div>
+      <div class="cheat-item"><strong>Grey box.</strong> Physical structure, a few parameters fitted from data. Needs both.</div>
+      <div class="cheat-item"><strong>Score it as you use it.</strong> Open loop for planning; one-step-ahead flatters.</div>
+      <div class="cheat-item"><strong>Extrapolation test.</strong> Hold out a week unlike the training week, never a random sample.</div>
+      <div class="cheat-item"><strong>Hidden states.</strong> What no sensor reads (the mass) a regression folds into a constant.</div>
+      <div class="cheat-item"><strong>Audit the parameters.</strong> A fitted kU means something on site; a regression weight does not.</div>
+      <div class="cheat-item"><strong>Plant an answer.</strong> Test any fit on toy data with a known value first. Kittiwake is constructed; your numbers will differ.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Calibrating a model to measurements.</strong> Two parameters, one week of data: why the search pins down heat loss and loses the thermal mass, and how not to overfit the calibration week.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Practitioner session 2 of 10 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="p1-anatomy-of-a-twin.html">← Prev: Anatomy of a twin</a>
+        <a href="p3-calibrating-a-model-to-measurements.html">Next: Calibrating a model to measurements →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwkp2-f");
+  var out = document.getElementById("kwkp2-out");
+  var verdict = document.getElementById("kwkp2-verdict");
+  var self = document.getElementById("kwkp2-self");
+  if (!sel || !out) return;
+  var W = DTW.world(1124), n = W.n, W1 = 25, W2 = 168;
+
+  function rmse(a, T, lo, hi) { var s = 0, k = 0; for (var i = lo; i < hi; i++) { var e = a[i] - T[i]; s += e * e; k++; } return Math.sqrt(s / k); }
+  function openLoop(f, p) {
+    var x = [W.meas[f][0], W.meas[f][0]], o = [x[0]];
+    for (var i = 0; i < n - 1; i++) { x = DTW.step(p, x, W.to[i], W.qlog[f][i] + W.sol[i] + W.occN[i]); o.push(x[0]); }
+    return o;
+  }
+  function feat(f, y, i) { return [1, y, W.to[i], W.qlog[f][i], W.sol[i], W.occN[i]]; }
+  // Least squares by the normal equations, solved with partial pivoting. Week 1 only: hours 24 to 168.
+  function fitBlack(f) {
+    var m = 6, A = [], b = [], r, c, k, t;
+    for (r = 0; r < m; r++) { A.push([0, 0, 0, 0, 0, 0]); b.push(0); }
+    for (t = 24; t < 168; t++) {
+      var z = feat(f, W.meas[f][t], t), y = W.meas[f][t + 1];
+      for (r = 0; r < m; r++) { b[r] += z[r] * y; for (c = 0; c < m; c++) A[r][c] += z[r] * z[c]; }
+    }
+    for (k = 0; k < m; k++) {
+      var pv = k;
+      for (r = k + 1; r < m; r++) if (Math.abs(A[r][k]) > Math.abs(A[pv][k])) pv = r;
+      var tA = A[k]; A[k] = A[pv]; A[pv] = tA; var tb = b[k]; b[k] = b[pv]; b[pv] = tb;
+      for (r = k + 1; r < m; r++) { var fc = A[r][k] / A[k][k]; for (c = k; c < m; c++) A[r][c] -= fc * A[k][c]; b[r] -= fc * b[k]; }
+    }
+    var w = [0, 0, 0, 0, 0, 0];
+    for (k = m - 1; k >= 0; k--) { var s = b[k]; for (c = k + 1; c < m; c++) s -= A[k][c] * w[c]; w[k] = s / A[k][k]; }
+    return w;
+  }
+  // Run the regression on its own predictions from hour 24 to the end of week 2.
+  function runBlack(f, w) {
+    var o = [], t;
+    for (t = 0; t < n; t++) o.push(NaN);
+    o[24] = W.meas[f][24];
+    for (t = 24; t < n - 1; t++) { var z = feat(f, o[t], t), s = 0; for (var c = 0; c < 6; c++) s += w[c] * z[c]; o[t + 1] = s; }
+    return o;
+  }
+  var cache = {};
+  function compute(f) {
+    if (cache[f]) return cache[f];
+    var T = W.truth[f], cal = DTW.calibrate(W, f), w = fitBlack(f);
+    var wh = openLoop(f, DTW.params(f, 1, 1)), gr = openLoop(f, DTW.params(f, cal.kU, cal.kC)), bb = runBlack(f, w);
+    cache[f] = {
+      cal: cal, w: w, kU: W.kU[f], kC: W.kC[f],
+      rows: [
+        ["White box", "the drawings (kU 1.0, kC 1.0)", rmse(wh, T, W1, W2), rmse(wh, T, W2, n)],
+        ["Black box", "6 weights fitted on week 1", rmse(bb, T, W1, W2), rmse(bb, T, W2, n)],
+        ["Grey box", "kU " + cal.kU.toFixed(2) + ", kC " + cal.kC.toFixed(2) + " fitted on week 1", rmse(gr, T, W1, W2), rmse(gr, T, W2, n)]
+      ]
+    };
+    return cache[f];
+  }
+  function render() {
+    var f = Number(sel.value), R = compute(f);
+    var html = '<table class="sql-table"><thead><tr><th>Model</th><th>What it knows</th><th>Week 1 error (trained on)</th><th>Week 2 error (setback, unseen)</th></tr></thead><tbody>';
+    R.rows.forEach(function (r) { html += "<tr><td><b>" + r[0] + "</b></td><td>" + r[1] + "</td><td>" + r[2].toFixed(3) + " C</td><td><b>" + r[3].toFixed(3) + " C</b></td></tr>"; });
+    html += "</tbody></table>";
+    out.innerHTML = html;
+    var b = R.rows[1], g = R.rows[2];
+    verdict.textContent = "Floor " + (f + 1) + ": the black box's error goes from " + b[2].toFixed(3) + " to " + b[3].toFixed(3) + " C (" + (b[3] / b[2]).toFixed(1) + " times) when the schedule changes; the grey box goes from " + g[2].toFixed(3) + " to " + g[3].toFixed(3) + " C. " +
+      "Regression weights: constant " + R.w[0].toFixed(2) + ", current reading " + R.w[1].toFixed(3) + ". True floor (constructed): kU " + R.kU.toFixed(2) + ", kC " + R.kC.toFixed(2) + ". Errors are RMSE against the true room, open loop, hours 25 to 168 and 168 to 336.";
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed (seed 1124). The engine's " + st.checks.length + " self-checks pass in this browser. Your numbers will differ on another floor or another world."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwkp2-box .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwkp2-box table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

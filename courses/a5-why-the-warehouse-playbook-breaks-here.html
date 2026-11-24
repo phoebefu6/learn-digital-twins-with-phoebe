@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 5 of 6. Five mechanisms that make a twin project unlike a warehouse project: the source changes on its own, identity is a configuration version, there is no ground truth to label against, the twin's advice changes the next data, and being wrong costs comfort, energy and safety. Kittiwake Hall is constructed. Not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Why the warehouse playbook breaks here - learn digital twins with phoebe">
+<meta property="og:description" content="Leader session 5 of 6. Source, identity, ground truth, feedback loop, cost of being wrong: what each does to a conventional data project, drawn as a mechanism, and the check that replaces each warehouse habit.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/a5-why-the-warehouse-playbook-breaks-here.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why the warehouse playbook breaks here - learn digital twins with phoebe">
+<meta name="twitter:description" content="A warehouse copies a system of record. A twin follows a building that changes on its own and never files a ticket.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 5 · Why the warehouse playbook breaks here - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Leader session 5 of 6</div>
+    <h1>Why the <span class="accent">warehouse playbook</span> breaks here</h1>
+    <p class="sub">A data team that has shipped warehouses, dashboards and churn models arrives at a twin project with a playbook that has worked for years. Five of its habits quietly stop being true: where the data comes from, what a key means, what counts as the right answer, whether the data stands still, and what a wrong number costs. Tonight takes them one mechanism at a time on Kittiwake Hall, the constructed six-storey teaching building every session uses; every Kittiwake number is generated in the page, not observed. Nothing here is investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Data and AI leaders moving into twins</span>
+      <span class="chip audience">Teams arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-15 · Source and identity</span>
+      <span class="a3" style="flex:3">15-28 · Truth and the loop</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The analyst who came from the warehouse</h2>
+    </div>
+    <p class="lede">Kittiwake Hall is constructed. The analyst who picked up its twin ticket in session 1 has now run it for two weeks, and she keeps reaching for habits that served her in a retail warehouse: trust the system of record, join on the key, score against the label, treat the data as history, fix a wrong number in the next refresh. Each habit is sound where it came from. Each one rests on an assumption a building does not honour. The fix is not to throw the playbook away (leader session 6 sorts what carries over); it is to know exactly which page fails, and what check takes its place.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Five mechanisms, each drawn: the source is a physical asset that changes without telling anyone; identity is a configuration version, not a row key; there is no ground truth to label against (in Kittiwake's constructed bench the sensors are 0.404 C off the true room and the filtered twin 0.218 C, and you only know that because the building is invented); the twin's advice changes the building, so the next data depends on the last decision; and being wrong costs comfort, energy and safety, not a corrected dashboard tile. You leave with a five-row map: for each mechanism, the warehouse habit, what breaks, and the check that replaces it. Nothing here is investment advice, and nothing here is legal, compliance or safety advice.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a twin is a different kind of data project<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A warehouse sits downstream of software. Every order, refund and stock count was written by a system first, and the warehouse copies those writes. If a value is wrong, the source system is wrong, and someone can fix it there.</p>
+        <p>A twin sits downstream of a physical thing. Nobody writes the building. It loses heat at whatever rate its walls, windows and radiators allow, today, and the only record of that is what the sensors and meters happen to catch. That single difference, upstream is matter rather than software, is where all five mechanisms come from.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The AIAA and AIA (2020) position paper names three essential elements of a twin, a virtual representation, a physical realization and a transfer of data between them, and draws the consequence plainly: to have a digital twin requires a physical asset. It then follows that asset through phases called As Designed, As Built, As Used and As Maintained. A warehouse table has no "As Maintained"; a building is never anything else.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>System of record.</strong> The software that owns a fact, such as an order system. Warehouses trust it because every change passes through it.</li>
+          <li><strong>Configuration.</strong> What the asset physically is right now: which radiators, which insulation, which windows. It changes when facilities change it.</li>
+          <li><strong>Asset record and model record.</strong> Two separate things: the record of the floor as built and maintained, and the record of the model fitted to it. Practitioner session 1 draws them apart.</li>
+          <li><strong>Ground truth.</strong> In a supervised model, the label you score against. In a building, the true room temperature, which no instrument reads exactly.</li>
+          <li><strong>Innovation.</strong> The surprise: what the sensor read minus what the twin predicted. With no ground truth, the surprises are the main evidence a twin has.</li>
+          <li><strong>Coverage.</strong> How often reality fell inside the twin's stated band. A 95 percent band should hold the reading about 95 percent of the time.</li>
+          <li><strong>Constructed.</strong> Kittiwake Hall and every number about it are invented so the truth is knowable. The research and position papers are real and cited.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the source and the identity</span>
+      <h2>The source changes on its own, and a key is not an identity</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The first two mechanisms are about what the data is attached to. In a warehouse, a change to the business is a write to a system, and a row's key means the same thing forever. In a twin, the asset changes by being worked on, no system hears about it, and "floor 4" names a different physical thing after each retrofit. Both panels below draw where the warehouse assumption sits and where the building breaks it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-panel figure. Panel 1, the source: in a warehouse, the system of record writes every change and the warehouse copies the writes. In a twin, the floor itself is insulated or has a radiator swapped, and the arrow to the twin's model is broken: the change sends no message, highlighted in copper, so the model still describes the old floor. Panel 2, the identity: in a warehouse, order 10482 keeps the same key forever and every table joins on it. In a twin, floor 4 passes through version 1 as designed, version 2 with a radiator swapped, and version 3 insulated, under the same name; the model record still points at version 1 while the floor is version 3.">
+        <defs>
+          <filter id="kwka5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka5aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka5aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka5aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka5aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka5aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka5aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka5aH" x="30" y="30">WHERE THE DATA COMES FROM, AND WHAT A NAME MEANS (KITTIWAKE, CONSTRUCTED)</text>
+
+        <g filter="url(#kwka5aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panels -->
+          <rect x="20" y="46" width="410" height="272" rx="12" transform="rotate(-0.3 225 182)" fill="#FFFFFF"/>
+          <rect x="450" y="46" width="410" height="272" rx="12" transform="rotate(0.3 655 182)" fill="#FFFFFF"/>
+          <!-- panel 1, warehouse row -->
+          <rect x="40" y="92" width="150" height="56" rx="8" transform="rotate(-0.5 115 120)" fill="#EDF4FB"/>
+          <rect x="260" y="92" width="150" height="56" rx="8" transform="rotate(0.5 335 120)" fill="url(#kwka5aHc)"/>
+          <path d="M192 120 L256 120" marker-end="url(#kwka5aAr)"/>
+          <!-- panel 1, twin row -->
+          <rect x="40" y="182" width="150" height="64" rx="8" transform="rotate(0.4 115 214)" fill="#FFFFFF"/>
+          <rect x="260" y="182" width="150" height="64" rx="8" transform="rotate(-0.4 335 214)" fill="#EDF4FB"/>
+          <path d="M192 214 L214 214"/>
+          <path d="M234 214 L256 214" marker-end="url(#kwka5aAr)"/>
+          <path d="M224 220 L224 260"/>
+          <rect x="110" y="262" width="250" height="40" rx="8" transform="rotate(-0.4 235 282)" fill="#C8733A"/>
+          <!-- panel 2, warehouse row -->
+          <rect x="470" y="92" width="170" height="56" rx="8" transform="rotate(0.5 555 120)" fill="#FFFFFF"/>
+          <rect x="670" y="92" width="170" height="56" rx="8" transform="rotate(-0.5 755 120)" fill="url(#kwka5aHc)"/>
+          <path d="M642 120 L666 120" marker-end="url(#kwka5aAr)"/>
+          <!-- panel 2, twin row: three versions of one floor -->
+          <rect x="470" y="182" width="110" height="56" rx="8" transform="rotate(-0.5 525 210)" fill="#FFFFFF"/>
+          <rect x="605" y="182" width="110" height="56" rx="8" transform="rotate(0.4 660 210)" fill="#FFFFFF"/>
+          <rect x="740" y="182" width="110" height="56" rx="8" transform="rotate(-0.4 795 210)" fill="#EDF4FB"/>
+          <path d="M582 210 L601 210" marker-end="url(#kwka5aAr)"/>
+          <path d="M717 210 L736 210" marker-end="url(#kwka5aAr)"/>
+          <path d="M525 240 L525 260"/>
+          <rect x="510" y="262" width="300" height="40" rx="8" transform="rotate(0.3 660 282)" fill="#EDF4FB"/>
+          <!-- doodle: a radiator -->
+          <rect x="384" y="54" width="30" height="20" rx="3" fill="#FFFFFF"/>
+          <path d="M391 57 L391 71 M397 57 L397 71 M403 57 L403 71 M409 57 L409 71"/>
+        </g>
+
+        <text class="kwka5aH" x="36" y="70">1 · THE SOURCE</text>
+        <text class="kwka5aA" x="40" y="86">warehouse habit</text>
+        <text class="kwka5aL" x="52" y="116">system of record</text>
+        <text class="kwka5aS" x="52" y="134">changes are writes</text>
+        <text class="kwka5aK" x="272" y="116">the warehouse</text>
+        <text class="kwka5aK" x="272" y="134">copies the writes</text>
+        <text class="kwka5aA" x="40" y="176">twin</text>
+        <text class="kwka5aL" x="52" y="204">the floor itself</text>
+        <text class="kwka5aS" x="52" y="222">insulated, radiator</text>
+        <text class="kwka5aS" x="52" y="238">swapped, by hand</text>
+        <text class="kwka5aL" x="272" y="204">the twin's model</text>
+        <text class="kwka5aS" x="272" y="222">still describes</text>
+        <text class="kwka5aS" x="272" y="238">the old floor</text>
+        <text class="kwka5aK" x="126" y="279">the change sends no message</text>
+        <text class="kwka5aK" x="126" y="295">to any system</text>
+
+        <text class="kwka5aH" x="466" y="70">2 · THE IDENTITY</text>
+        <text class="kwka5aA" x="470" y="86">warehouse habit</text>
+        <text class="kwka5aL" x="482" y="116">order 10482</text>
+        <text class="kwka5aS" x="482" y="134">same key, forever</text>
+        <text class="kwka5aK" x="682" y="116">every table joins</text>
+        <text class="kwka5aK" x="682" y="134">on that one key</text>
+        <text class="kwka5aA" x="470" y="176">twin</text>
+        <text class="kwka5aL" x="480" y="204">floor 4 · v1</text>
+        <text class="kwka5aS" x="480" y="222">as designed</text>
+        <text class="kwka5aL" x="615" y="204">floor 4 · v2</text>
+        <text class="kwka5aS" x="615" y="222">radiator swap</text>
+        <text class="kwka5aL" x="750" y="204">floor 4 · v3</text>
+        <text class="kwka5aS" x="750" y="222">insulated</text>
+        <text class="kwka5aK" x="540" y="279">model record still points at v1;</text>
+        <text class="kwka5aK" x="540" y="295">the floor is v3, same name</text>
+
+        <text class="kwka5aN" x="30" y="342">Left: the asset changes by being worked on and tells no system. Right: one name, three physical floors.</text>
+        <text class="kwka5aN" x="30" y="360">A twin's identity is the pair (asset, configuration version), and the model record must say which.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper box is the whole problem: a real change to the asset that produces no record anywhere, so the model keeps describing a building that no longer exists.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Mechanism 1 · the source is a physical asset that changes on its own<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The warehouse habit.</strong> Trust the system of record. If the warehouse disagrees with it, the warehouse is wrong; if the system of record is wrong, someone corrects it there and the next load picks it up.</p>
+        <p><strong>What breaks.</strong> A building has no system of record for its own physics. A contractor insulates a floor, a radiator is swapped for a larger one, a window is replaced, and the heat loss changes that afternoon. Nothing in the data pipeline is notified. The sensors keep reporting; the model keeps predicting with its old parameters; the two slowly disagree.</p>
+        <p><strong>On Kittiwake's bench (constructed).</strong> The break scenario insulates floor 4 at the start of week 2 without logging it. The room estimate still looks fine, because the hourly correction follows the sensor. But floor 4's heating plan goes 63.1 percent wrong, and the whole building's plan 8.9 percent wrong, from one unrecorded job on one floor.</p>
+        <p><strong>The check that replaces the habit.</strong> A change log owned by facilities, treated as a data source, and the twin's surprises watched against it. When floor 4's surprises jump, the first question is "what did someone do to floor 4?", and the log should already hold the answer. Practitioner session 6 builds that log.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Mechanism 2 · identity is a configuration version, not a row key<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The warehouse habit.</strong> A stable key means the same entity forever. Order 10482 is order 10482 in every table, and joins on it are safe.</p>
+        <p><strong>What breaks.</strong> "Floor 4" is a name for a place, not for a physical behaviour. After a radiator swap and an insulation job it is, thermally, a different floor under the same name. A model fitted to version 1 and joined to version 3's readings is not stale data; it is the wrong asset. That is why practitioner session 1 keeps the asset record (the floor as built and maintained) apart from the model record (the model fitted to it), joined by a configuration version.</p>
+        <p><strong>The check that replaces the habit.</strong> Every twin run names its asset and its configuration version, and every model names the version it was calibrated on. When the two differ, the result is flagged before anyone reads it. The AIAA and AIA (2020) "As Maintained" phase is this idea in their vocabulary: the twin follows the asset through its changes, not just its drawings.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Slowly changing dimensions, and why they are not enough<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Warehouse people already know the shape of this problem: a customer moves house, and a slowly changing dimension keeps both addresses with dates. The pattern carries over, and leader session 6 counts it among the things that do. What does not carry over is the trigger. A customer's move arrives as a write from a system; a retrofit arrives as nothing at all. The version table is only as good as the habit of filling it, and for a building that habit belongs to facilities, not to the data team.</p>
+        <p>So the version table needs a second line of defence: the surprises. On Kittiwake's bench, floor 4's mean surprise moved from +0.015 C in week 1 to +0.638 C in week 2 (a shift test score of 11.44, against under 0.7 on every other floor). That is the building filing the missing change request for you. Detectors for such shifts belong to <a href="https://phoebefu6.github.io/learn-anomaly-detection-with-phoebe/">learn anomaly detection</a>.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the ground truth and the feedback loop</span>
+      <h2>No label to score against, and data the twin helped create</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">The next two mechanisms are about how you know you are right. A supervised model is scored against labels that sit still. A twin is scored against a room nobody can read exactly, and the data it is scored on next week exists partly because of what it advised this week. The figure draws both; the widget runs the engine so you can see the first one floor by floor.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-panel figure. Panel 3, the ground truth: in a warehouse, the prediction is compared with a known, stored label. In a twin, the true room temperature, highlighted in copper, is read by nobody; the sensor estimates it with an error of 0.404 C and the filtered twin with 0.218 C, both on Kittiwake's constructed bench. Panel 4, the feedback loop: in a warehouse, the model reads last year's orders and never writes them. In a twin, the twin advises 15 C at night, the building runs the setback, and week 2's data exists because of that advice, which feeds the twin again.">
+        <defs>
+          <filter id="kwka5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka5bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka5bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka5bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka5bK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka5bA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka5bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka5bH" x="30" y="30">HOW YOU KNOW YOU ARE RIGHT, AND WHY THE DATA DOES NOT SIT STILL (CONSTRUCTED)</text>
+
+        <g filter="url(#kwka5bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panels -->
+          <rect x="20" y="46" width="410" height="272" rx="12" transform="rotate(0.3 225 182)" fill="#FFFFFF"/>
+          <rect x="450" y="46" width="410" height="272" rx="12" transform="rotate(-0.3 655 182)" fill="#FFFFFF"/>
+          <!-- panel 3, warehouse row -->
+          <rect x="40" y="94" width="150" height="50" rx="8" transform="rotate(0.5 115 119)" fill="#FFFFFF"/>
+          <rect x="260" y="94" width="150" height="50" rx="8" transform="rotate(-0.5 335 119)" fill="#EDF4FB"/>
+          <path d="M192 119 L256 119" marker-end="url(#kwka5bAr)"/>
+          <!-- panel 3, twin row -->
+          <ellipse cx="230" cy="208" rx="86" ry="26" fill="#C8733A"/>
+          <rect x="40" y="252" width="150" height="50" rx="8" transform="rotate(-0.5 115 277)" fill="#FFFFFF"/>
+          <rect x="260" y="252" width="150" height="50" rx="8" transform="rotate(0.5 335 277)" fill="#EDF4FB"/>
+          <path d="M166 230 L132 250" stroke-dasharray="6 5" marker-end="url(#kwka5bAr)"/>
+          <path d="M294 230 L328 250" stroke-dasharray="6 5" marker-end="url(#kwka5bAr)"/>
+          <!-- doodle: a thermometer -->
+          <path d="M404 56 L404 80"/>
+          <circle cx="404" cy="86" r="6" fill="#FFFFFF"/>
+          <!-- panel 4, warehouse row -->
+          <rect x="470" y="94" width="150" height="50" rx="8" transform="rotate(-0.5 545 119)" fill="url(#kwka5bHc)"/>
+          <rect x="690" y="94" width="150" height="50" rx="8" transform="rotate(0.5 765 119)" fill="#FFFFFF"/>
+          <path d="M622 119 L686 119" marker-end="url(#kwka5bAr)"/>
+          <!-- panel 4, twin loop -->
+          <rect x="470" y="184" width="150" height="50" rx="8" transform="rotate(0.4 545 209)" fill="#EDF4FB"/>
+          <rect x="690" y="184" width="150" height="50" rx="8" transform="rotate(-0.4 765 209)" fill="#FFFFFF"/>
+          <rect x="580" y="260" width="150" height="46" rx="8" transform="rotate(0.4 655 283)" fill="url(#kwka5bHc)"/>
+          <path d="M622 209 L686 209" marker-end="url(#kwka5bAr)"/>
+          <path d="M760 236 L724 258" marker-end="url(#kwka5bAr)"/>
+          <path d="M578 282 L548 240" marker-end="url(#kwka5bAr)"/>
+        </g>
+
+        <text class="kwka5bH" x="36" y="70">3 · THE GROUND TRUTH</text>
+        <text class="kwka5bA" x="40" y="88">warehouse habit</text>
+        <text class="kwka5bL" x="52" y="116">the prediction</text>
+        <text class="kwka5bS" x="52" y="133">scored against</text>
+        <text class="kwka5bL" x="272" y="116">the label</text>
+        <text class="kwka5bS" x="272" y="133">known and stored</text>
+        <text class="kwka5bA" x="40" y="176">twin</text>
+        <text class="kwka5bK" x="186" y="205">the true room</text>
+        <text class="kwka5bK" x="174" y="221">nobody can read it</text>
+        <text class="kwka5bL" x="52" y="274">the sensor</text>
+        <text class="kwka5bS" x="52" y="291">0.404 C off it</text>
+        <text class="kwka5bL" x="272" y="274">filtered twin</text>
+        <text class="kwka5bS" x="272" y="291">0.218 C off it</text>
+
+        <text class="kwka5bH" x="466" y="70">4 · THE FEEDBACK LOOP</text>
+        <text class="kwka5bA" x="470" y="88">warehouse habit</text>
+        <text class="kwka5bK" x="482" y="116">last year's orders</text>
+        <text class="kwka5bK" x="482" y="133">sit still</text>
+        <text class="kwka5bL" x="702" y="116">the model</text>
+        <text class="kwka5bS" x="702" y="133">reads, never writes</text>
+        <text class="kwka5bA" x="470" y="176">twin</text>
+        <text class="kwka5bL" x="482" y="206">twin advises</text>
+        <text class="kwka5bS" x="482" y="223">15 C at night</text>
+        <text class="kwka5bL" x="702" y="206">the building</text>
+        <text class="kwka5bS" x="702" y="223">runs the setback</text>
+        <text class="kwka5bK" x="592" y="280">week 2's data exists</text>
+        <text class="kwka5bK" x="592" y="296">because of the advice</text>
+
+        <text class="kwka5bN" x="30" y="342">Left: no label column exists; the bench knows the true room only because Kittiwake is constructed.</text>
+        <text class="kwka5bN" x="30" y="360">Right: the next data depends on the last decision, so yesterday's score does not carry forward.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper oval is the thing a warehouse always has and a twin never does: the right answer, readable and stored.</figcaption>
+    </figure>
+
+    <div class="wk" id="kwka5-truth">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">The engine builds Kittiwake's constructed world in your browser (seed 1124, six floors, hours 168 to 336, the setback week) and, because the building is invented, also knows the true room. It scores the raw sensors and the filtered twin against that truth, floor by floor. Switch the twin to "trust the sensors fully" to see what happens when nobody admits the sensors are noisy.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwka5-pick">What the twin assumes about its sensors</label>
+        <select class="sql-code" id="kwka5-pick">
+          <option value="honest">Honest: sensors are noisy, sd 0.4 C</option>
+          <option value="anti">Trust the sensors fully: sd 0.01 C</option>
+        </select>
+        <div id="kwka5-out"></div>
+        <p class="sql-note" id="kwka5-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwka5-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Mechanism 3 · there is no ground truth to label against<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The warehouse habit.</strong> Hold out some labelled rows and score the model against them. The label is the answer, it is stored, and the score is an accuracy.</p>
+        <p><strong>What breaks.</strong> The true room temperature is never stored anywhere. The sensor is one noisy reading at one spot; on Kittiwake's constructed bench it is 0.404 C off the true room on average. The filtered twin, which combines the sensor with the physics of the floor, is 0.218 C off: closer than the instrument you would have used as the label. At its default setting the widget shows every floor's sensor between 0.373 and 0.433 C off and every floor's twin between 0.209 and 0.236 C off. If you had scored the twin against the sensor, you would have marked its better answer as error.</p>
+        <p><strong>The anti-lever.</strong> Tell the twin its sensors are perfect and it copies them: 0.403 C off, no better than the sensors, and its 95 percent band now holds reality only 77.4 percent of the time, against 96.8 percent for the honest twin. Nothing in a sensor-scored dashboard would show the difference, because the overconfident twin agrees with the sensors beautifully.</p>
+        <p><strong>The check that replaces the habit.</strong> Score what you can observe, honestly: the surprises (are they small, centred and patternless?) and the band's coverage on readings it did not see. Treat the sensor as evidence with its own error, never as the label. Sensor triage itself (drift, clocks, gaps) belongs to <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Mechanism 4 · the twin's advice changes the building<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The warehouse habit.</strong> The data is history. A churn model reads last year's customers, and nothing it says changes what last year was.</p>
+        <p><strong>What breaks.</strong> In Kittiwake's story, the setback week happens because the twin advised it: 15 C at night and at weekends. Every reading from week 2 was produced by a building running the twin's advice. The next calibration, the next surprise and the next score are all computed on data the twin helped create. The National Academies (2024) describe the two-way interaction between virtual and physical as "central to the digital twin", and conclude it forms a feedback loop of data-driven model updating.</p>
+        <p>The sharpest consequence: the week without the setback never happens in a real building. Kittiwake's bench can report a true saving of 20.1 percent (6,343 to 5,067 kWh, constructed) only because the engine runs the same invented week twice. In a real building that counterfactual is gone the moment the advice is taken, so the twin's own estimate (21.5 percent calibrated, 23.9 percent from the drawings) cannot be checked against a measured "without".</p>
+        <p><strong>The check that replaces the habit.</strong> Log each decision next to the data it produced, so later analysis knows which readings were made under which advice, and agree before acting how the effect will be judged. Practitioner session 9 closes the loop in full.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the filter beats the sensor, in one paragraph<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The filtered twin uses the method set out by Kalman (1960): predict the room from the physics, then correct the prediction toward each reading by a weight that depends on how much each is trusted. Because the physics knows rooms do not jump 0.4 C in an hour, it discards much of the sensor's noise; because the reading arrives every hour, the physics cannot wander far. Neither source alone is the truth; the blend is closer to it than either. Practitioner session 4 does it by hand. The National Academies (2024) also ask for verification, validation and uncertainty quantification to be continual and to adapt as the physical counterpart changes, which is the formal name for not trusting last month's score.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>The cost-of-being-wrong map</h2>
+      <span class="tag demo">★ 17 min · everyone builds</span>
+    </div>
+    <p class="lede">You will leave with one page your team can pin above a twin project: five rows, one per mechanism, each naming the warehouse habit, what breaks, and the check that replaces it. The fifth row is the one that changes how carefully you run the other four. Draw it on paper as you go; the figure is the finished map for Kittiwake.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 436" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn five-row map with four columns: mechanism, warehouse habit, what breaks, and the check that replaces it. Row 1 source: trust the system of record; the floor changes and tells no system; a change log owned by facilities, checked against surprises. Row 2 identity: a stable key joins everything; one floor has many configurations and the twin used an old one; every run names its asset and model version. Row 3 ground truth: score against the label; the true room is unobservable; watch surprises and check band coverage. Row 4 feedback loop: data is history; the advice made the data; log each decision with the data it caused. Row 5, in copper, cost of being wrong: a wrong number is fixed in the next refresh; comfort, energy and safety are at stake with people in the rooms, an overconfident band covers 77.4 percent while claiming 95, and an unlogged change made floor 4's plan 63.1 percent wrong; check band coverage and who may act, before anyone acts.">
+        <defs>
+          <filter id="kwka5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="57" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka5cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka5cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka5cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka5cK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka5cA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka5cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka5cH" x="30" y="30">THE COST-OF-BEING-WRONG MAP: FIVE HABITS, FIVE CHECKS (KITTIWAKE, CONSTRUCTED)</text>
+        <text class="kwka5cA" x="42" y="62">MECHANISM</text>
+        <text class="kwka5cA" x="184" y="62">WAREHOUSE HABIT</text>
+        <text class="kwka5cA" x="404" y="62">WHAT BREAKS</text>
+        <text class="kwka5cA" x="634" y="62">THE CHECK THAT REPLACES IT</text>
+
+        <g filter="url(#kwka5cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="74" width="830" height="54" rx="8" transform="rotate(-0.2 445 101)" fill="#FFFFFF"/>
+          <rect x="30" y="136" width="830" height="54" rx="8" transform="rotate(0.2 445 163)" fill="#EDF4FB"/>
+          <rect x="30" y="198" width="830" height="54" rx="8" transform="rotate(-0.2 445 225)" fill="#FFFFFF"/>
+          <rect x="30" y="260" width="830" height="54" rx="8" transform="rotate(0.2 445 287)" fill="#EDF4FB"/>
+          <rect x="30" y="322" width="830" height="54" rx="8" transform="rotate(-0.2 445 349)" fill="#C8733A"/>
+          <path d="M172 80 L172 122 M392 80 L392 122 M622 80 L622 122"/>
+          <path d="M172 142 L172 184 M392 142 L392 184 M622 142 L622 184"/>
+          <path d="M172 204 L172 246 M392 204 L392 246 M622 204 L622 246"/>
+          <path d="M172 266 L172 308 M392 266 L392 308 M622 266 L622 308"/>
+          <path d="M172 328 L172 370 M392 328 L392 370 M622 328 L622 370"/>
+          <!-- doodle: a window -->
+          <rect x="824" y="16" width="26" height="26" rx="2" fill="#FFFFFF"/>
+          <path d="M837 16 L837 42 M824 29 L850 29"/>
+        </g>
+
+        <text class="kwka5cL" x="42" y="96">1 · Source</text>
+        <text class="kwka5cS" x="184" y="96">trust the system of record;</text>
+        <text class="kwka5cS" x="184" y="114">it records every change</text>
+        <text class="kwka5cS" x="404" y="96">the floor changes and tells</text>
+        <text class="kwka5cS" x="404" y="114">no system</text>
+        <text class="kwka5cS" x="634" y="96">a change log facilities own,</text>
+        <text class="kwka5cS" x="634" y="114">checked against the surprises</text>
+
+        <text class="kwka5cL" x="42" y="158">2 · Identity</text>
+        <text class="kwka5cS" x="184" y="158">a stable key joins</text>
+        <text class="kwka5cS" x="184" y="176">every table, forever</text>
+        <text class="kwka5cS" x="404" y="158">one floor, many configurations;</text>
+        <text class="kwka5cS" x="404" y="176">the model fits an old one</text>
+        <text class="kwka5cS" x="634" y="158">every run names its asset,</text>
+        <text class="kwka5cS" x="634" y="176">configuration and model version</text>
+
+        <text class="kwka5cL" x="42" y="220">3 · Ground truth</text>
+        <text class="kwka5cS" x="184" y="220">score against the stored</text>
+        <text class="kwka5cS" x="184" y="238">label on held-out rows</text>
+        <text class="kwka5cS" x="404" y="220">the true room is unobservable;</text>
+        <text class="kwka5cS" x="404" y="238">sensor 0.404 C, twin 0.218 C</text>
+        <text class="kwka5cS" x="634" y="220">watch the surprises; check the</text>
+        <text class="kwka5cS" x="634" y="238">band's coverage on new readings</text>
+
+        <text class="kwka5cL" x="42" y="282">4 · Feedback loop</text>
+        <text class="kwka5cS" x="184" y="282">the data is history;</text>
+        <text class="kwka5cS" x="184" y="300">the model only reads it</text>
+        <text class="kwka5cS" x="404" y="282">the advice made the data;</text>
+        <text class="kwka5cS" x="404" y="300">the "without" week never runs</text>
+        <text class="kwka5cS" x="634" y="282">log each decision next to</text>
+        <text class="kwka5cS" x="634" y="300">the data it caused</text>
+
+        <text class="kwka5cH" x="42" y="344">5 · Cost of</text>
+        <text class="kwka5cH" x="42" y="362">being wrong</text>
+        <text class="kwka5cK" x="184" y="344">a wrong number is fixed</text>
+        <text class="kwka5cK" x="184" y="362">in the next refresh</text>
+        <text class="kwka5cK" x="404" y="344">people in rooms; a band at 77.4%</text>
+        <text class="kwka5cK" x="404" y="362">claiming 95%; floor 4 +63.1%</text>
+        <text class="kwka5cK" x="634" y="344">check band coverage and who may</text>
+        <text class="kwka5cK" x="634" y="362">act on the twin, before acting</text>
+
+        <text class="kwka5cN" x="30" y="404">Rows 1 to 4 say what to check. Row 5 says how hard: the cost of a wrong answer sets how often and how strictly.</text>
+        <text class="kwka5cN" x="30" y="422">Numbers are Kittiwake's constructed bench, seed 1124; a real twin's will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper row is the one a warehouse team skips: a wrong twin is not a wrong tile, it is a cold room, a wasted heating bill or a decision taken on a band that lied.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Row 1 · write down who changes the asset</h4>
+        <p>Name the people who can physically change the thing the twin mirrors (facilities, contractors, operators), and where, if anywhere, they record it. If the answer is "nowhere the data team can read", that is the first gap on your map. On Kittiwake's bench, one unrecorded job made floor 4's plan 63.1 percent wrong.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 2 · decide what identifies the asset</h4>
+        <p>Write the identity as a pair: the asset's name plus its configuration version. Then check one thing: does the model record say which version it was calibrated on? If the model has no version, it cannot know it is out of date.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 3 · replace "accuracy" with two observable checks</h4>
+        <p>Cross out any line on your plan that scores the twin against the sensors as if they were the truth. Write in its place: surprises watched per asset over time, and band coverage on readings the twin had not seen. Kittiwake's honest twin covered 96.8 percent; the twin told its sensors were perfect covered 77.4 percent and looked just as good on a sensor-scored dashboard.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 4 · log decisions as data</h4>
+        <p>For each decision the twin informs, write where it will be recorded, with its date and the asset it touched, so later readings can be read as "data under this advice". Agree now how the decision's effect will be judged, because the week without it will never be measured.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Row 5 · price the cost of being wrong, then set the strictness</h4>
+        <p>For your twin, write what a wrong answer costs and who bears it: comfort (a cold seminar room), energy (a heating plan that misses by a margin), safety (anything where people or equipment are at risk). Then set rows 1 to 4 to match: the higher the cost, the more often the surprises are reviewed and the fewer people may act on the twin unaided. Who may act is practitioner session 8. Safety, building codes and compliance are outside tonight's scope; take those to the people accountable for them.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> When a twin project inherits a warehouse plan, read it row by row and ask of each line: does this assume a system of record, a stable key, a stored label, data that sits still, or a cheap mistake? Every "yes" is a line to rewrite with the check from the map.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Why is there no ground truth to score a building twin against?</p>
+      <button class="qopt" type="button">A · Because the sensors are switched off at night</button>
+      <button class="qopt" type="button">B · Because labels cost too much to buy</button>
+      <button class="qopt" type="button">C · Because the true room is never read exactly; the sensor is itself a noisy estimate, 0.404 C off on Kittiwake's constructed bench, worse than the filtered twin's 0.218 C</button>
+      <p class="qwhy">The thing you would label against is unobservable. Scoring the twin against the sensor would mark its better answer as error; score the surprises and the band's coverage instead.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Kittiwake's twin advised a night setback, and the building ran it in week 2. Why does that feedback loop matter to anyone judging the twin?</p>
+      <button class="qopt" type="button">A · Week 2's data exists because of the advice, so the next calibration and score sit on data the twin helped create, and the week without the setback is never measured</button>
+      <button class="qopt" type="button">B · It does not matter; data is data once it is stored</button>
+      <button class="qopt" type="button">C · Because the setback makes the sensors noisier</button>
+      <p class="qwhy">The next data depends on the last decision. Only the constructed bench can run the same week twice; a real building loses the counterfactual when the advice is taken, so decisions must be logged next to the data they cause.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why is "floor 4" not enough to identify the asset a twin describes?</p>
+      <button class="qopt" type="button">A · Because floor numbers are sometimes typed wrong</button>
+      <button class="qopt" type="button">B · Because after a radiator swap or an insulation job it is a different physical floor under the same name, so identity is the asset plus its configuration version</button>
+      <button class="qopt" type="button">C · Because twins should use random identifiers</button>
+      <p class="qwhy">A row key means the same thing forever; an asset's name does not. On Kittiwake's bench, an unlogged insulation job left the model describing the old floor 4, and its plan went 63.1 percent wrong.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 6</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one plan you already own.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the map on one real plan</h4>
+        <p>Take any data or AI project plan you have touched (a warehouse, a forecast, a model) and imagine its subject were a physical asset. Mark each line that assumes a system of record, a stable key, a stored label, data that sits still or a cheap mistake. Count them; leader session 6 sorts which can be kept.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Price one wrong answer</h4>
+        <p>For one asset you know, write one sentence each on what a wrong twin answer would cost in comfort, energy and safety, and who would notice first. Keep it to what you know; it is a planning note, not a safety assessment.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The asset as the source</span><span class="note">AIAA and AIA (2020), "Digital Twin: Definition and Value": a twin requires a physical asset; As Designed, As Built, As Used, As Maintained. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The feedback loop and continual checking</span><span class="note">National Academies (2024): bidirectional interaction is central; VVUQ must be continual and adapt to changes in the physical counterpart. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Kittiwake numbers</span><span class="note">Constructed and computed in the page: sensors 0.404 C, twin 0.218 C; anti-lever 0.403 C, coverage 77.4 vs 96.8 percent; unlogged retrofit +63.1 percent on floor 4, +8.9 percent overall; savings 20.1 true, 21.5 calibrated, 23.9 design.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">The filter behind the twin</span><span class="note">Kalman (1960), Journal of Basic Engineering: named tonight. Practitioner session 4 does it by hand.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Change logs and governance</span><span class="note">Named tonight. Practitioner sessions 6 and 8.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Safety and building codes</span><span class="note">Out of scope: nothing here is safety, legal or compliance advice, and nothing is investment advice.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensor triage</span><span class="note">Drift, clocks, sampling and missing data live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>The one sentence.</strong> Upstream of a twin is matter, not software, and matter files no change requests.</div>
+      <div class="cheat-item"><strong>Source.</strong> The asset changes on its own; keep a change log and check it against the surprises.</div>
+      <div class="cheat-item"><strong>Identity.</strong> Asset plus configuration version; every model names the version it was fitted on.</div>
+      <div class="cheat-item"><strong>Ground truth.</strong> None. Kittiwake's sensors 0.404 C off the true room, the twin 0.218 C (constructed).</div>
+      <div class="cheat-item"><strong>Never score against the sensor.</strong> Score surprises and band coverage on unseen readings.</div>
+      <div class="cheat-item"><strong>Feedback loop.</strong> The advice makes the next data; log each decision next to it.</div>
+      <div class="cheat-item"><strong>Cost of being wrong.</strong> Comfort, energy, safety. A band at 77.4% while claiming 95% is a lie with consequences.</div>
+      <div class="cheat-item"><strong>The map.</strong> Habit, what breaks, the check that replaces it, five rows, priced by row 5.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>From warehouse to digital twins: the transfer map.</strong> Not everything breaks. What carries over from the warehouse, what has to be learned, what has to be unlearned, and a 90-day self-study ladder.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 5 of 6 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="a4-reading-a-digital-twin-claim.html">← Prev: Reading a digital twin claim</a>
+        <a href="a6-from-warehouse-to-digital-twins.html">Next: From warehouse to digital twins: the transfer map →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwka5-pick");
+  var out = document.getElementById("kwka5-out");
+  var verdict = document.getElementById("kwka5-verdict");
+  var self = document.getElementById("kwka5-self");
+  if (!sel || !out) return;
+  var W = DTW.world(DTW.DEFAULTS.seed, false);
+  var F = W.meas.length, sensor = [], honest = [], f;
+  function rm(a, b) { var s = 0, n = 0; for (var t = 168; t < W.n; t++) { var e = a[t] - b[t]; s += e * e; n++; } return Math.sqrt(s / n); }
+  function pool(arr) { var s = 0; arr.forEach(function (x) { s += x * x; }); return Math.sqrt(s / arr.length); }
+  for (f = 0; f < F; f++) {
+    var c = DTW.calibrate(W, f);
+    var k = DTW.kalman(W, f, DTW.params(f, c.kU, c.kC), DTW.DEFAULTS);
+    sensor.push(rm(W.meas[f], W.truth[f]));
+    honest.push(rm(k.ti, W.truth[f]));
+  }
+  var runs = { honest: DTW.custom(0.4, false), anti: null };
+  function render() {
+    var mode = sel.value;
+    if (mode === "anti" && !runs.anti) runs.anti = DTW.custom(0.01, false);
+    var R = runs[mode];
+    var twin = mode === "honest" ? honest : R.floors.map(function (r) { return r.rmse; });
+    var rows = "";
+    for (var i = 0; i < F; i++) {
+      rows += "<tr><td>Floor " + (i + 1) + "</td><td>" + sensor[i].toFixed(3) + " C</td><td><b>" + twin[i].toFixed(3) + " C</b></td><td>" + (100 * R.floors[i].cover).toFixed(1) + "%</td></tr>";
+    }
+    out.innerHTML = '<table class="sql-table"><thead><tr><th>Floor</th><th>Sensor, off the true room</th><th>Twin, off the true room</th><th>Twin\'s 95% band held the reading</th></tr></thead><tbody>' + rows +
+      "<tr><td><b>All floors</b></td><td>" + pool(sensor).toFixed(3) + " C</td><td><b>" + pool(twin).toFixed(3) + " C</b></td><td><b>" + (100 * R.cover).toFixed(1) + "%</b></td></tr></tbody></table>";
+    if (mode === "honest") verdict.textContent = "Honest twin: on every floor it is closer to the true room than the sensor is (" + pool(twin).toFixed(3) + " C against " + pool(sensor).toFixed(3) + " C), and its 95% band held the reading " + (100 * R.cover).toFixed(1) + "% of the time. Scored against the sensor, this better answer would have looked like error.";
+    else verdict.textContent = "Trust the sensors fully: the twin copies the noise (" + pool(twin).toFixed(3) + " C off, the sensors' own error) and its band, still labelled 95%, held the reading only " + (100 * R.cover).toFixed(1) + "% of the time. A dashboard that scores the twin against the sensors would call this one perfect.";
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed: Kittiwake Hall, its weather, its true rooms and its readings are generated (seed 1124); only an invented building lets you see the truth column. The engine's " + st.checks.length + " self-checks pass in this browser. Your numbers will differ on another seed."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwka5-truth .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwka5-truth table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

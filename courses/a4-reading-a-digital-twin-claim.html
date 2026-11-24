@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 4 of 6. How to read a digital twin claim: a render is not a twin, a small tracking error can hide a lying band or a wrong plan, and a savings figure is a model output that needs a baseline and a band. Kittiwake Hall, a constructed building, claims 24 percent; the true saving is 20.1. Not investment advice.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Reading a digital twin claim - learn digital twins with phoebe">
+<meta property="og:description" content="Leader session 4 of 6. Render or live, real-time or checked, accurate against what, saving against which baseline: a six-question checklist for any twin claim.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/courses/a4-reading-a-digital-twin-claim.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reading a digital twin claim - learn digital twins with phoebe">
+<meta name="twitter:description" content="A savings figure from a twin is a model output with a baseline. Ask for both, and for the band.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 4 · Reading a digital twin claim - learn digital twins with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-digital-twins-with-phoebe</a> / Leader session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Digital Twins with Phoebe · Leader session 4 of 6</div>
+    <h1>Reading a digital twin <span class="accent">claim</span></h1>
+    <p class="sub">Every twin arrives with a sentence attached: it is live, it is real-time, it is accurate, it saved this much. Each of those sentences can be true and still mislead. Kittiwake Hall, a constructed six-storey teaching building whose every number is generated in the page rather than observed, gives us a twin that claims its night setback cut heating by 24 percent. The true saving in the constructed world is 20.1 percent. Tonight is how to read a claim like that, what to ask for, and why the honest answer always comes with a baseline. Savings are money, so one line for the whole page: nothing here is investment advice.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders who fund or sign off a twin</span>
+      <span class="chip audience">Data people arriving from the warehouse</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-15 · A render is not a twin</span>
+      <span class="a3" style="flex:3">15-28 · Accuracy and savings claims</span>
+      <span class="a4" style="flex:4">28-45 · Build-along and Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Kittiwake Hall, the slide that says 24 percent</h2>
+    </div>
+    <p class="lede">Kittiwake Hall is constructed: six floors of seminar rooms, a heat meter and a room sensor per floor, a weather feed and a set of drawings. Three sessions ago the facilities lead asked for a twin to plan a night setback; last session showed how far the drawings sit from the building as built. Now the setback has run for a week and a slide lands on the lead's desk: "Our twin cut heating 24 percent." It has a striking 3D picture of the building, the word "real-time" twice and a tracking error of under half a degree. The lead has to decide whether to repeat the setback across the estate and report the saving upward. The slide is built from Kittiwake's design twin, and every sentence on it can be checked.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> How to tell a render from a twin by looking for the data link and the check, not the picture. Why a small tracking error proves less than it seems: in Kittiwake's constructed bench a twin told its sensors are perfect is 0.403 C off with a band that holds the reading 77.4 percent of the time, against the honest twin's 0.218 C and 96.8 percent; and floor 4, after an unlogged retrofit, tracks its room within 0.399 C while its heat estimate is 63.1 percent wrong. Why a savings figure is a model output: it needs a counterfactual, a baseline and a band. And a six-question checklist that turns "our twin cut heating 24 percent" into "20.1 percent, against a baseline of 6,343 kWh".</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why a claim needs reading at all<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A claim about a twin compresses three different things into one sentence: what the model is, how well it agrees with the asset, and what someone decided because of it. A render, a tracking number and a savings figure each answer one of those, and none of them answers the others. Reading a claim means pulling the sentence apart and asking for the evidence behind each piece.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) report on digital twins, read at source, names verification, validation and uncertainty quantification as an area of particular need, and concludes that for a twin they have to be a continual process that adapts as the physical counterpart changes. A claim that was true at handover is a claim about a building that may no longer exist. The leader's job is to ask when it was last checked, and against what.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The words that keep coming back<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Render.</strong> A picture of the asset, often 3D. It can be beautiful and still have no data link and no check.</li>
+          <li><strong>Real-time.</strong> A word about how often data arrives. It says nothing about whether the model still agrees with the asset.</li>
+          <li><strong>Tracking error.</strong> How far the twin's estimate of a measured quantity (here, room temperature) sits from the truth or from the readings. Small tracking error is necessary, not sufficient.</li>
+          <li><strong>Band and coverage.</strong> A band is the range the twin says reality will fall in; coverage is how often it actually did. A 95 percent band should hold the reading about 95 percent of the time.</li>
+          <li><strong>Counterfactual.</strong> What would have happened without the change: the heat Kittiwake would have used with no setback. In a real building nobody measures it; it is modelled.</li>
+          <li><strong>Baseline.</strong> The number a saving is measured against: the counterfactual, as some model estimated it.</li>
+          <li><strong>CV(RMSE) and NMBE.</strong> Two scores for how well a model matches metered energy: the spread of the errors, and their average bias, both as a percentage of the mean.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers render versus live model, and what "connected" means</span>
+      <h2>A render is not a twin</h2>
+      <span class="tag concept">12 min live</span>
+    </div>
+    <p class="lede">The fastest way to make a model look like a twin is to make it look like the building. A render shows geometry, finishes and sometimes colours painted by a value, and it can be updated every second from a feed. None of that tells you whether the model behind it agrees with the asset. The figure puts the same Kittiwake floor side by side, shown two ways; the difference is not in the picture.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn comparison of the same Kittiwake floor shown two ways, constructed. Left, a render: a detailed picture of the building with no data link, no check and no band. Right, a live model: the floor sends hourly readings to a two-node thermal model, and in copper a check compares each reading with the prediction every hour; the model carries a 95 percent band whose coverage was checked, 96.8 percent for the honest twin.">
+        <defs>
+          <filter id="kwka4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka4aH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4aL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4aS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka4aK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka4aA { font: 700 11px Inter, sans-serif; fill: #045C9F; }
+          .kwka4aN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka4aH" x="30" y="30">THE SAME FLOOR, SHOWN TWO WAYS (KITTIWAKE, CONSTRUCTED)</text>
+
+        <g filter="url(#kwka4aSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="390" height="252" rx="12" transform="rotate(-0.4 225 178)" fill="#FFFFFF"/>
+          <rect x="460" y="52" width="390" height="252" rx="12" transform="rotate(0.4 655 178)" fill="#EDF4FB"/>
+          <!-- doodle: the rendered building -->
+          <rect x="150" y="96" width="150" height="128" rx="3" transform="rotate(-0.6 225 160)" fill="url(#kwka4aHc)"/>
+          <path d="M140 96 L225 70 L310 96"/>
+          <path d="M150 138 L300 138 M150 180 L300 180"/>
+          <path d="M200 96 L200 224 M250 96 L250 224"/>
+          <!-- live model -->
+          <rect x="480" y="96" width="140" height="48" rx="8" transform="rotate(-0.5 550 120)" fill="#FFFFFF"/>
+          <rect x="690" y="96" width="140" height="48" rx="8" transform="rotate(0.5 760 120)" fill="#FFFFFF"/>
+          <path d="M622 122 L686 122" marker-end="url(#kwka4aAr)"/>
+          <rect x="540" y="178" width="200" height="50" rx="8" transform="rotate(-0.4 640 203)" fill="#C8733A"/>
+          <path d="M550 146 L550 174" marker-end="url(#kwka4aAr)"/>
+          <path d="M760 146 L732 174" marker-end="url(#kwka4aAr)"/>
+        </g>
+
+        <text class="kwka4aL" x="50" y="80">A render</text>
+        <text class="kwka4aS" x="50" y="252">data link: none</text>
+        <text class="kwka4aS" x="50" y="270">check against readings: none</text>
+        <text class="kwka4aS" x="50" y="288">band: none, however good it looks</text>
+
+        <text class="kwka4aL" x="480" y="80">A live model</text>
+        <text class="kwka4aK" x="494" y="118">floor 3, today</text>
+        <text class="kwka4aK" x="704" y="118">2-node model</text>
+        <text class="kwka4aA" x="634" y="112">hourly</text>
+        <text class="kwka4aK" x="556" y="200">check: reading minus</text>
+        <text class="kwka4aK" x="556" y="216">prediction, every hour</text>
+        <text class="kwka4aS" x="480" y="256">band: 95 percent, and how often it held</text>
+        <text class="kwka4aS" x="480" y="274">honest Kittiwake twin: 96.8 percent</text>
+
+        <text class="kwka4aN" x="30" y="334">The right-hand panel could be boxes on a whiteboard and still be the twin. The left could be photoreal</text>
+        <text class="kwka4aN" x="30" y="352">and still be a picture. Ask for the arrows and the copper box, not the pixels.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper check is what makes the right-hand panel a twin; nothing on the left can be wrong in a way anyone would notice.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What a render can show, and what it cannot<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>A render can show</strong> geometry, where things are, which room a reading belongs to, and a value painted onto a surface. That is useful for orientation and for talking to people who do not read charts.</p>
+        <p><strong>A render cannot show</strong> whether the value painted on the wall came from a model that still agrees with the wall. It cannot show the model's parameters, when they were last fitted, or how wide its uncertainty is. A render of Kittiwake's design twin would look identical to a render of its calibrated twin, and the design twin is 4.45 C off the true room.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>The National Academies (2024) put it as a finding: a digital twin is "more than just simulation and modeling." What it adds is the two-way link with the physical counterpart and the dynamic updating from its data. Neither is visible in a picture, which is why a picture is the cheapest way to claim both.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What "connected" should mean<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>"Connected" is a claim with two parts, and a leader should hear both as numbers. <strong>An interval:</strong> how often data from the asset reaches the model, from which feeds, and whether it updates the state, the parameters or both. Kittiwake's twin is updated hourly from one room sensor and one heat meter per floor. <strong>A check:</strong> how often the model's predictions are compared with what the asset did, and who looks at the result. Kittiwake's check is the hourly surprise, the reading minus the prediction, per floor.</p>
+        <p>A feed with no check is plumbing. A check nobody reads is a log file. The promise from leader session 1 needs both, and an owner for the second.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why the physical asset is in the definition<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The AIAA and AIA (2020) position paper, read at source, lists three essential elements: a virtual representation, a physical realization and a transfer of data between them, and draws the conclusion that a twin requires a physical asset. A render of a building that is still on paper can be a fine design model; by that definition it cannot yet be a twin, because there is nothing for it to stay in sync with. When a claim describes a twin "before construction", read it as a design model with a plan to become a twin, and ask when the data link starts.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers real-time and accuracy claims, and savings figures</span>
+      <h2>A small error and a big saving, read honestly</h2>
+      <span class="tag concept">13 min live</span>
+    </div>
+    <p class="lede">Accuracy claims usually arrive as one number: the twin tracks the room within so many tenths of a degree. That number answers one question about one quantity on one stretch of data. The figure shows two ways it can be true and still mislead on Kittiwake's constructed floors: once about the twin's uncertainty, once about the plan. Then the widget turns to the number leaders are asked to repeat upward, the saving.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn two-panel sketch of what a tracking number hides, Kittiwake constructed, seed 1124. Left, the same floors with two twins over the setback week. The honest twin, told its sensor is 0.4 C noisy, is 0.218 C off and its 95 percent band held the reading 96.8 percent of the time. The twin told its sensor is perfect, its narrow band in copper, is 0.403 C off and its band held the reading only 77.4 percent of the time; readings fall outside the band. Right, floor 4 after an unlogged retrofit: checked against the room sensor it is 0.399 C off and looks fine; never checked against the heat meter, its heat estimate is 63.1 percent wrong.">
+        <defs>
+          <filter id="kwka4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka4bH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4bL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4bS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka4bV { font: 800 16px Inter, sans-serif; fill: #033F6E; }
+          .kwka4bN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka4bH" x="30" y="30">WHAT A TRACKING NUMBER HIDES (KITTIWAKE, CONSTRUCTED, SEED 1124)</text>
+
+        <g filter="url(#kwka4bSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="400" height="290" rx="12" transform="rotate(-0.4 230 195)" fill="#FFFFFF"/>
+          <rect x="450" y="50" width="400" height="290" rx="12" transform="rotate(0.4 650 195)" fill="#EDF4FB"/>
+          <!-- honest band -->
+          <path d="M50 108 C130 100 210 112 290 104 C340 100 380 106 410 104 L410 150 C380 152 340 146 290 150 C210 156 130 146 50 152 Z" fill="#EDF4FB" stroke="#2E6FAB"/>
+          <path d="M50 130 C130 124 210 134 290 128 C340 124 380 130 410 128" stroke="#045C9F"/>
+          <circle cx="90" cy="120" r="3.2" fill="#10202F"/>
+          <circle cx="150" cy="140" r="3.2" fill="#10202F"/>
+          <circle cx="210" cy="124" r="3.2" fill="#10202F"/>
+          <circle cx="270" cy="138" r="3.2" fill="#10202F"/>
+          <circle cx="330" cy="118" r="3.2" fill="#10202F"/>
+          <circle cx="390" cy="136" r="3.2" fill="#10202F"/>
+          <!-- narrow band, the false confidence -->
+          <path d="M50 216 C130 212 210 220 290 214 C340 211 380 216 410 214 L410 230 C380 232 340 228 290 231 C210 236 130 228 50 232 Z" fill="#C8733A"/>
+          <circle cx="90" cy="206" r="3.2" fill="#10202F"/>
+          <circle cx="150" cy="224" r="3.2" fill="#10202F"/>
+          <circle cx="210" cy="242" r="3.2" fill="#10202F"/>
+          <circle cx="270" cy="220" r="3.2" fill="#10202F"/>
+          <circle cx="330" cy="204" r="3.2" fill="#10202F"/>
+          <circle cx="390" cy="224" r="3.2" fill="#10202F"/>
+          <!-- floor 4 checks -->
+          <rect x="470" y="92" width="360" height="80" rx="8" transform="rotate(-0.4 650 132)" fill="#FFFFFF"/>
+          <rect x="470" y="190" width="360" height="80" rx="8" transform="rotate(0.4 650 230)" fill="#FFFFFF" stroke-dasharray="7 5"/>
+          <!-- doodle: a thermometer -->
+          <rect x="818" y="60" width="10" height="22" rx="5" fill="#FFFFFF"/>
+          <circle cx="823" cy="88" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="kwka4bL" x="50" y="76">Same floors, two twins, setback week</text>
+        <text class="kwka4bS" x="50" y="96">told the sensor is 0.4 C noisy</text>
+        <text class="kwka4bV" x="50" y="178">0.218 C off · band held 96.8%</text>
+        <text class="kwka4bS" x="50" y="196">told the sensor is perfect</text>
+        <text class="kwka4bV" x="50" y="270">0.403 C off · band held 77.4%</text>
+        <text class="kwka4bS" x="50" y="296">The narrow band looks sharper and is wrong more</text>
+        <text class="kwka4bS" x="50" y="312">often than the 95 percent it claims.</text>
+
+        <text class="kwka4bL" x="470" y="76">Floor 4 after an unlogged retrofit</text>
+        <text class="kwka4bL" x="490" y="116">Checked against the room sensor</text>
+        <text class="kwka4bV" x="490" y="140">0.399 C off</text>
+        <text class="kwka4bS" x="490" y="160">looks fine</text>
+        <text class="kwka4bL" x="490" y="214">Never checked against the heat meter</text>
+        <text class="kwka4bV" x="490" y="238">+63.1% on heat</text>
+        <text class="kwka4bS" x="490" y="258">so the plan for floor 4 is wrong</text>
+        <text class="kwka4bS" x="470" y="296">Its surprises flag floor 4 alone (z = 11.44);</text>
+        <text class="kwka4bS" x="470" y="312">the tracking error on its own does not.</text>
+
+        <text class="kwka4bN" x="30" y="366">A tracking error is a statement about temperature on the data it was scored on. It is not a statement</text>
+        <text class="kwka4bN" x="30" y="384">about the band, about energy, or about a week the twin was never checked on.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper band is the trap: the twin that trusts its sensors fully has the narrowest band and the worst coverage.</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>"Real-time" and "accurate": ask against what, on which data<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>"Real-time"</strong> is a claim about the feed. Translate it into an interval and a check, as in Part 1. Kittiwake plans heating a week ahead, so an hourly update is plenty; a second-by-second feed would not make its plan better. Sensor clocks, sampling and gaps are their own subject, in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</p>
+        <p><strong>"Accurate"</strong> needs three more words. <em>Against what:</em> room temperature, or the energy the plan depends on? <em>On which data:</em> the week the twin was calibrated on, or a different week? <em>Including the band:</em> how often did reality fall inside the range the twin gave? In the figure, the twin that trusts its sensors fully has a tracking error nearly the same as the sensors' own 0.404 C, which sounds fine, while its band fails one reading in four or five. Floor 4 after the retrofit tracks its room well because the filter follows the sensor, while its heat estimate is 63.1 percent wrong.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>ASHRAE Guideline 14 (editions 2002 and 2014; paywalled, so reported here via secondary papers) is commonly cited for when a building energy model counts as calibrated: hourly CV(RMSE) at most 30 percent and NMBE within plus or minus 10 percent, or monthly 15 and 5 percent. Three things to notice. The criteria judge energy, not room temperature, so a temperature tracking claim does not meet them. Editions differ, and so do denominators and sign conventions, so ask which edition and which formula. And Garrett and New (2016) question whether these metrics are sufficient for calibration at all (reported). Meeting a threshold is a floor, not a verdict.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="wk" id="kwka4-saving">
+      <div class="wk-head">
+        <b>Live</b>
+        <span class="wk-hint">Pick a constructed world. The engine builds Kittiwake's six floors in your browser, runs a week without the night setback and a week with it, and compares the true saving, which only a constructed world can observe, with what the design twin and the calibrated twin each claim. Seed 1124 is the canon; the others are different constructed buildings. Your numbers will differ from any real building.</span>
+      </div>
+      <div class="wk-body">
+        <label class="sql-label" for="kwka4-seed">Constructed world (seed)</label>
+        <select class="sql-code" id="kwka4-seed">
+          <option value="1124">Seed 1124 · the canon</option>
+          <option value="1">Seed 1</option>
+          <option value="7">Seed 7</option>
+          <option value="42">Seed 42</option>
+        </select>
+        <div id="kwka4-out"></div>
+        <p class="sql-note" id="kwka4-verdict">...</p>
+      </div>
+      <div class="wk-foot" id="kwka4-self">...</div>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Reading the savings widget<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A saving is a comparison between two weeks of heat: the week with the change, which the meter measures, and the week without it, which nobody can measure because it did not happen. That second number is the <strong>counterfactual</strong>. In the constructed world the engine can run it, so the true saving is known: 6,343 kWh without the setback, 5,067 kWh with it, 20.1 percent.</p>
+        <p>A twin has to model the counterfactual. The design twin believes the building is cheaper to heat than it is: its own baseline is 4,471 kWh and its setback week 3,402 kWh, so it claims 23.9 percent. The calibrated twin's baseline is 6,565 kWh and it claims 21.5 percent: much closer, still a model output. Across the four constructed worlds the design twin overstates the true saving by 3.2 to 4.0 points and the calibrated twin by 0.6 to 1.5. The shape holds; the sizes differ. That spread is the reason a saving should travel with a band, not a single figure.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why savings attributed to twins are contested<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Published savings attributed to digital twins vary widely, and they are argued over. The disagreement is not mainly about whether twins help. It is about method: what baseline was used and who modelled it, whether the change would have been made anyway without the twin, whether the saving was measured over a season or extrapolated from a week, and whether the people reporting it also sold or built the twin. Any one of these can move a figure by more than the effect being claimed.</p>
+        <p>The honest position is that a savings figure from the literature tells you little until you know its baseline and its band, and that no single percentage summarises what twins save. Kittiwake's constructed figures show the mechanism with the truth known; in a real building the truth is not known, and the counterfactual is always a model. Not legal or compliance advice; measurement and verification protocols exist for exactly this, and your organisation's reporting rules apply.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · build-along</span>
+      <h2>A checklist for any twin claim</h2>
+      <span class="tag demo">★ 17 min · everyone builds</span>
+    </div>
+    <p class="lede">You will leave with a six-question checklist that fits on one card and works on any twin claim, from any sector, whether it comes from your own team or from outside. Then you will run it on the slide from Part 0, "Our twin cut heating 24 percent", and see why the honest answer is 20.1 percent with a baseline. The first figure is the saving drawn as it really is: two weeks of heat, one of them imagined.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn bar sketch of a week of heat at Kittiwake Hall, constructed, seed 1124. The true world: baseline with no setback, the counterfactual drawn dashed in copper, 6,343 kWh; measured with the setback, 5,067 kWh; true saving 20.1 percent. The design twin: its own baseline 4,471 kWh, its setback week 3,402 kWh, claiming 23.9 percent, rounded to 24 on the slide. The calibrated twin: baseline 6,565 kWh, setback week 5,152 kWh, claiming 21.5 percent. Every baseline is dashed because nobody measures the week that did not happen.">
+        <defs>
+          <filter id="kwka4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="57" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka4cH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4cL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4cS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka4cB { font: 700 12px Inter, sans-serif; fill: #8A4316; }
+          .kwka4cN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka4cH" x="30" y="30">ONE WEEK OF HEAT, TWO WAYS, THREE CLAIMS (KITTIWAKE, CONSTRUCTED, SEED 1124)</text>
+
+        <g filter="url(#kwka4cSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- true world -->
+          <rect x="200" y="70" width="571" height="22" rx="4" transform="rotate(-0.2 485 81)" fill="#FBEFE5" stroke="#C8733A" stroke-dasharray="8 5"/>
+          <rect x="200" y="100" width="456" height="22" rx="4" transform="rotate(0.2 428 111)" fill="url(#kwka4cHc)"/>
+          <!-- design twin -->
+          <rect x="200" y="186" width="402" height="22" rx="4" transform="rotate(0.2 401 197)" fill="#FFFFFF" stroke-dasharray="8 5"/>
+          <rect x="200" y="216" width="306" height="22" rx="4" transform="rotate(-0.2 353 227)" fill="#FFFFFF"/>
+          <!-- calibrated twin -->
+          <rect x="200" y="302" width="591" height="22" rx="4" transform="rotate(-0.2 495 313)" fill="#FFFFFF" stroke-dasharray="8 5"/>
+          <rect x="200" y="332" width="464" height="22" rx="4" transform="rotate(0.2 432 343)" fill="#EDF4FB"/>
+          <!-- doodle: a radiator -->
+          <rect x="806" y="16" width="44" height="26" rx="3" fill="#FFFFFF"/>
+          <path d="M817 20 L817 38 M828 20 L828 38 M839 20 L839 38"/>
+        </g>
+
+        <text class="kwka4cL" x="30" y="60">The true world (only a constructed world can see it)</text>
+        <text class="kwka4cB" x="30" y="86">without setback</text>
+        <text class="kwka4cS" x="30" y="116">measured, setback</text>
+        <text class="kwka4cL" x="780" y="86">6,343 kWh</text>
+        <text class="kwka4cL" x="666" y="116">5,067 kWh</text>
+        <text class="kwka4cL" x="200" y="150">true saving 20.1 percent = 1 minus 5,067 / 6,343</text>
+
+        <text class="kwka4cL" x="30" y="176">The design twin's claim</text>
+        <text class="kwka4cS" x="30" y="202">its baseline</text>
+        <text class="kwka4cS" x="30" y="232">its setback week</text>
+        <text class="kwka4cL" x="612" y="202">4,471 kWh</text>
+        <text class="kwka4cL" x="516" y="232">3,402 kWh</text>
+        <text class="kwka4cL" x="200" y="266">claims 23.9 percent, rounded to 24 on the slide</text>
+
+        <text class="kwka4cL" x="30" y="292">The calibrated twin's claim</text>
+        <text class="kwka4cS" x="30" y="318">its baseline</text>
+        <text class="kwka4cS" x="30" y="348">its setback week</text>
+        <text class="kwka4cL" x="800" y="318">6,565 kWh</text>
+        <text class="kwka4cL" x="674" y="348">5,152 kWh</text>
+        <text class="kwka4cL" x="200" y="382">claims 21.5 percent: closer, and still a model output</text>
+
+        <text class="kwka4cN" x="30" y="408">Dashed bars are weeks that never happened. The truth is known only because Kittiwake is constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper dashed bar is the counterfactual; every saving is measured against some model's version of it.</figcaption>
+    </figure>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn row of six checklist cards with the answer the 24 percent slide gives to each. One, which asset and which version: not stated. Two, render or live: a render on the slide. Three, updated how often and checked: real-time, no interval. Four, accurate how and on which data: room temperature only. Five, in copper, the saving's baseline and band: no baseline, no band. Six, who measured it: the twin itself.">
+        <defs>
+          <filter id="kwka4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwka4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwka4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwka4dH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4dL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwka4dS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwka4dK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwka4dV { font: 800 18px Inter, sans-serif; fill: #033F6E; }
+          .kwka4dX { font: 800 18px Inter, sans-serif; fill: #10202F; }
+          .kwka4dN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+        </style>
+
+        <text class="kwka4dH" x="30" y="30">SIX QUESTIONS, AND WHAT THE 24 PERCENT SLIDE ANSWERS</text>
+
+        <g filter="url(#kwka4dSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="52" width="132" height="160" rx="10" transform="rotate(-0.8 96 132)" fill="#FFFFFF"/>
+          <rect x="168" y="52" width="132" height="160" rx="10" transform="rotate(0.7 234 132)" fill="#FFFFFF"/>
+          <rect x="306" y="52" width="132" height="160" rx="10" transform="rotate(-0.6 372 132)" fill="#FFFFFF"/>
+          <rect x="444" y="52" width="132" height="160" rx="10" transform="rotate(0.6 510 132)" fill="#FFFFFF"/>
+          <rect x="582" y="52" width="132" height="160" rx="10" transform="rotate(-0.7 648 132)" fill="#C8733A"/>
+          <rect x="720" y="52" width="132" height="160" rx="10" transform="rotate(0.8 786 132)" fill="#EDF4FB"/>
+          <path d="M44 146 L148 146 M182 146 L286 146 M320 146 L424 146 M458 146 L562 146 M596 146 L700 146 M734 146 L838 146" stroke-dasharray="4 4"/>
+        </g>
+
+        <text class="kwka4dV" x="44" y="80">1</text>
+        <text class="kwka4dL" x="44" y="104">Which asset,</text>
+        <text class="kwka4dL" x="44" y="120">which version?</text>
+        <text class="kwka4dS" x="44" y="168">slide: not stated</text>
+
+        <text class="kwka4dV" x="182" y="80">2</text>
+        <text class="kwka4dL" x="182" y="104">Render or</text>
+        <text class="kwka4dL" x="182" y="120">live model?</text>
+        <text class="kwka4dS" x="182" y="168">slide: a render</text>
+
+        <text class="kwka4dV" x="320" y="80">3</text>
+        <text class="kwka4dL" x="320" y="104">Updated how</text>
+        <text class="kwka4dL" x="320" y="120">often, checked?</text>
+        <text class="kwka4dS" x="320" y="168">slide: real-time</text>
+
+        <text class="kwka4dV" x="458" y="80">4</text>
+        <text class="kwka4dL" x="458" y="104">Accurate how,</text>
+        <text class="kwka4dL" x="458" y="120">on which data?</text>
+        <text class="kwka4dS" x="458" y="168">slide: room temp</text>
+
+        <text class="kwka4dX" x="596" y="80">5</text>
+        <text class="kwka4dL" x="596" y="104">Saving: which</text>
+        <text class="kwka4dL" x="596" y="120">baseline, band?</text>
+        <text class="kwka4dK" x="596" y="168">slide: neither</text>
+
+        <text class="kwka4dV" x="734" y="80">6</text>
+        <text class="kwka4dL" x="734" y="104">Who measured</text>
+        <text class="kwka4dL" x="734" y="120">it, and how?</text>
+        <text class="kwka4dS" x="734" y="168">slide: the twin</text>
+
+        <text class="kwka4dN" x="30" y="246">Questions 1 to 4 decide whether the model deserves trust; question 5 decides whether the number does.</text>
+        <text class="kwka4dN" x="30" y="264">Question 6 decides whether anyone independent looked. A slide that answers none of them is an advert.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the copper card is the one the 24 percent slide fails hardest: a saving with no baseline and no band.</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Ask which asset, and which version</h4>
+        <p>Write the asset and the date of the last physical change the twin knows about. The slide says "our twin". Pressed, it is Kittiwake's design twin, built from the drawings and never fitted to readings: the version from before the building existed.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask whether it is a render or a live model</h4>
+        <p>Cover the picture with your hand and ask what is left: a data link, a check, a band? If nothing is left, it was a render. Kittiwake's design twin receives readings but its parameters were never moved by them, so its render and its numbers both describe the drawings.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask for the update interval and the check</h4>
+        <p>Replace "real-time" with an interval and a named check. For Kittiwake the honest answer is hourly, with an hourly surprise per floor. Then ask who reads the surprises and when they last did.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask what the accuracy is against, and on which data</h4>
+        <p>Temperature or energy? The calibration week or a different week? With a band, and how often did it hold? Write the slide's answer next to Part 2's traps: a twin can be 0.403 C off with a band that held only 77.4 percent, or track floor 4 within 0.399 C while its heat estimate is 63.1 percent wrong. If the accuracy is not about energy, it says nothing about a saving.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask for the saving's baseline and band</h4>
+        <p>A saving is one minus the measured week over the modelled week. Ask for both numbers in kWh, who modelled the baseline, and how wide its band is. For the slide, the design twin's own baseline is 4,471 kWh, well below what the building would really have used, and that is where its 23.9 percent comes from. The constructed truth is 20.1 percent against a baseline of 6,343 kWh. The calibrated twin's 21.5 percent is the best a real team could report, and it should travel with a band and the word "modelled".</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Ask who measured it</h4>
+        <p>The meter readings for the setback week are measurements; the baseline is a model run; the percentage is arithmetic on both. Ask which parts were measured, by whom, and whether anyone who did not build the twin checked the arithmetic and the baseline. Then rewrite the slide: "Night setback, setback week: 5,067 kWh measured against a modelled 6,565 kWh baseline from the calibrated twin, a modelled saving of about 21 percent; band to follow." In the constructed world we can add the truth, 20.1 percent. In yours, nobody can, which is why the band matters.</p>
+      </div></div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>The habit to keep.</strong> Never repeat a twin's saving upward without its baseline in kWh, the word "modelled" next to the baseline, and a band. If the claim cannot supply them, report the measured week and say the saving is not yet known.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A team presents a photoreal, live-updating 3D view of a building as its digital twin. What is the first thing a leader should ask for?</p>
+      <button class="qopt" type="button">A · A higher resolution, to see more detail</button>
+      <button class="qopt" type="button">B · The data link and the check: how often the model is updated, and how its predictions are compared with readings</button>
+      <button class="qopt" type="button">C · Nothing more; live updates prove it is a twin</button>
+      <p class="qwhy">A render shows the picture, not the model's agreement with the asset. The National Academies (2024) say a twin is more than simulation and modelling: it is updated from its physical counterpart and checked continually.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Kittiwake's twin told its sensors are perfect (constructed) has a narrower band than the honest twin. Why is that not a better twin?</p>
+      <button class="qopt" type="button">A · It is a better twin; a narrower band means more precision</button>
+      <button class="qopt" type="button">B · Narrow bands are always slower to compute</button>
+      <button class="qopt" type="button">C · Its band held the reading only 77.4 percent of the time while claiming 95, against 96.8 percent for the honest twin</button>
+      <p class="qwhy">A band is a promise about how often reality falls inside it. The over-confident twin copies the sensor noise (0.403 C off) and breaks that promise one reading in four or five.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why does a twin's savings figure need a baseline?</p>
+      <button class="qopt" type="button">A · Because a saving compares a measured week with a week that did not happen, and that week is always a model's estimate</button>
+      <button class="qopt" type="button">B · Because the heat meter cannot measure a setback week</button>
+      <button class="qopt" type="button">C · It does not; the percentage is enough on its own</button>
+      <p class="qwhy">The counterfactual is modelled. Kittiwake's design twin modelled it at 4,471 kWh and claimed 23.9 percent; against the constructed truth of 6,343 kWh the saving is 20.1 percent.</p>
+    </div>
+
+    <div class="quiz-score"></div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="homework">
+    <div class="section-kicker">
+      <span class="klabel">Before session 5</span>
+      <h2>Homework</h2>
+    </div>
+    <p class="lede">Twenty minutes, on one claim and one sentence of your own.</p>
+    <div class="steps">
+      <div class="step"><div>
+        <h4>Run the six questions on one public claim</h4>
+        <p>Pick any public description of a digital twin that states a result, from any sector. Write one line per question with what the claim says, and mark the questions it leaves unanswered. Do not judge the result; judge what you would need to believe it.</p>
+      </div></div>
+      <div class="step"><div>
+        <h4>Rewrite one saving honestly</h4>
+        <p>Take a savings figure you have reported or been shown, from a twin or any model. Rewrite it in the form "measured X against a modelled baseline Y from model Z, band W". Leave blanks where you do not know. The blanks are your questions for the next review.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- ============ OFFICIAL ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Covered tonight</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Render versus twin</span><span class="note">National Academies (2024), "Foundational Research Gaps and Future Directions for Digital Twins": Finding 2-1 and continual VVUQ. Read at source.</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">A twin needs an asset and a data link</span><span class="note">AIAA and AIA (2020), "Digital Twin: Definition and Value". Read at source.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Calibration criteria</span><span class="note">ASHRAE Guideline 14 (2002, 2014): hourly 30 / 10, monthly 15 / 5 percent. Reported; paywalled, editions differ. Garrett and New (2016) question sufficiency (reported).</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Kittiwake claims</span><span class="note">Constructed and computed in the page: tracking 0.218 vs 0.403 C, coverage 96.8 vs 77.4 percent; savings 20.1 true, 21.5 calibrated, 23.9 design.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Savings attributed to twins</span><span class="note">Contested. Taught as a disagreement about baselines and method; no figure from the literature is quoted.</span></div>
+      <div class="covered-row"><span class="status pill inkpill">◐</span><span class="name">Honest bands</span><span class="note">Named tonight. Practitioner session 7 builds them.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Vendor and product claims</span><span class="note">Out of scope by design. The checklist works on any claim; no company, product or real building is assessed.</span></div>
+      <div class="covered-row"><span class="status pill light">○</span><span class="name">Sensors, clocks, sampling</span><span class="note">Live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data</a>.</span></div>
+    </div>
+    <p class="mono">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="section" id="cheatsheet">
+    <div class="section-kicker">
+      <span class="klabel">Take this with you</span>
+      <h2>Cheat sheet</h2>
+    </div>
+    <div class="cheat">
+      <div class="cheat-item"><strong>A render is a picture.</strong> Ask for the data link and the check, not the pixels.</div>
+      <div class="cheat-item"><strong>"Connected" is two numbers.</strong> An update interval, and how often predictions are checked against readings.</div>
+      <div class="cheat-item"><strong>"Real-time" is about the feed.</strong> It says nothing about whether the model still agrees.</div>
+      <div class="cheat-item"><strong>Accurate against what?</strong> Temperature or energy, calibration week or a different one, band included.</div>
+      <div class="cheat-item"><strong>Narrow is not better.</strong> 0.403 C, band held 77.4%; honest twin 0.218 C, 96.8% (constructed).</div>
+      <div class="cheat-item"><strong>ASHRAE G14, reported.</strong> Hourly CV(RMSE) 30 / NMBE 10; monthly 15 / 5. Energy, not temperature.</div>
+      <div class="cheat-item"><strong>A saving has a baseline.</strong> The week without the change is always modelled. Ask for it in kWh.</div>
+      <div class="cheat-item"><strong>24 percent, read honestly.</strong> Design twin 23.9; calibrated 21.5; constructed truth 20.1 against 6,343 kWh.</div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Why the warehouse playbook breaks here.</strong> A warehouse table does not change because you queried it. A building changes on its own, has only noisy sensors for ground truth, and changes again when you act on the twin's advice.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <div class="wrap">
+      <p>Leader session 4 of 6 · learn-digital-twins-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></p>
+      <nav class="pagenav">
+        <a href="a3-the-as-built-gap.html">← Prev: The as-built gap</a>
+        <a href="a5-why-the-warehouse-playbook-breaks-here.html">Next: Why the warehouse playbook breaks here →</a>
+      </nav>
+    </div>
+  </footer>
+
+</main>
+
+<script src="../assets/dtw-live.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+<script>
+(function () {
+  if (typeof DTW === "undefined") return;
+  var sel = document.getElementById("kwka4-seed");
+  var out = document.getElementById("kwka4-out");
+  var verdict = document.getElementById("kwka4-verdict");
+  var self = document.getElementById("kwka4-self");
+  if (!sel || !out) return;
+  var cache = {};
+  function kwh(x) { return Math.round(x).toLocaleString("en-US") + " kWh"; }
+  function pc(x) { return (100 * x).toFixed(1) + "%"; }
+  function pts(x) { return (x >= 0 ? "+" : "-") + (100 * Math.abs(x)).toFixed(1) + " pts"; }
+  function render() {
+    var s = Number(sel.value);
+    if (!cache[s]) cache[s] = DTW.ladder({ seed: s });
+    var L = cache[s];
+    var t = L.trueSaving, d = L.rungs[0], c = L.rungs[1];
+    out.innerHTML = '<table class="sql-table"><thead><tr><th>Who says</th><th>Week without setback</th><th>Setback week</th><th>Saving</th><th>Against the truth</th></tr></thead><tbody>' +
+      "<tr><td>The true world (constructed)</td><td>" + kwh(t.base) + " (counterfactual)</td><td>" + kwh(t.setback) + "</td><td><b>" + pc(t.saving) + "</b></td><td>-</td></tr>" +
+      "<tr><td>Calibrated twin</td><td>" + kwh(c.eBase) + " (modelled)</td><td>" + kwh(c.energy) + "</td><td><b>" + pc(c.saving) + "</b></td><td>" + pts(c.saving - t.saving) + "</td></tr>" +
+      "<tr><td>Design twin (the slide)</td><td>" + kwh(d.eBase) + " (modelled)</td><td>" + kwh(d.energy) + "</td><td><b>" + pc(d.saving) + "</b></td><td>" + pts(d.saving - t.saving) + "</td></tr>" +
+      "</tbody></table>";
+    verdict.textContent = "Seed " + s + ": the design twin claims " + pc(d.saving) + " because it believes the building is cheaper to heat than it is (its baseline " + kwh(d.eBase) + " against a true " + kwh(t.base) + "). The calibrated twin claims " + pc(c.saving) + ". The true saving, which only a constructed world can observe, is " + pc(t.saving) + ".";
+  }
+  sel.addEventListener("change", render);
+  render();
+  var st = DTW.selfTestResult || DTW.selfTest();
+  self.textContent = st.pass
+    ? "Synthetic and constructed: Kittiwake Hall, its weather and its readings are generated by seed. Real buildings have no true counterfactual to compare with. The engine's " + st.checks.length + " self-checks pass in this browser."
+    : "The engine's self-check did not pass in this browser, so nothing above should be believed.";
+})();
+</script>
+<style>
+  #kwka4-saving .sql-code { border: 1px solid var(--hairline); border-radius: 8px; max-width: 24rem; }
+  #kwka4-saving table.sql-table { margin: .6rem 0 .2rem; font-size: .85rem; }
+</style>
+</body>
+</html>

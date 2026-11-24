@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Sixteen sessions on digital twins as a data problem: purpose and fidelity, physics versus data models, the as-built gap, calibration, the Kalman filter by hand, model drift versus asset drift, the change log as data, what-if runs with honest bands, governance, and a twin sync bench with an anti-lever and a break button. Kittiwake Hall is constructed. Free. Not investment advice.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn Digital Twins with Phoebe">
+<meta property="og:description" content="A twin built from the drawings is 4.45 C off the true room and 32.9 percent low on a week's heat. Calibrate it and keep it in sync: 0.218 C. Tell it the sensors are perfect and its band covers 77.4 percent instead of 96.8.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn Digital Twins with Phoebe">
+<meta name="twitter:description" content="A model that claims to mirror a building is only worth the evidence that it still does. Sixteen sessions for data people and the leaders who fund them.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-digital-twins-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn Digital Twins with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; color: var(--indigo-deep); }
+  .stat span { font-size: .72rem; opacity: 1; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; color: var(--ink); }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(4,92,159,.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo-deep); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--muted); font-weight: 700; }
+
+  .transfer { margin-top: 2.6rem; }
+  .transfer h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .transfer .plede { color: var(--muted); font-size: .92rem; margin-bottom: .9rem; }
+  .transfer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+  .transfer-col { border: 1px solid var(--hairline); border-radius: var(--radius); background: #fff; padding: 1rem 1.1rem 1rem; }
+  .transfer-col h3 { font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; padding-bottom: .5rem; border-bottom: 2px solid var(--indigo-soft); color: var(--indigo-deep); }
+  .transfer-col.keep h3 { border-bottom-color: var(--indigo); }
+  .transfer-col.learn h3 { border-bottom-color: var(--amber); color: var(--amber-ink-text); }
+  .transfer-col.unlearn h3 { border-bottom-color: var(--ink); color: var(--ink); }
+  .transfer-col ul { list-style: none; margin: 0; padding: 0; }
+  .transfer-col li { font-size: .86rem; color: var(--ink); padding: .35rem 0 .35rem 1rem; position: relative; line-height: 1.5; }
+  .transfer-col li::before { content: ""; position: absolute; left: 0; top: .85rem; width: .45rem; height: .45rem; border-radius: 999px; background: var(--indigo-mid); }
+  .transfer-col.learn li::before { background: var(--amber); }
+  .transfer-col.unlearn li::before { background: var(--ink); }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg, var(--paper), var(--indigo-50)); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Emerging Tech</div>
+    <h1>Learn <span class="accent">Digital Twins</span> with Phoebe</h1>
+    <p class="sub">A warehouse table records what already happened. A digital twin makes a promise about the present: this model describes this particular asset as it is today, it is kept in step with data from it, and someone will decide with it. The promise is only worth the evidence that it still holds. Kittiwake Hall, a constructed six-storey teaching building whose facilities team builds a thermal twin of each floor to plan heating, runs through every session: a twin built from the drawings is 4.45 C off the true room and estimates a week's heat 32.9 percent low; calibrated and kept in sync it is 0.218 C off and its 95 percent band holds 96.8 percent of readings; told its sensors are perfect, the band holds 77.4 percent. Six leader sessions on the decision, ten practitioner sessions on the build. The research and standards are cited; every Kittiwake number is constructed and computed in the page. Nothing here is investment advice or a view on any company.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="16">16</b><span>sessions, two tracks</span></div>
+      <div class="stat"><b>4.45 to 0.218</b><span>C off the true room, up the ladder</span></div>
+      <div class="stat"><b>32.9%</b><span>too low, a twin from the drawings</span></div>
+      <div class="stat"><b>96.8 vs 77.4</b><span>% band coverage, honest vs overconfident</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section ihx-hero" aria-label="A hand-drawn ladder of twin error and the hourly correction">
+    <figure class="zoomable" style="margin:0 0 1rem">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hand drawn ladder for the constructed Kittiwake twin, six floors, the setback week. Each rung is a block with how far the twin is from the true room. From the drawings: 4.45 C, and the week's heat 32.9 percent too low. Calibrated on one week of readings: 0.48 C, and 1.7 percent too high. A copper top block, revealed by the button, keeps the twin in sync every hour with a Kalman filter: 0.218 C, closer than the sensors' own 0.404 C. On the right, the as-built gap: the real floors lose heat 1.15 to 1.45 times what the drawings say.">
+        <defs>
+          <filter id="kwkxSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="kwkxHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#045C9F" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="kwkxAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#10202F" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .kwkxH { font: 800 12px Inter, sans-serif; fill: #10202F; }
+          .kwkxL { font: 600 12px Inter, sans-serif; fill: #10202F; }
+          .kwkxS { font: 400 11px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkxK { font: 400 11px Inter, sans-serif; fill: #10202F; }
+          .kwkxV { font: 800 20px Inter, sans-serif; fill: #033F6E; }
+          .kwkxW { font: 800 20px Inter, sans-serif; fill: #10202F; }
+          .kwkxN { font: 400 12px Inter, sans-serif; fill: #4A5A6A; }
+          .kwkx-top { transition: opacity .3s ease; opacity: 0; }
+          .kwkx-on .kwkx-top { opacity: 1; }
+          @media (prefers-reduced-motion: reduce) { .kwkx-top { transition: none; } }
+        </style>
+
+        <text class="kwkxH" x="30" y="30">HOW FAR THE TWIN IS FROM THE TRUE ROOM (CONSTRUCTED)</text>
+        <text class="kwkxH" x="600" y="30">WHY THE DRAWINGS MISS</text>
+
+        <g filter="url(#kwkxSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="236" width="150" height="48" rx="6" transform="rotate(-0.6 105 260)" fill="#FFFFFF"/>
+          <rect x="150" y="180" width="150" height="48" rx="6" transform="rotate(0.5 225 204)" fill="#EDF4FB"/>
+          <path d="M180 252 L196 236 M300 196 L316 180" marker-end="url(#kwkxAr)"/>
+          <rect x="600" y="56" width="250" height="180" rx="10" transform="rotate(0.4 725 146)" fill="#FFFFFF"/>
+          <rect x="622" y="86" width="90" height="120" rx="4" fill="#EDF4FB"/>
+          <rect x="740" y="86" width="90" height="120" rx="4" fill="url(#kwkxHc)"/>
+          <path d="M667 126 L667 106 M785 140 L785 100 M785 160 L785 120"/>
+        </g>
+        <g class="kwkx-top" filter="url(#kwkxSk)" fill="none" stroke="#10202F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="270" y="124" width="150" height="48" rx="6" transform="rotate(-0.4 345 148)" fill="#C8733A"/>
+          <path d="M420 140 L436 124" marker-end="url(#kwkxAr)"/>
+        </g>
+
+        <text class="kwkxV" x="46" y="268">4.45</text>
+        <text class="kwkxS" x="98" y="258">from the</text>
+        <text class="kwkxS" x="98" y="272">drawings</text>
+        <text class="kwkxV" x="166" y="212">0.48</text>
+        <text class="kwkxS" x="218" y="202">calibrated</text>
+        <text class="kwkxS" x="218" y="216">on week 1</text>
+        <g class="kwkx-top">
+          <text class="kwkxW" x="284" y="156">0.218</text>
+          <text class="kwkxK" x="346" y="146">kept in</text>
+          <text class="kwkxK" x="346" y="160">sync hourly</text>
+        </g>
+        <text class="kwkxS" x="30" y="306">Degrees C, averaged over six floors and the setback week. The sensors alone are 0.404 C off.</text>
+
+        <text class="kwkxL" x="667" y="226" text-anchor="middle">drawn</text>
+        <text class="kwkxL" x="785" y="226" text-anchor="middle">as built</text>
+        <text class="kwkxN" x="600" y="262">Real floors lose 1.15 to 1.45 times</text>
+        <text class="kwkxN" x="600" y="280">the heat the drawings say.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the drawings are a starting point, readings fix the parameters, and the copper rung is what an hourly correction adds.</figcaption>
+    </figure>
+    <div class="ihx-row">
+      <button type="button" class="btn primary" id="kwkx-toggle">Keep the twin in sync every hour</button>
+      <span class="ihx-hint" id="kwkx-hint">Canon numbers from the bench, seed 1124. Press it and watch the copper rung.</span>
+    </div>
+    <div class="ihx-guess" id="kwkx-guess">
+      <p class="ihx-q"><b>Guess first.</b> Kittiwake's facilities lead asks the twin built from the drawings how much heat next week's night setback schedule will use. How far off do you think its answer is, in percent?</p>
+      <div class="ihx-slider">
+        <input type="range" id="kwkx-g" min="0" max="50" step="5" value="10" aria-label="your guess, percent off">
+        <output for="kwkx-g" id="kwkx-gv">10%</output>
+        <button type="button" class="btn" id="kwkx-reveal">Lock my guess</button>
+      </div>
+      <p class="ihx-answer" id="kwkx-ans" hidden></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Leader track 🧭 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· six sessions, no code</span></h2>
+      <p class="plede">For anyone who funds, governs or acts on a twin. What the promise is, how detailed a twin should be, the gap between the drawn and the built, how to read a twin claim, why the warehouse playbook breaks here, and a transfer map for anyone arriving from a data team.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/a1-a-twin-is-a-promise-to-stay-in-sync.html" style="--diff:#34D399">
+        <span class="cicon">🔁</span>
+        <span class="cnum">Leader session 1 · start here</span>
+        <h3>A twin is a promise to stay in sync</h3>
+        <p>Asset, model, data link, decision: four parts, one loop, and five questions to put to any twin.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/a2-fidelity-is-a-choice.html" style="--diff:#FBBF24">
+        <span class="cicon">🔍</span>
+        <span class="cnum">Leader session 2</span>
+        <h3>Fidelity is a choice, not a virtue</h3>
+        <p>Fit for purpose: the decision sets the detail, and every extra detail is one more thing to keep in sync.</p>
+      </a>
+      <a class="course-card" href="courses/a3-the-as-built-gap.html" style="--diff:#FBBF24">
+        <span class="cicon">📐</span>
+        <span class="cnum">Leader session 3</span>
+        <h3>The as-built gap</h3>
+        <p>The building you drew versus the one you have: a twin from the drawings was 32.9 percent low.</p>
+      </a>
+      <a class="course-card" href="courses/a4-reading-a-digital-twin-claim.html" style="--diff:#FB923C">
+        <span class="cicon">🎬</span>
+        <span class="cnum">Leader session 4</span>
+        <h3>Reading a digital twin claim</h3>
+        <p>A 3D render versus a live model, "real-time", and savings figures with no baseline and no band.</p>
+      </a>
+      <a class="course-card" href="courses/a5-why-the-warehouse-playbook-breaks-here.html" style="--diff:#FB923C">
+        <span class="cicon">🧩</span>
+        <span class="cnum">Leader session 5</span>
+        <h3>Why the warehouse playbook breaks here</h3>
+        <p>The source, the identity, the ground truth, the feedback loop and the cost of being wrong, each drawn as a mechanism.</p>
+      </a>
+      <a class="course-card" href="courses/a6-from-warehouse-to-digital-twins.html" style="--diff:#FB923C">
+        <span class="cicon">🗺️</span>
+        <span class="cnum">Leader session 6</span>
+        <h3>From warehouse to digital twins: the transfer map</h3>
+        <p>What carries over, what must be learned, what must be unlearned, and a 90-day self-study ladder on free sources.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Practitioner track 🛠️ <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· ten sessions, hands on</span></h2>
+      <p class="plede">For whoever has to build a twin and defend its numbers. Records and schemas, physics and data models, calibration, the Kalman filter by hand, drift, change logs, what-if bands, governance, closing the loop, and a bench with an anti-lever and a break button.</p>
+    </div>
+    <div class="course-grid">
+      <a class="course-card" href="courses/p1-anatomy-of-a-twin.html" style="--diff:#34D399">
+        <span class="cicon">🧬</span>
+        <span class="cnum">Practitioner session 1 · start here</span>
+        <h3>Anatomy of a twin</h3>
+        <p>Asset, model, hourly row, decision log: four schemas, and one hour of a thermal twin read field by field.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/p2-physics-data-or-both.html" style="--diff:#34D399">
+        <span class="cicon">⚗️</span>
+        <span class="cnum">Practitioner session 2</span>
+        <h3>Physics, data or both</h3>
+        <p>White box, black box, grey box: what each needs, what each extrapolates to, and why buildings sit in between.</p>
+      </a>
+      <a class="course-card" href="courses/p3-calibrating-a-model-to-measurements.html" style="--diff:#FBBF24">
+        <span class="cicon">🎯</span>
+        <span class="cnum">Practitioner session 3</span>
+        <h3>Calibrating a model to measurements</h3>
+        <p>A week of readings pins down heat loss within 0.08 and cannot pin down the mass. Identifiability, by example.</p>
+      </a>
+      <a class="course-card" href="courses/p4-the-kalman-filter-by-hand.html" style="--diff:#FBBF24">
+        <span class="cicon">🧮</span>
+        <span class="cnum">Practitioner session 4</span>
+        <h3>Keeping state in sync: the Kalman filter by hand</h3>
+        <p>Predict, read, correct. Where the gain of 0.445 comes from, and why the twin beats its own sensors.</p>
+      </a>
+      <a class="course-card" href="courses/p5-model-drift-or-asset-drift.html" style="--diff:#FBBF24">
+        <span class="cicon">📉</span>
+        <span class="cnum">Practitioner session 5</span>
+        <h3>When the model drifts and when the asset does</h3>
+        <p>The surprises tell you. An unlogged retrofit shifts one floor's innovations from +0.015 to +0.638 C.</p>
+      </a>
+      <a class="course-card" href="courses/p6-the-change-log-is-a-data-source.html" style="--diff:#FB923C">
+        <span class="cicon">📒</span>
+        <span class="cnum">Practitioner session 6</span>
+        <h3>The change log is a data source</h3>
+        <p>Configuration as data: an insulation job nobody logged made one floor's plan 63.1 percent wrong.</p>
+      </a>
+      <a class="course-card" href="courses/p7-what-if-runs-with-honest-bands.html" style="--diff:#FB923C">
+        <span class="cicon">🌗</span>
+        <span class="cnum">Practitioner session 7</span>
+        <h3>What-if runs with honest bands</h3>
+        <p>A band is a claim to check: 96.8 percent coverage when honest, 77.4 when the twin trusts its sensors fully.</p>
+      </a>
+      <a class="course-card" href="courses/p8-twin-governance.html" style="--diff:#FB923C">
+        <span class="cicon">🏛️</span>
+        <span class="cnum">Practitioner session 8</span>
+        <h3>Twin governance: versions, owners, who may act on it</h3>
+        <p>Model versions, asset versions, owners for each link, and who is allowed to act on what the twin says.</p>
+      </a>
+      <a class="course-card" href="courses/p9-closing-the-loop.html" style="--diff:#FB923C">
+        <span class="cicon">🔒</span>
+        <span class="cnum">Practitioner session 9</span>
+        <h3>Closing the loop</h3>
+        <p>Advice versus control, and the cost of being wrong in a real building with real people in it.</p>
+      </a>
+      <a class="course-card" href="courses/p10-the-twin-sync-bench.html" style="--diff:#F87171">
+        <span class="cicon">🎛️</span>
+        <span class="cnum">Practitioner session 10 · capstone</span>
+        <h3>The twin sync bench</h3>
+        <p>Every rung live: 4.45, 0.48, 0.218 C. Trust the sensors for 77.4 percent coverage; retrofit floor 4 unlogged.</p>
+      </a>
+    </div>
+    <div class="diff-legend">
+      <span><i style="background:#34D399"></i>Foundations</span>
+      <span><i style="background:#FBBF24"></i>Working depth</span>
+      <span><i style="background:#FB923C"></i>Advanced</span>
+      <span><i style="background:#F87171"></i>Hardest</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Four ways through</h2>
+      <p class="plede">Everyone starts at session 1 of their track. These are the shortest useful routes if you cannot take all sixteen.</p>
+      <div class="path"><b>I am asked to fund or approve a twin</b>
+        <a class="pstep" href="courses/a1-a-twin-is-a-promise-to-stay-in-sync.html">The promise</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a2-fidelity-is-a-choice.html">Fidelity</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a4-reading-a-digital-twin-claim.html">Reading a claim</a>
+      </div>
+      <div class="path"><b>I build the data side</b>
+        <a class="pstep" href="courses/p1-anatomy-of-a-twin.html">Anatomy</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p6-the-change-log-is-a-data-source.html">Change log</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p8-twin-governance.html">Governance</a>
+      </div>
+      <div class="path"><b>I build and tune the model</b>
+        <a class="pstep" href="courses/p3-calibrating-a-model-to-measurements.html">Calibration</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p4-the-kalman-filter-by-hand.html">Kalman by hand</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p7-what-if-runs-with-honest-bands.html">Honest bands</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p10-the-twin-sync-bench.html">The bench</a>
+      </div>
+      <div class="path"><b>I am moving in from a data team</b>
+        <a class="pstep" href="courses/a5-why-the-warehouse-playbook-breaks-here.html">Why it breaks</a><span class="parr">→</span>
+        <a class="pstep" href="courses/a6-from-warehouse-to-digital-twins.html">The transfer map</a><span class="parr">→</span>
+        <a class="pstep" href="courses/p1-anatomy-of-a-twin.html">Anatomy</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="transfer">
+      <h2>If you come from a data team</h2>
+      <p class="plede">Leader session 6 in three columns. What a conventional analyst, engineer or scientist already has that is worth more here, what is new, and what is actively dangerous.</p>
+      <div class="transfer-grid">
+        <div class="transfer-col keep">
+          <h3>Carries over</h3>
+          <ul>
+            <li>Schemas, keys and versioning, now for assets, models and every prediction</li>
+            <li>Residual analysis: reading minus prediction, sliced by floor and by week</li>
+            <li>Train and test discipline, now a calibration week and a different check week</li>
+            <li>Lineage: which model, fitted to which configuration, said this</li>
+          </ul>
+        </div>
+        <div class="transfer-col learn">
+          <h3>Must learn</h3>
+          <ul>
+            <li>State versus parameters: what the asset is doing now versus how it behaves</li>
+            <li>Physics-structured models with few parameters, and which ones the data can pin down</li>
+            <li>Data assimilation: the Kalman predict and update, and what the gain means</li>
+            <li>Uncertainty bands that are checked against what then happened</li>
+          </ul>
+        </div>
+        <div class="transfer-col unlearn">
+          <h3>Must unlearn</h3>
+          <ul>
+            <li>"The model is done once it is trained": a twin is refitted as the asset changes</li>
+            <li>"Trust the latest reading": at full trust the twin copies the noise, 0.403 C off</li>
+            <li>"Narrower is better": an overconfident band held 77.4 percent, not 95</li>
+            <li>"Config is not data": an unlogged retrofit made one floor's plan 63.1 percent wrong</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The whole thing on one page</h2>
+    <p class="mm-lede">Every idea and the session that owns it. Click any node to jump there.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>What is real here</h2>
+      <p class="plede">Every number was computed before any page quoted it. The research and standards are real and cited; the building around them is constructed.</p>
+      <table style="width:100%;border-collapse:collapse">
+        <tr><td style="padding:.5rem 0;font-weight:700">The research</td><td style="padding:.5rem 0;color:var(--muted)">A 2024 National Academies report on digital twins, a 2020 aerospace position paper defining them, the 1960 Kalman filter paper, grey-box building models (2011), and calibration criteria and a manufacturing framework reported from paywalled standards, cited on each page</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">The ladder</td><td style="padding:.5rem 0;color:var(--muted)">4.450, 0.482 and 0.218 C off the true room; the setback week's heat estimated 32.9 percent low, then 1.7 percent high</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">The anti-lever and the break</td><td style="padding:.5rem 0;color:var(--muted)">Trusting the sensors fully narrows the band from 2.20 to 1.28 C and drops coverage from 96.8 to 77.4 percent. An unlogged retrofit on floor 4 is flagged on floor 4 alone. Both modelled and declared on the widget</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">The engine checks itself</td><td style="padding:.5rem 0;color:var(--muted)">Six properties on every page load, each of five planted faults shown to make one fail. A Python copy reproduces every bench number</td></tr>
+        <tr><td style="padding:.5rem 0;font-weight:700">Constructed</td><td style="padding:.5rem 0;color:var(--muted)">Kittiwake Hall, its floors, weather and readings are invented so the truth is knowable. No real company, product, building or incident appears; nothing here is investment advice</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <footer class="pagefoot">
+    <span class="meta">part of <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a> · by Phoebe Fu · not investment advice · sensors and clocks live in <a href="https://phoebefu6.github.io/learn-iot-data-with-phoebe/">learn IoT data ↗</a>, city-scale data in <a href="https://phoebefu6.github.io/learn-smart-city-with-phoebe/">learn smart city ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {
+ "title": "A model that\nstays in sync",
+ "centerColor": "#033F6E",
+ "sessions": [
+  {
+   "label": "The promise",
+   "href": "courses/a1-a-twin-is-a-promise-to-stay-in-sync.html",
+   "concepts": [
+    {"label": "Anatomy of a twin", "href": "courses/p1-anatomy-of-a-twin.html"},
+    {"label": "Four parts, one loop", "href": "courses/a1-a-twin-is-a-promise-to-stay-in-sync.html"},
+    {"label": "Closing the loop", "href": "courses/p9-closing-the-loop.html"}
+   ]
+  },
+  {
+   "label": "Fidelity",
+   "href": "courses/a2-fidelity-is-a-choice.html",
+   "concepts": [
+    {"label": "Physics, data or both", "href": "courses/p2-physics-data-or-both.html"},
+    {"label": "Fit for purpose", "href": "courses/a2-fidelity-is-a-choice.html"},
+    {"label": "Calibration", "href": "courses/p3-calibrating-a-model-to-measurements.html"}
+   ]
+  },
+  {
+   "label": "As-built gap",
+   "href": "courses/a3-the-as-built-gap.html",
+   "concepts": [
+    {"label": "The change log", "href": "courses/p6-the-change-log-is-a-data-source.html"},
+    {"label": "Drawings as a prior", "href": "courses/a3-the-as-built-gap.html"},
+    {"label": "Model or asset drift", "href": "courses/p5-model-drift-or-asset-drift.html"}
+   ]
+  },
+  {
+   "label": "Reading a claim",
+   "href": "courses/a4-reading-a-digital-twin-claim.html",
+   "concepts": [
+    {"label": "Honest bands", "href": "courses/p7-what-if-runs-with-honest-bands.html"},
+    {"label": "Savings, no baseline", "href": "courses/a4-reading-a-digital-twin-claim.html"},
+    {"label": "Kalman by hand", "href": "courses/p4-the-kalman-filter-by-hand.html"}
+   ]
+  },
+  {
+   "label": "Why it breaks",
+   "href": "courses/a5-why-the-warehouse-playbook-breaks-here.html",
+   "concepts": [
+    {"label": "Governance", "href": "courses/p8-twin-governance.html"},
+    {"label": "Cost of being wrong", "href": "courses/a5-why-the-warehouse-playbook-breaks-here.html"},
+    {"label": "Who may act", "href": "courses/p8-twin-governance.html"}
+   ]
+  },
+  {
+   "label": "Transfer map",
+   "href": "courses/a6-from-warehouse-to-digital-twins.html",
+   "concepts": [
+    {"label": "The 90-day ladder", "href": "courses/a6-from-warehouse-to-digital-twins.html"},
+    {"label": "The twin sync bench", "href": "courses/p10-the-twin-sync-bench.html"},
+    {"label": "Unlearn: config is data", "href": "courses/a6-from-warehouse-to-digital-twins.html"}
+   ]
+  }
+ ]
+};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script>
+(function(){
+  var fig=document.querySelector('.ihx-hero svg'); if(!fig) return;
+  var on=false, tgl=document.getElementById('kwkx-toggle');
+  tgl.addEventListener('click', function(){
+    on=!on; fig.classList.toggle('kwkx-on', on);
+    tgl.textContent = on ? 'Take the hourly correction away again' : 'Keep the twin in sync every hour';
+  });
+  var g=document.getElementById('kwkx-g'), gv=document.getElementById('kwkx-gv'), rv=document.getElementById('kwkx-reveal'), ans=document.getElementById('kwkx-ans');
+  g.addEventListener('input', function(){ gv.textContent = g.value + '%'; });
+  rv.addEventListener('click', function(){
+    var v=+g.value, line;
+    if (v < 25) line = 'Most people guess low: drawings feel like a precise description of a building. They describe the building someone intended.';
+    else line = 'Right direction. The drawings describe the building someone intended, not the one that was built.';
+    ans.textContent = 'You said ' + v + ' percent. The bench says 32.9 percent too low: 3,402 kWh against 5,067 really used, because every constructed floor loses heat 1.15 to 1.45 times faster than drawn. Calibrated on one week of readings, the twin is 1.7 percent high. ' + line + ' Session 10 lets you rerun it with other seeds.';
+    ans.hidden=false; rv.disabled=true; g.disabled=true;
+    if (!on) tgl.click();
+  });
+})();
+</script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>
